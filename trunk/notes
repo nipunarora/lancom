@@ -1,0 +1,38 @@
+
+- Policy should have source IP address (-s/-d options in iptables)
+- Commands to add and delete route entries (as a part of routing entries)
+
+
+  ROUTE COMMANDS:
+  -Commands to add and delete entries to the routing table (* these commands are not yet added, so we will require to add these)
+  -Tabular repreesntation of the entries
+  
+  
+----------------------------------------------
+NETWORK  MASK   INTERFACE   GATEWAY ADD/DELETE
+-----------------------------------------------
+ 
+ 
+
+  INTERFACE COMMAND:
+     WE HAVE THERE (THE HOST CONFIG COMMANDS)
+         - IP ADDRESS
+         - DNS
+         - DEFAULT GW
+
+-------------------------------------------------------------------------------------------
+INTERFACE NAME    CARD NO   IP ADDRESS NETMASK DNS_NAME(optional) DEFAULT_GATWEAY(optional)
+-------------------------------------------------------------------------------------------
+
+
+  FIREWALLING 
+    - 
+-----------------------------------------------------------------------------------------------------------
+HOST_GROUP  VERDICT PROTOCOL DIRECTION SOURCE_IP(do but added to the grammar) SOURCE_PORT DESTINATION_PORT 
+-----------------------------------------------------------------------------------------------------------
+
+FLAG - ROUTE / FIREWALL BACKEND - CISCO IOS , FREEBSD / LINUX ROUTING COMMAND , FREEBSD PFILTER (FREEBSD PACKET FILTERING ) , 
+       LINUX IPTABLES (LINUX FIREWALLING)
+
+
+

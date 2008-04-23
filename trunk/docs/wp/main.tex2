@@ -1,0 +1,78 @@
+\documentclass{sig-alternate-10pt}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{epsfig}
+\usepackage{url}
+\usepackage{balance}
+\usepackage{amsmath}
+%\usepackage{verbatim}
+%\usepackage{amsfonts}
+%\usepackage{amssymb}
+%\usepackage{amsthm}
+
+
+% MATH -------------------------------------------------------------------
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}{Proposition}
+\newtheorem{lem}{Lemma}
+\newtheorem{cor}{Corollary}
+
+\newif{\ifanonymous}
+\anonymousfalse
+%\anonymoustrue
+\newcommand{\appsection}[1]{\let\oldthesection\thesection
+  \renewcommand{\thesection}{Appendix \oldthesection}
+  \section{#1}\let\thesection\oldthesection}
+
+\newcommand{\comment}[1]{}
+\newcommand{\smallcaption}[1]{\caption[#1]{{\protect\small \protect\bf #1}}}
+\newcommand{\fakeitem}{\vspace*{1ex} \noindent $\bullet$ \hskip .02in}
+
+
+\begin{document}
+
+\title{LinkWidth: A Method to Measure Link Capacity and Available
+Bandwidth using Single-End Probes.}
+
+\ifanonymous
+\numberofauthors{1}
+\author{Anonymous submission to ACM SIGCOMM/USENIX IMC 2007 \\}
+\else
+\numberofauthors{3}
+\author{
+\alignauthor Sambuddho Chakravarty\\
+\affaddr{Department of Computer Science}\\
+\affaddr{Columbia University}\\
+\email{sc2516@cs.columbia.edu}
+\alignauthor Angelos Stavrou\\
+\affaddr{Department of Computer Science}\\
+\affaddr{Columbia University}\\
+\email{angel@cs.columbia.edu}
+\alignauthor Angelos D. Keromytis\\
+\affaddr{Department of Computer Science}\\
+\affaddr{Columbia University}\\
+\email{angelos@cs.columbia.edu}
+}
+\fi
+
+\maketitle
+
+\input{abstract}
+
+\category{H.1.1}{Models and Principles}{Systems and Information Theory}[Value of Information]
+
+\terms{Measurement, Experimentation}
+
+\keywords{link capacity, available capacity, single-end tool, link measurement tool}
+
+
+\input{intro}
+\input{implementation}
+\input{evaluation}
+\input{conclusions}
+\bibliographystyle{abbrv}
+
+
+\bibliography{biblio}
+\end{document}

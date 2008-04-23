@@ -1,0 +1,190 @@
+\section*{}
+\label{sec:grammar}
+
+\begin{enumerate}
+\item \noindent ${\it subroutine}$ $\rightarrow$ ${\tt function}$ ${\it function\_name} {\tt (} {\it arg\_list} {\tt )} {\it stmt\_list}$\\ 
+%\item \noindent ${\it prog}$ $\rightarrow$ ${\tt prog}$ ${\it stmt\_line}$ ${\tt endprog}$\\
+\item ${\it prog}$ $\rightarrow$ $({\it subroutine})^{*}$ ${\tt prog}$ ${\it stmt\_list}$ ${\tt endprog}$\\
+\item ${\it stmt\_list}$ $\rightarrow$ $({\it stmt})^{+}$\\ 
+
+\item \noindent ${\it stmt}$ $\rightarrow$ ${\it cond\_stmt}$ \\
+\item ${\it stmt}$ $\rightarrow$ ${\it iter\_stmt}$\\
+\item ${\it stmt}$ $\rightarrow$ ${\it stmt\_expr}$\\
+\item ${\it stmt}$ $\rightarrow$ ${\it print\_stmt}$\\
+\item ${\it stmt}$ $\rightarrow$ ${\it declr\_stmt}$\\
+\item ${\it stmt}$ $\rightarrow$ ${\it comment}$\\
+  
+%\item ${\it stmt\_line}$ $\rightarrow$ ${\tt function}$ ${\it function\_name}$ ${\it (argument-list)}$  $\{ {\it stmt\_line} \}$  \\
+%\item ${\it stmt\_line}$ $\rightarrow$ ${\tt\#^{+}}$ ${\it commented\_text}$\\
+\item ${\it comment}$ $\rightarrow$ $\#$ ~ $({\tt NL}|{\tt CR})^{*}({\tt CR})^{?}{\tt NL}$  \\
+% to be fixed
+\item ${\tt CR}$ $\rightarrow$ ${\tt '\backslash r'}$\\
+\item ${\tt NL}$ $\rightarrow$ ${\tt '\backslash n'}$\\
+
+% \item  ${\it stmt\_line}$ $\rightarrow$ ${\it stmt}$ ${\it delimiter}$ ${\it stmt\_line}$\\
+% \item  ${\it stmt\_line}$ $\rightarrow$ ${\it stmt\_line}$ ${\it delimiter}$\\
+% \item  ${\it stmt\_line}$ $\rightarrow$ ${\tt \epsilon}$\\
+\item \noindent ${\it stmt\_expr}$ $\rightarrow$ ${\it delimiter}$\\
+ \item  ${\it stmt\_expr}$ $\rightarrow$ ${\it expr}$ ${\it delimiter}$\\
+\item ${\it delimiter}$ $\rightarrow$ ${\tt ; }$\\
+   \item ${\it declr\_stmt}$ $\rightarrow$ ${\it type\_name}$ ${\it object\_name}$ $({\it , object\_name})^{*}$ \\ 
+%  \item ${\it expr}$ $\rightarrow$ ${\it object\_name}$ $:$ ${\it attrib}$ $=$ ${\it object\_values}$ \\\\ 
+   \item ${\it declr\_stmt}$ $\rightarrow$ ${\it object\_name}$ $=$ ${\it object\_values}$ \\\\ 
+%remove all attrib. 
+%\item \noindent ${\it attrib}$ $\rightarrow$ ${\tt topology}$ \\ 
+%\item ${\it attrib}$ $\rightarrow$ ${\tt host\_group}$ \\
+% \item ${\it attrib}$ $\rightarrow$ ${\tt host}$ \\ 
+%\item ${\it attrib}$ $\rightarrow$ ${\tt service\_group}$ \\ 
+%\item ${\it attrib}$ $\rightarrow$ ${\tt role}$ \\ 
+%\item ${\it attrib}$ $\rightarrow$ ${\tt policy}$ \\\\ 
+
+%attrib values will be objvalues
+
+\item \noindent ${\it object\_values}$ $\rightarrow$ ${\it topology}$ \\ 
+\item ${\it object\_values}$ $\rightarrow$ ${\it host\_group}$ \\ 
+\item ${\it object\_values}$ $\rightarrow$ ${\it host}$ \\ 
+\item ${\it object\_values}$ $\rightarrow$ ${\it service}$ \\ 
+\item ${\it object\_values}$ $\rightarrow$ ${\it serv\_group}$ \\ 
+\item ${\it object\_values}$ $\rightarrow$ ${\it role}$ \\ 
+\item ${\it object\_values}$ $\rightarrow$ ${\it policy}$ \\
+\item ${\it object\_values}$ $\rightarrow$ ${\it ip\_addr}$ \\
+
+%\item \noindent ${\it object\_values}$ $\rightarrow$ ${\it topology\_value}$ \\
+%\item ${\it object\_values}$ $\rightarrow$ ${\it host\_group\_value}$ \\
+%\item ${\it object\_values}$ $\rightarrow$ ${\it host\_value}$ \\
+%\item ${\it object\_values}$ $\rightarrow$ ${\it service\_group\_value}$ \\
+%\item ${\it object\_values}$ $\rightarrow$ ${\it role\_value}$ \\
+%\item ${\it object\_values}$ $\rightarrow$ ${\it policy\_value}$ \\
+
+
+\item \noindent ${\it type\_name}$ $\rightarrow$ ${\tt topology\_type\_t}$ \\ 
+\item ${\it type\_name}$ $\rightarrow$ ${\tt host\_type\_t}$ \\ 
+\item ${\it type\_name}$ $\rightarrow$ ${\tt host\_group\_type\_t}$ \\ 
+\item ${\it type\_name}$ $\rightarrow$ ${\tt serv\_group\_type\_t}$ \\ 
+\item ${\it type\_name}$ $\rightarrow$ ${\tt role\_type\_t}$ \\ 
+\item ${\it type\_name}$ $\rightarrow$ ${\tt policy\_t}$ \\ 
+\item ${\it type\_name}$ $\rightarrow$ ${\tt ipaddr\_t}$ \\ 
+
+
+\item \noindent ${\it object\_name}$ $\rightarrow$ $([{\tt a-z,A-Z}]^{+}[{\tt 0-9}]^{*})^{+}$ \\\\ 
+\item ${\it interface\_name}$ $\rightarrow$ $[{\tt a-z,A-Z}]^{+}$ ${\tt [0-9]^{+}}$  $($ $[/]$ ${\tt [0-9]^{+}}$ $)$ $^{?}$ \\ 
+\item ${\it ip\_addr}$ $\rightarrow$ ${\tt [0-255]}$.${\tt [0-255]}$.${\tt [0-255]}$.${\tt [0-255]}$\\
+\item ${\it netmask\_value}$ $\rightarrow$ ${\tt netmask}$ ${\it ip\_addr}$ \\
+\item ${\it host}$ $\rightarrow$ ${\it interface\_name}$ ${\it ip\_addr}$ ${\it netmask\_value}$ \\
+
+
+\item \noindent ${\it host\_set}$ $\rightarrow$ ${\it host}$ $({\it , host})^{*}$\\
+\item ${\it dns\_set}$ $\rightarrow$  ${\it ip\_addr}$  $({\it , ip\_addr})^{*}$ \\
+\item ${\it gateway}$ $\rightarrow$ ${\it ip\_addr}$ $({\it , ip\_addr})^{*}$\\
+
+\item \noindent ${\it host\_group}$ $\rightarrow$ ${\tt host\_set}$ $\{$ ${\it host\_set}$ $\}$ $($${\tt dns}$ $\{$ ${\it dns\_set}$ $\}$$)^{?}$ $($${\tt gw}$ $\{$ ${\it gateway}$ $\}$$)^{?}$\\
+%\item ${\it host\_group}$ $\rightarrow$ ${\tt host\_set}$ $\{$ ${\it host}$ $({\it , host})^{*}$ $\}$ ${\tt dns}$ $\{$ ${\it ip\_addr}$ $({\it , ip\_addr})^{*}$ $\}$ ${\tt gw}$ $\{$ ${\it ip\_addr}$ $({\it , ip\_addr})^{*}$ $\}$ \\   
+
+\item \noindent ${\it serv\_descr}$ $\rightarrow$ ${\it ip\_addr}$ ${\it netmask}^{?}$ ${\it serv\_listen\_port}$ \\
+\item ${\it serv\_group}$ $\rightarrow$ ${\tt service\_set}$ $\{$ ${\it serv\_descr}$ $({\it , serv\_descr})^{*}$ $\}$\\ 
+\item ${\it serv\_listen\_port}$ $\rightarrow$ ${\tt [0-65536]}$\\\\
+
+\item \noindent ${\it topology}$ $\rightarrow$ $({\it host\_group})^{+}$ ${\it role}^{?}$ \\ 
+\item ${\it topology}$ $\rightarrow$ ${\it serv\_group}^{+}$ ${\it role}^{?}$ \\ 
+
+
+
+%\item ${\it host\_groups}$ $\rightarrow$ $({\it host})^{+}$ $({\it dns})^{*}$ $({\it def\_gw})^{*}$ \\
+%\item ${\it dns}$ $\rightarrow$ ${\it host}$ \\ 
+%\item ${\it def\_gw}$ $\rightarrow$ ${\it host}$ \\ 
+%\item ${\it host}$ $\rightarrow$ (${\it interface\_name}$) (?) ${\it ip\_addr}$ ${\it netmask}$ \\ 
+%\item ${\it netmask}$ $\rightarrow$ ${\it ip\_addr}$ \\ 
+
+%\item ${\it ip\_addr}$ $\rightarrow$ {\tt [0-255]}.{\tt [0-255]}.{\tt [0-255]}.{\tt [0-255]}\\
+
+
+\item \noindent ${\it role}$ $\rightarrow$ ${\it policy}$ $({\it , policy})^{*}$ \\
+\item ${\it policy}$ $\rightarrow$ ${\it direction}$ ${\it verdict}$ ${proto}$ ${\it port}$ ${\it port}$ \\ 
+\item ${\it policy}$ $\rightarrow$ ${\it direction}$ ${\it verdict}$ ${\it icmp\_cntrl\_message}$ \\ 
+\item ${\it direction}$ $\rightarrow$ ${\tt inbound}$ \\ 
+\item ${\it direction}$ $\rightarrow$ ${\tt outbound}$ \\ 
+\item ${\it verdict}$ $\rightarrow$ $({\tt allow}|{\tt deny})$ \\ 
+\item ${\it proto}$ $\rightarrow$ $({\tt UDP  |  TCP})$ \\ 
+\item ${\it icmp\_cntrl\_message}$ $\rightarrow$ $({\tt ICMP\_MESSAGE\_TYPE})$ \\ 
+\item ${\it port}$ $\rightarrow$ ${\tt [0-65535]}$\\
+
+
+\item \noindent ${\it stmt}$ $\rightarrow$ ${\it cond\_stmt}$ \\
+\item ${\it cond\_stmt}$ $\rightarrow$ ${\it matched\_cond\_stmt}$ \\
+\item ${\it cond\_stmt}$ $\rightarrow$ ${\it unmatched\_cond\_stmt}$\\
+\item ${\it matched\_cond\_stmt}$ $\rightarrow$ ${\tt if}$ ${\it expr}$ ${\tt then}$ \\ ${\it matched\_cond\_stmt}$ ${\tt else}$ ${\it matched\_cond\_stmt}$ \\
+\item ${\it matched\_cond\_stmt}$ $\rightarrow$ ${\it stmt\_list}$ \\
+
+
+\item \noindent ${\it unmatched\_cond\_stmt}$ $\rightarrow$ ${\tt if}$ ${\it expr}$ ${\tt then}$ ${\it cond\_stmt}$ \\
+\item ${\it unmatched\_cond\_stmt}$ $\rightarrow$ ${\tt if}$ ${\it expr}$ ${\tt then}$ \\ ${\it unmatched\_cond\_stmt}$ \\
+ 
+\item \noindent ${\it iteration\_stmt}$ $\rightarrow$ ${\tt while}$ ${\it expr}$ ${\it stmt\_list}$ ${\tt endwhile}$ 
+
+\item \noindent ${\it print\_statement}$ $\rightarrow$ ${\tt echo}$ $STRING$ ${\it delimiter}$
+\item \noindent ${\it expr}$ $\rightarrow$ ${\it assignment\_expr}$ $(, {\it assignment\_expr})^{*}$\\  
+\item ${\it assignment\_expr}$ $\rightarrow$ ${\it lvalue}$ ${\it assign\_oper}$ ${\it assignment\_expr}$\\
+\item ${\it lvalue}$ $\rightarrow$ ${\it factor}$\\
+
+\item ${\it cond\_expr}$ $\rightarrow$ ${\it logOR\_expr}$ $(?{\it expr}:{\it cond\_expr}$ \\
+\item ${\it logOR\_expr}$ $\rightarrow$ ${\it logAND\_expr}$ $({\tt | |} {\it logAND\_expr})^{*}$ \\
+
+%\item ${\it logAND\_expr}$ $\rightarrow$ ${\it equality\_expr}$ $({\tt \&\&} {\it bitwiseOR\_expr})^{*}$\\
+
+\item ${\it logAND\_expr}$ $\rightarrow$ ${\it bitwiseOR\_expr}$ $({\tt \&\&} {\it bitwiseOR\_expr})^{*}$\\
+
+
+\item ${\it bitwiseOR\_expr}$ $\rightarrow$ ${\it bitwiseAND\_expr}$ $({\tt |} {\it bitwiseAND\_expr})^{*}$\\
+\item ${\it bitwiseAND\_expr}$ $\rightarrow$ ${\it equality\_expr}$ $({\tt \&} {\it equality\_expr})^{*}$\\
+
+\item ${\it equality\_oper}$ $\rightarrow$ ${\it relational\_expr}$ $(({\tt ==}{\tt |}{\tt !=}) {\it relational\_expr})^{*}$\\
+
+\item ${\it relational\_expr}$ $\rightarrow$ ${\it expr}$ $(({\tt <}|{\tt >}|{\tt <=}|{\tt >=}) {\it expr})^{*}$\\
+
+\item ${\it expr}$ $\rightarrow$  ${\it term}$ $(({\tt +} |{\tt  -} ){\it term})^{*}$\\ 
+\item ${\it term}$ $\rightarrow$ ${\it unary\_expr}$ $(({\tt *} |{\tt /}) {\it unary\_expr })^{*}$ \\
+ 
+\item ${\it unary\_expr}$ $\rightarrow$ ${\it postfix\_expression}$\\
+\item ${\it unary\_expr}$ $\rightarrow$ ~${\it unary\_expr}$\\
+
+\item ${postfix\_expression}$ $\rightarrow$ ${\it factor}$ $( . {\tt ID})^{*}$\\
+ 
+\item ${assignment\_operator}$ $\rightarrow$ ${\tt =} | {\tt *= } | {\tt /=} | {\tt += } | {\tt -=}$
+
+% To be clarified with Chitra 
+\item ${\it factor}$ $\rightarrow$ ${\tt ID}$\\
+\item ${\it factor}$  $\rightarrow$ ${\it constant}$\\
+\item ${\it constant}$ $\rightarrow$ ${\it NUMBER}$\\
+%\item ${\it constant}$ $\rightarrow$ ${\it STRING}$\\
+%\item ${\it constant}$ $\rightarrow$ ${\it CHAR}$\\
+\item ${\it constant}$ $\rightarrow$ ${\tt 'TRUE'}$\\
+\item ${\it constant}$ $\rightarrow$ ${\tt 'FALSE'}$\\
+
+\item \noindent ${\it NUMBER}$ $\rightarrow$ $({\it DIGIT})+$\\ 
+\item ${\it ID}$ $\rightarrow$ ${\it LETTER}$ $({\it LETTER}|{\it DIGIT})^{*}$
+%clarify with chitra.
+\item ${\it CHAR}$ $\rightarrow$ {\tt '} $( EscapeSequence$ $|$ $*\~*$ $($ {\tt '}$|$ {\tt $\backslash$} $)$ {\tt '} \\
+ 
+ %\item ${\it STRING}$ $\rightarrow$ $'"'$ $( EscapeSequence | ~(''|'"') )^{*}$ $'"'$;
+ 
+ \item ${\it DIGIT}$ $\rightarrow$ $[{\tt 0-9}]^{+}$\\
+\item ${\it LETTER}$ $\rightarrow$ $[A-Z,a-z,\_]^{+}$\\
+	
+%\item ${\it EscapeSequence}$ $\rightarrow$ $\\$ $({\tt 'b'}|{\tt 't'}|{\tt 'n'}|{\tt 'f'}|{\tt 'r'}|{\tt '\"'}|{\tt '\''}|{\tt '\\'})$\\
+
+%\item ${\it log\_expr}$ $\rightarrow$ ${\tt TRUE}$ ${\tt |}$ ${\tt FALSE}$ \\
+
+
+
+
+%\item \noindent ${\it rel\_expr}$ $\rightarrow$ ${\it id}$ ${\it rel\_oper}$ ${\it value}$\\
+%\item ${\it rel\_oper}$ $\rightarrow$  ${\tt ==}$ ${\tt |}$ ${\tt !=}$ ${\tt |}$ ${\tt <}$ ${\tt |}$ ${\tt <=}$ ${\tt |}$ ${\tt >}$ ${\tt |}$ ${\tt >=}$\\
+%\item ${\it id}$ $\rightarrow$ $([{\tt a-z,A-Z}]^{+}[{\tt 0-9}]^{*})^{+}$\\
+%\item ${\it value}$ $\rightarrow$ ${\it id}$\\
+
+ 
+%logic_expr -> logic_expr oper logic_expr | rel_expr
+%rel_expr -> id rel_oper val
+
+
+\end{enumerate}
