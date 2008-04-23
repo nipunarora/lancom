@@ -1,0 +1,1533 @@
+\ section
+{
+Related Work}
+ \label
+{
+related_research}
+
+There exists a wealth of tools for measuring
+{
+\it Installed or Bottleneck Capacity}
+of an end - to - end path.Dovrolis et.al.have
+  presented an accurate definition of this metric \ cite
+{
+ton_dispersion}
+. Consider a network path $P$ as a sequence of fist - come first -
+served (FCFS)
+  store - and - forward links that transfer
+    packets from a sender $S$ and receiver $R$.Each link $i$ transmits
+    data with a constant rate of $C_i$ bits per second, referred to as
+  {
+  \it link capacity}
+
+or
+{
+\it transmission rate}
+
+.The bottleneck link
+  capacity or installed capacity is the minimum transmission capacity of
+  all links in $P$.More formally, if $H$
+is the number of hops (links) in $P$, $C_i$ is the capacity of the link $i$, and $C_0$ is the transmission rate of the sender, then the path capacity is:
+  $$C = min (C_i) \ \i \ in \
+  {
+  0, \ldots, H \}
+$$ \ noindent Note that the link capacity is independent of the traffic
+  load on the path.
+  On the other hand, the bottleneck link capacity is measured by
+  injecting two back - to - back packets into the network and thereby
+  measuring the dispersion (time delay between the end of reception of
+			    the first packet to the end of reception of the
+			    last packet) \ cite
+{
+pktpair_keshav, ton_dispersion}
+
+.Pathchar \ cite
+{
+sigcomm1999, pathchar_url}
+appears to be one of the most accurate
+  tools to estimate the slowest link of an end - to - end IP Path.Figure \ ref
+{
+Basic_Pkt_Pair_Disp}
+displays the measuring principle behind this
+  technique:two back - to - back packets are sent from a one link to
+  another via a low capacity bottleneck
+link (we shall refer to such
+      bottleneck link as the narrow link or the slow link).
+When this packet
+  pair leaves the narrow link for a faster / higher capacity link, a gap
+  is introduced between the packet pair which is proportional to the
+  slow link 's capacity.
+
+The {\it Packet Train } method enlarge the packet-pair dispersion by
+increasing the number of packets. The received dispersion is measured
+between the end of the first packet and the end of the last packet of
+the train \cite {ieee2003}. Thus, the end-to-end capacity is measured
+as:
+$$C = (N-1)*\frac{L}{\Delta_R(N)}$$ 
+for a train of N packets, where the L is the size of each packet (in
+bits) and $\Delta_R(N)$ is the end-to-end dispersion of the entire
+train \cite{ieee2003,sigmetrics2004,iwqos2002}.
+
+LinkWidth uses a variation of the Recursive Packet Train
+\cite{sigcomm2004} (originally RPT was used in Pathneck
+\cite{sigcomm2004,pathneck_url}). Packet train has its obvious
+advantages over the packet pair method: IP, inherently unreliable
+connectionless protocol, can potentially fragment large size packet
+and may even reorder them. This is especially true for large sized
+packets. Packet train method overcomes such an effect by sending long
+trains of packets. Smaller cross traffic packets in such long trains
+don' t add significant end - to - end dispersion to cause much perturbation in the measurements.Packet pair suffer from size dependent over - estimation and under - estimation effects \ cite
+{
+  sigmetrics2004
+    }.Other tools which measure bottleneck capacity such as pchar \ cite
+    {
+    pchar_url}
+  , clink \ cite
+  {
+  clink_url}
+  and bing \ cite
+  {
+  bing_url}
+  are
+    not as accurate as pathchar under various / adverse link and
+    cross - traffic conditions.The experimental results which justify our
+    claim, have been presented in later sections in this paper.Although
+    all previous tools implement packet pair method in some form, they
+    suffer from capacity under - estimation and capacity - overestimation
+    effects due to various link and cross traffic conditions \ cite
+  {
+  sigmetrics2004, iwqos2002}
+  .LinkWidth uses long trains of TCP RST
+    packets (sent back - to - back in real - time) can be used effectively to
+    compute the bottleneck link capacity under various link and traffic
+    conditions.Moreover, this value is capacity is used as an upper bound in
+    our measurement of available capacity (using a modified version of
+					   Train of Packet Pair method).
+    \ begin
+  {
+  figure}[htp] \ includegraphics[scale = 0.38]
+  {
+  plots / basic_pkt_pair_disp.png}
+  \caption
+  {
+  Basic Packet Pair Dispersion Technique:The two packets go
+      from a high - capacity link to a slow one and then to a high -
+      capacity link introducing a delay between the pairs}
+   \label
+  {
+  Basic_Pkt_Pair_Disp}
+   \end
+  {
+  figure}
+
+  \cite
+  {
+  ton_dispersion} furthur defines
+  {
+  \it Available or Un - utilized
+      Capacity} as the a function of the link 's {\it utilization}. If $u_i$
+is the link utilization for link $i$ (where $0 \le u_i \l_e 1$) over a
+certain time interval, the average spare capacity of link $i$ is
+$C_i(1-u_i)$. Thus, the available capacity of $P$ in the same interval
+can be defined as:
+$$A = min([C_i(1-u_i)]),\ \ i\in \{0,\ldots,H\}$$
+Available capacity has been further classified as {\it Available
+Bottleneck Link Capacity, Surplus Available Capacity and Proportional
+Share Capacity} by Melander, Bjorkman
+et. al. \cite{TOPP_globecom2000}. Most research
+\cite{TOPP_globecom2000,ieee2003,ton_dispersion,jain02endtoend,pathchirp}
+have acknowledged available capacity to be defined as something quite
+similar to this definition.
+
+There are two broad types of available capacity estimation techniques,
+viz. Self Loading of Periodic Streams (SLoPS) and Train of Packet Pair
+(TOPP) \cite{ieee2003}. The idea behind both these techniques is not
+radically different. In SLoPS one of the hosts (the sender $S$) send
+to the other host (the receiver $R$) a stream of packets over a fixed
+path $P$. The receiver measures the One-Way-Delay(OWD) of such trains
+in succession\cite{pathload_jain_ppt}:
+\vspace{-0.05in}
+$$\Delta_R = T^R_{arrive} - T^S_{send} = T_{arrive} - T_{send} + Offset(S,R)$$ 
+
+As long as $S$ sends to $R$ within the available capacity, the OWD
+such trains remains constant. When the sender injects packets at a
+rate faster than the available capacity (minimum spare capacity), the
+OWD starts to grow linearly (see figure \ref{basic_owd_slops}).
+
+\begin{figure}[htp]
+  \centering		
+  \includegraphics[scale=0.6,width=3.5in,keepaspectratio=true]{plots/basic_owd_slops.png} 
+  \vspace{-.1in}
+  \centering
+  \caption{Variation of One Way Packet Delay(OWD) versus Number of
+	Packets Sent in SLoPS: OWD remains constant as long as the sending
+	rate is within the available capacity; grows linearly when the
+	sending rate exceeds the available capacity}
+  \label{basic_owd_slops}
+\end{figure}
+ 
+To measure the OWD of each of the trains, SLoPS requires both sender
+$S$ and receiver $R$ to have either synchronized clocks or add to the
+difference in time of reception and sending, the clock drift offset
+the hosts. This requirement makes SLoPS difficult to be used in
+situations where we do not have control over the clock of the host at
+the other end of path $P$.  Some of the most commonly known available
+capacity estimation techniques use the SLoPS technique.
+
+TOPP \cite{TOPP_globecom2000} is not very different from SLoPS: the
+sender iteratively sends a train of packet pair at some rate $O_i$
+(typically $0 \le O_i \le C $(bottleneck capacity)) over the fixed
+path $P$ to receiver $R$. Assuming $R$ receives these train of packet
+pairs at some rate $M_i$, the ratio $O_i/M_i$ is
+calculated. Theoretically, this ratio should be exactly one as long as
+the sender sends within the available capacity (figure
+\ref{TOPP_knee_points} shows a variation of $O/M$ versus $O$). When
+the sender sends faster than what the receiver can receive, the ratio
+grows linearly with respect to the sending rate $O_i$ (the receiver
+cannot receive faster than the available capacity; this is shown by
+the knee point, $\tau$, in figure \ref{TOPP_knee_points}). A train of
+packet pair is definitely better than just a pair.
+
+{\em Since TOPP relies only on the sending and receiving rates
+(sending and receiving dispersions)of the entire train, it is a
+suitable of measurement technique for single-end point controlled
+technique. SLoPS requires either the clocks of the hosts to be
+synchronized or the clock offset to be taken into account during the
+measurement of the OWD of each train. This makes SLoPS difficult to be
+implemented as a single-end point controlled technique.}
+
+\comment{ \cite{pathload_jain_ppt} however also mentions a variation
+of SLoPS which uses the difference between the OWDs of successive
+trains rather than the OWDs themselves. The difference should be
+ideally zero as long as the sender sends within available capacity and
+should grow monotonically when the sender sends faster than the
+available capacity.  }
+
+LinkWidth is the first tool to implement a single-end controlled tool
+for measuring end-to-end capacity using an optimized Train of Packet
+Pair. We use a binary search over the range ($0$ to $C$(the end-to-end
+capacity); $A$, the available capacity cannot possibly more than the
+$C$). Other tools commonly known for measuring available capacity are
+pathrate \cite{ton_dispersion}, pathchirp \cite{pathchirp}, pathload
+\cite{jain02endtoend}, IPERF and lately abget \cite{dovrolis_markatos}
+(which is the only other single-end controlled available capacity
+estimation technique which gives a measure of both the upload and
+download capacity). Most of these available capacity estimation tools
+use SLoPS technique for measurement of available capacity; LinkWidth,
+to the best of the knowledge of the authors, is th only tool that
+implements single-end controlled tool that uses an optimized version
+of TOPP to compute available capacity.
+
+
+\section{Measurement Approach}
+
+This section discusses our measurement methodology for both installed
+and available capacity from a single host. We extend some of the
+existing tools and described in the previous section
+\ref{related_research}. We begin this section with some background
+information about of TOPP and RPT and then we analyses the design and
+implementation details of our modified RPT and TOPP and how we
+integrated them into LinkWidth.
+
+\subsection{Train of Packet Pair (TOPP)}
+In Train of Packet Pair (TOPP) method the sender $S$ sends trains of
+packet pairs at gradually increasing rates from to the receiver
+$R$. Assuming a train of packet pair sent with an initial dispersion
+of $R_o$. The probe packets have size of $L$ bytes and thus the
+offered rate of the packet pair is $O = L / R_o$. As long as $O \leq
+A$, TOPP assumes that the train of packet pair will arrive at the
+receiver with the same rate with which it was injected into the
+network by the sender, i.e. $M = O$.  If $O>A$, the measured rate at
+the receiver will be $M<O$. As per \cite{TOPP_globecom2000} that the
+received rate $M$ is a fraction of the sending rate $O$ when the
+sending rate $O$ exceeds the available capacity $A$. Typically, {\bf$M
+= (O/(O+X))*C$ } \\
+
+
+\noindent Thus,\\
+\noindent $M = (O/(O+X))*C$\\
+\noindent or $O/M = (O + X) / C $\\
+\noindent or $O/M = (O + C - A) / C $\\
+\noindent {\bf {or $O/M = O/C + (1-A/C)$}}\\
+
+
+\noindent This gives a linear variation of $O/M$ versus $O$ in the case where $O>A$ . This is illustrated in figure ~(Figure \ref{TOPP_knee_points}) 
+
+\begin{figure}[htp]
+  \includegraphics[width=2.3in]{plots/basic_owd_topp.png}	
+  \caption{Variation of the Ratio (Offered Rate ($O$) / Measured Rate
+  ($M$)) versus Offered Rate (O) : $O = \tau$ is available capacity
+  and the ratio $O/M = 1$. $O>A$ is indicated by the linear increase
+  of $O/M$ with increase in $O$ }
+  \label{TOPP_knee_points}	
+ \vspace{-.1in}
+\end{figure}
+
+Here the graph displays the available capacity achieved at
+$O$=$\tau$. The very idea of TOPP isn' t far from SLoPS but we neither SLoPS nor TOPP verbatim.We propose a modification of the original TOPP to include a binary search technique to estimate the value of available capacity continent upon two convergence parameters $ \ theta$ and $ \ epsilon$ described in a later subsection ~ \ref
+  {
+  TCP_TOPP}).
+    As long as the sender injects packets at a rate within available
+    capacity $A$, it must be received at the same rate.In case of
+    cross - traffic, the probe packets may have to wait in queues, thereby
+    possibly incurring additional queuing delay (s) between the first and
+    last packet of the train (possibly resulting in additional end - to - end
+			      dispersion).
+    This is due to best effort routing of the Internet which may multiplex
+    probe traffic with cross - traffic.Thus,
+    less cross -
+    traffic would result in more available capacity for the probe packets.
+    The greater the available capacity,
+    the higher the chances of the train of packet pairs to be forwarded with
+    rates at which it was injected into the network by the sender.
+    This justifies the fact why small cross traffic on high bandwidth links
+    has less effect on our probes (as presented in section \ ref
+				   {
+				   experiments_and_results}
+  )
+    .The
+      available capacity measure in such cases is usually close to the
+      maximum installed link capacity.This is also the case for other
+      available capacity estimation tools, such as IPERF, which set up an
+	end - to - end TCP connection.Elastic TCP flows utilize all the
+	un utilized available capacity;
+  hence what we measure from LinkWidth
+    (which uses such train of packet pair probes) is not very different
+    from what we measure when using IPERF.These results are presented and
+    explained in detail in a later section of this paper (section \ ref
+							  {
+							  experiments_and_results}
+  ).Corollary to this observation, in case
+    of a non - elastic Constant Bit Rate (CBR) UDP traffic, the available
+    capacity (the `` head room '') may not increase considerably.Thus, what
+    we measure as the installed link capacity is actually the bandwidth
+    un utilized by the aggressive CBR UDP cross traffic (section \ ref
+							 {
+							 experiments_and_results}
+  ). \ subsection
+  {
+  \bf Pathneck (Recursive Packet Train)}
+  Pathneck proposed by Ninigin Hu et.al. \ cite
+  {
+  sigcomm2004}
+  , used
+    Recursive Packet Train (RPT) technique to locate bottleneck links and
+    measure the end - to - end installed bottleneck capacity.The recursive
+    packet train uses a train of back - to - back UDP packet (called load
+							      packets) which
+    are appended and prepended by another train of UDP packets called
+    measurement packets.Figure \ ref
+  {
+  RPT_basic}
+  describes the arrangement of packets in the pathneck arrangement. \ begin
+  {
+  figure}
+  [htp] \ includegraphics[width = 3.5i n]
+  {
+  plots / basic_pathneck_rpt.png}
+
+
+  \caption
+  {
+    Arrangement of packets in RPT Pathneck:IP TTL values increase from 1..
+      .30 (head measurement packets);
+    intermediate load packets TTL = 255;
+  IP TTL values decease from 30...1 (tail measurement packets)}
+  \ label
+  {
+  RPT_basic}
+  \end
+  {
+  figure}
+
+  Evident from the arrangement of packets in RPT, the TTL values of each
+    of the head and tail measurement packets would decrement to zero at
+    each hop of the train.This would send ICMP TTL Expired packets back
+    to the sender.The dispersion between two consecutive ICMP TTL expired
+    packets at the source from the same router would give a good
+    approximation of the dispersion of the packet train as perceived at
+    the router. \ subsection
+  {
+  \bf The TCP Variant of RPT}
+  \label
+  {
+  TCP_variant_RPT}
+  We modified the RPT method used by pathneck and incorporated TCP SYN
+    packets in place of UDP / ICMP packets as was described in the previous
+    section.TCP SYN packets being sent to a closed TCP port (on which no
+							     service is
+							     waiting for
+							     incoming
+							     connections)
+    are used as the head and tail measurement packets.Any operating system,
+      adhering to standards,
+      would reply back to such with a TCP RST +
+      ACK packet.Our arrangement ~ (Figure \ ref
+				    {
+				    TCP_RPT_1}
+  )somewhat attempts to emulate
+    the UDP based RPT.The head measurement packets which are sent to even
+    port numbers that match up with the tail measurement packets going to
+    the next consecutive odd port numbers (the original RPT
+					   implementation uses the 16 -
+					   bit IP Identification field of the
+					   IPv4 header for this purpose)
+    . \ begin
+    {
+    figure}
+  [htp] \ centering \ includegraphics[scale = 0.23]
+  {
+  plots / basic_rpt_tcp.png}
+  \caption
+  {
+    TCP based variant of RPT:TCP SYN packets to even port
+      offset (head measurement packets);
+    Intermediate TCP RST (load packets);
+  TCP SYN Packets to odd offset (tail measurement packets)}
+  \ label
+  {
+  TCP_RPT_1}
+  \end
+  {
+  figure}
+
+
+  From the arrangement ~ (Figure \ ref
+			  {
+			  TCP_RPT_1}
+  ), we see each of the
+    consecutive SYN segments in the arrangement being sent of the
+    consecutive routers along the path to the destination.Starting with
+    a certain base port number BASE - PORT, each of the consecutive packets
+    are sent to consecutive even destination port numbers BASE - PORT + $2$,
+    BASE - PORT + $4$, BASE - PORT + $6$, BASE - PORT + $ (2 * N) $.Thus,
+    packet sent with destination port as BASE - PORT +
+    $2$ is sent to router 1, with BASE - PORT + $4$ is sent to router 2,
+    with BASE - PORT +
+    $6$ is sent to router 3 and so on such that the one going to BASE - PORT +
+    $ (2 *
+       N) $ is sent to the destination hop.
+    This arrangement of packets forms the head measurement packets.
+    This is followed by the TCP RST load packets;
+  and finally the tail measurement packets which are sent to consecutive odd destination port numbers BASE - PORT + $3$, BASE - PORT + $5$, ..., BASE - PORT + $2 * N + 1 $ (each being sent to the consecutive routers along the path to the destination).The reason for using such port numbering is to match up each of the head measurement packet 's TCP RST+ACK reply (from even TCP port number)
+ with that due the tail measurement packet (from the next consecutive
+ odd TCP port number). Thus, the measured time dispersion between two
+ such consecutive TCP RST+ACK packet (coming from two consecutive port
+ numbers) gives the end-to-end dispersion of the entire train measured
+ for that particular router.\\
+
+
+\noindent There are two inherent advantages of the
+ above arrangement:-
+\begin{enumerate}
+ \item Most of the single-ended controlled methods for measuring the
+ capacity and / or available capacity make, use of ICMP TTL expired
+ packets.  Commercially available routers give very low priority to
+ ICMP packet generation / forwarding resulting is large end-to-end
+ gaps being inserted between the ICMP TTL expired packets. This leads
+ to capacity underestimation. We avoid, as much as possible, such a
+ situation using TCP packets.
+ \item The load packets used here are TCP RST packets which don' t result in
+    the ICMP Destination Unreachable packets which used to be generated in case of older UDP / ICMP based techniques such as Pathneck and CapProbe.This avoids reverse cross - traffic for the forward probe traffic. \ end
+  {
+    enumerate
+      }
+
+      \subsection
+      {
+      \bf TCP Based Train of Packet Pairs (TOPP) -
+	  Available Capacity Estimation}
+    \label
+    {
+    TCP_TOPP}
+    A certain variation of the Train of Packet Pair method, described
+      earlier, is used to measure the available capacity of an end - to - end
+      IP path.A single - end controlled technique, requires the sender to
+      send packets at varying sending rates and to measure the varying
+      receiving rates, and thereby converging to a value of available
+      capacity ($A = O_i$ (some sending rate less than the capacity $C$))
+      depending on whether $O / M \ approx 1 $ or $O / M >
+      1 $.The arrangement of packet train (figure \ ref
+					   {
+					   TOPP_used}
+					   .Rather than using an iterative
+					   linear increment to $O_i$ (where $0
+								      \ le O_i
+								      \ le C$)
+					   we perform a binary search over the
+					   entire range $[0,
+							  C] $ to select
+					   values for $O_i$ and decide if we
+					   are sending within available
+					   capacity or more than that. \
+					   subsubsection *
+					   {
+					   \bf Binary Search Procedure Used to
+					   Compute the Available Capacity}
+					   The value of available capacity
+					   converges to a value $O_i$,
+					   such that $O_
+					   {
+					   MIN}
+					   \le O_i \ le O_
+					   {
+					   MAX}
+					   $ ($O_
+					      {
+					      MIN}
+					      $ being zero in all cases
+					      and $O_
+					      {
+					      MAX}
+					      $ being the upper bound -
+					      $C$).
+					   LinkWidth iteratively performs a
+					   binary search over the range $[O_
+									  {
+									  MIN}
+									  , O_
+									  {
+									  MAX}
+					   ]$.At
+					   each iteration,
+					   LinkWidth send the Train of Packet
+					   Pairs at $O_
+					   {
+					   MID}
+					   $, where $O_
+					   {
+					   MID}
+					   = (O_
+					      {
+					      MIN}
+					      +O_
+					      {
+					      MAX}
+					   ) / 2 $.At each iteration,
+					   the ratio of end - to -
+					   end dispersion of the packet train
+					   as received $R_m$ versus the end -
+					   to -
+					   end dispersion with which the
+					   sender injects it into the network
+					   $R_o$,
+					   is compared with the convergence
+					   parameter $ \ epsilon$.
+					   If this ratio $ (R_m / R_o) >
+					   (1 -
+					    \epsilon) $ we go on trying with
+					   faster sending rate by setting $O_
+					   {
+					   MIN}
+					   = O_
+					   {
+					   MID}
+					   $.However,
+					   if the ratio exceeds unity,
+					   we know we have sent more than the
+					   available capacity and we slow down
+					   our sending rate by setting $O_
+					   {
+					   MAX}
+					   = O_
+					   {
+					   MID}
+					   $.
+					   There is also a possibility of the
+					   received dispersion less than the
+					   sending dispersion;
+					   resulting in capacity over
+					   estimation.
+					   This phenomenon is explained more
+					   clearly by Kapoor et.al \ cite
+					   {
+					   sigmetrics2004}
+					   .
+					   This is experienced when the ratio
+					   $R_m / R_o <
+					   1 -
+					   \epsilon$ (the convergence
+						      parameter).
+					   In such a situation we set $O_
+					   {
+					   MAX}
+					   = O_
+					   {
+					   MID}
+					   $ to reduce our sending rate to a
+					   new value which is half of the
+					   previous value.
+					   The algorithm converges when the
+					   difference $O_
+					   {
+					   MAX}
+					   -O_
+					   {
+					   MIN}
+					   $ is less than the granularity
+					   parameter $ \ theta$. \\\\
+					   \noindent The following algorithm
+					   summarizes the procedure to compute
+					   available capacity \ begin
+					   {
+					   enumerate}
+					   \item Start with a range of sending
+					   rate $0$ bps - $C$ bps (the end -
+								   to -
+								   end
+								   bottleneck
+								   capacity)
+					   ($O_
+					    {
+					    MIN}
+					    $ = $0$ bps and $O_
+					    {
+					    MAX}
+					    $ = $C$ bps). \ item If $ | O_
+					   {
+					   MAX}
+					   -O_
+					   {
+					   MIN}
+					   |<\theta $ then report $A = (O_
+									{
+									MIN}
+									+O_
+									{
+									MAX}
+					   ) /
+					   2 $ and stop the search procedure \
+					   item Perform the experiment by
+					   sending the train of packet pair
+					   with appropriate sending rate and
+					   compute $ O / M = R_m / R_o $;
+					   ($R_o$ =
+					    end - to -
+					    end dispersion of the train at the
+					    sender - side;
+					    $R_m$ =
+					    end - to -
+					    end dispersion of the train at the
+					    receiver -
+					    side) \ item If $ ((R_m / R_o) >=
+							       1 -
+							       \epsilon)
+					   and ((R_m / R_o) <=
+						1) $ (sending rate is within
+						      available capacity and
+						      we can try sending
+						      faster), set $O_
+					   {
+					   MIN}
+					   = O_
+					   {
+					   MID}
+					   $ and go back to
+					   step 2
+					   \ item Else if $ (R_m / R_o) >
+					   1 $ (we are above the available
+						capacity and hence need to
+						back off), set $O_
+					   {
+					   MAX}
+					   = O_
+					   {
+					   MID}
+					   $ and go back to step 2
+					   \ item Else if $ ((R_m / R_o) <
+							     1 -
+							     \epsilon) $ (we
+									  are
+									  above
+									  the
+									  available
+									  capacity
+									  and
+									  hence
+									  need
+									  to
+									  decrease
+									  our
+									  sending
+									  rate
+									  O),
+					   set $O_
+					   {
+					   MAX}
+					   = O_
+					   {
+					   MID}
+					   $ and go back to step 2 \ end
+					   {
+					   enumerate}
+
+					   This is what we had selected to `` tune '' LinkWidth 's convergence conditions, based upon the results when we measured the end-to-end available capacity with a IPERF, which sets up an end-to-end TCP connection. We know we have sent more than the available capacity and we slowdown the sending rate by setting $O_{MAX} = O_{MID}$.
+
+
+This is in accordance to the theoretical background described in
+\cite{TOPP_globecom2000}; sender and receiver dispersion is almost the
+same as long as the sender sends within the available capacity. Thus,
+ideally, the ratio should be exactly one as long as the sender sends
+within available capacity. However, we never get a ratio of exactly
+one due to errors in our time computation (inherent to Intel x86
+platform). Since, we don' t have any knowledge of the cross - traffic, we
+					   needed some figures to determine what values could we approximate as `` unity '' for the purpose of our making the decision for the binary search (so as to decrease or increase the sending rate by half).Thus we `` tuned '' the convergence parameters by correlating with the results which we achieved by running IPERF.The real Internet traffic emulation being anyways a hard problem with the existing hardware and software within a lab environment, we required this `` tuning '' of LinkWidth to determine correctly the installed and available cross traffic for the emulated / shaped link capacities and the crude Internet workload generation we used.When running LinkWidth Accross hosts connected to the Internet, we required tuning the convergence parameters $ \ epsilon$ and $ \ theta$ with some idea of what to expect
+					   as the installed and available capacity (when compared with IPERF).As presented in the section \ ref
+					   {
+					   experiments_and_results}
+					   , when the ratio
+					   lies in the range of 0.9000 to
+					   0.9999 we assume that we are
+					   sending within our available
+					   capacity.
+					   This is also proven with
+					   correlating to what we achieve with
+					   IPERF.
+					   The $ \ epsilon$ parameter for such
+					   experiments was set to 0.1.Thus,
+					   as long as the ratio is less than
+					   one and more than $1 -
+					   \epsilon$ we assume we are within
+					   the available capacity and hence go
+					   on increasing the sending rate. \
+					   subsection
+					   {
+					   \bf Implementation Methodology}
+					    \label
+					   {
+					   implementation_meth}
+					   The implementation methodology for
+					   implementing LinkWidth is simple.
+					   It involves merging the two
+					   techniques described above,
+					   namely the TCP based RPT with the
+					   TCP oriented TOPP implementation.
+					   LinkWidth is implemented from an
+					   existing implementation of PATHNECK
+					   \ cite
+					   {
+					   sigcomm2004}
+					   .UDP /
+					   ICMP TTL Expired Packets used for
+					   measuring the end - to -
+					   end dispersion of the Train of
+					   Packet Pair at the destination is
+					   replaced with a TCP based
+					   implemented.
+					   The head measurement packets,
+					   the load packets and the tail
+					   measurement packets are such as
+					   that described earlier ~ (Figure \
+								     ref
+								     {
+								     TCP_RPT_1}
+					   ).The head
+					   measurement packets are so arranged
+					   such that the first head packet and
+					   the first tail measurement packet
+					   are destined to the first hop in
+					   the path.
+					   The second head and the second tail
+					   packet are destined to the second
+					   host and so on till the end of the
+					   train.
+					   The head measurement packets are
+					   sent to even port numbers while the
+					   tail measurement packets are send
+					   to the next consecutive odd ports.
+					   This is as per the description of
+					   TCP based RPT ~ (subsection \ ref
+							    {
+							    TCP_variant_RPT}
+					   ).
+					   The TCP based RPT procedure gives
+					   us a measure of the end - to -
+					   end installed /
+					   bottleneck capacity $C$.
+					   This estimation of $C$ is used as
+					   an upper bound in the binary search
+					   procedure used by our TCP based
+					   Train of Packet Pair method.
+					   The figure \ ref
+					   {
+					   TOPP_used}
+					   described the
+					   arrangement of packets in the TCP
+					   based TOPP.
+					   Our TCP based TOPP procedure uses
+					   an iterative binary search to try
+					   out capacities in the range $[0,
+									 C] $
+					   and converges (by using the
+							  algorithm outlined
+							  in the previous
+							  subsection \ ref
+							  {
+							  TCP_TOPP}
+  )to a value of available capacity. \ noindent The following are the input parameters that LinkWidth takes:-\begin
+					   {
+					   itemize}
+					   \item $num$ \ _$load$ \ _$pkts$ =
+					   Number of load packets for the TCP
+					   based RPT \ item $ \ theta$ =
+					   granularity parameter (in bps) \
+					   item $ \ epsilon$ =
+					   convergence parameter \ item
+					   $payloadSize$ =
+					   Payload Size (in Bytes) \ item
+					   $npackets$ =
+					   Number of packets per train \ item
+					   $ \ Delta r_t$ =
+					   Inter -
+					   Pair gap (in microseconds) \ item
+					   Inter -
+					   Train delay (in seconds) \ item
+					   Output file \ end
+					   {
+					   itemize}
+
+					   \subsubsection *
+					   {
+					   \bf Arrangement of Packets in the
+					   TCP Based TOPP}
+
+					   \begin
+					   {
+					   figure}
+					   \includegraphics[width = 3.4i n]
+					   {
+					   plots / basic_tcp_topp.png}
+					   \caption
+					   {
+  Arrangement of Packets in TOPP:	   TCP SYN packet used as head
+					   measurement packet;
+					   Intermediate TCP RST load packets;
+					   TCP SYN packet used as tail
+					   measurement packets}
+					   \label
+					   {
+					   TOPP_used}
+					   \end
+					   {
+					   figure}
+
+					   The figure \ ref
+					   {
+					   TOPP_used}
+					   describes the arrangement of
+					   packets used by the TCP based TOPP.
+					   Here \ begin
+					   {
+					   itemize}
+					   \item $R$ =
+					   End - to -
+					   end dispersion of the train \ item
+					   $ \ Delta r_i$ =
+					   Intra pair gap for a given sending
+					   rate $O_i, (1 \ le i \ le K) $,
+					   assuming we converge to the
+					   available capacity within $K$
+					   trains \ item $ \ Delta r_t$ =
+					   Fixed Inter pair gap for each train
+					   \ end
+					   {
+					   itemize}
+
+					   \noindent Thus, \\\noindent
+					   {
+					   \bf $R =
+					   (m * \Delta r_i) + (m -
+							       1) *
+					   \Delta r_t +
+					   2 * m * packetSendTime$}
+					   \\\\\noindent $m$ = number of packet pairs per train (used in TCP based TOPP; $m = npacket / 2 $) \\\\ \noindent $packetSendTime$ = time to inject a packet of $payloadSize$ bytes into the network (by the probe host).This is a function of the packet size being used for the probe and is determined anew every time LinkWidth is run.Our implementation of LinkWidth needs to change the sending rate $O$ depending upon the ratio $R_m / R_o$.Thus, we need to control the sending rate by controlling the intra - pair or inter - pair delays.We thus choose the inter - pair delay $ \ Delta r_i$ to be computed anew for each train.The intra - pair delay $ \ Delta r_t$ is accepted in as user input and chosen as a constant for each of the equations (it wouldn 't
+have been possible to compute two unknowns $\Delta r_i$ and $\Delta
+r_t$ from a single equation).
+
+\subsubsection{\bf {Computation of Intra - Pair Gaps}}
+From ~(Figure ~\ref{TOPP_used}) above, the intra-pair gaps can be
+computed as follows:-\\\\
+\noindent trainLen = The number bytes from the end of
+the first packet to the end of the last packet \\
+
+\noindent From the previous section we have the formula for end-to-end gap of the sending train as \\
+ 
+\noindent {\bf {$R_{o} = (m*\Delta r_i) + (m-1)*\Delta r_t + 2*m*packetSendTime$} }\\
+\noindent or $O=(trainLen*8)/R_{o}$\\
+
+\noindent Solving for $\Delta r_i$, given that the values of the other	
+variables are known and with the approximation $m-1 \approx m$ we get\\
+
+\noindent {\bf {$\Delta r_i = (trainLen*8)/(O*m) - (\Delta r_t +2*packetSendTime)$} }\\
+
+\noindent Thus, for each train $\Delta r_i$ value is
+computed anew. $O$ varies between $O_{MIN} (0)$ and $O_{MAX}$ ($C$ -
+the bottleneck capacity). The sending train rate is varied by varying
+this intra-pair gaps ($\Delta r_i$) while the value of inter-pair
+gap $\Delta r_t$ stays fixed (It is accepted as an input from the user
+program).
+  
+\subsubsection*{\bf {Controlling the Inter-Pair and Intr-Pair Gaps in Real-Time}}	
+ It is essential to introduce precise delays to implement the
+ Inter-Pair and Intra-Pair gaps for sending packets in real-time (for
+ accurately controlling the sending rates). For ensuring that
+ LinkWidth sends out packets with precise inter-packet/intra-packet
+ delays, we use the system call nanosleep(). The process scheduling is
+ switched to real-time SCHED\_FIFO with highest scheduling
+ priority. This essentially gives maximum CPU time slices to the
+ process; not achievable with the conventional SCHED\_OTHER
+ non-real-time Round Robin scheduling. Small delays of less than 2
+ microseconds are thus implemented as busy waiting loops. This
+ technique works correctly in case of Linux 2.4. Linux 2.6 actually
+ switches a task to sleep state and can cause a dispatch latency which
+ can as high as 10 microseconds; hence failing to ensure real-time
+ delays \cite{linux_man_page_ref}. {\it The high-res timers feature
+ (CONFIG\_HIGH\_RES\_TIMERS) enables POSIX timers and nanosleep() to
+ be as accurate as the hardware allows (around 1 usec on typical
+ hardware).This feature is transparent - if enabled it just makes
+ these timers much more accurate than the current HZ
+ resolution\cite{linux_high_res_timer_url}}.
+
+ Thus we have presented the entire picture of how LinkWidth measures
+installed and available capacity using a variant of RPT , used
+originally in Pathneck, and thereby uses this result and a single-end
+point controlled TCP variant of TOPP to estimate the available
+capacity.
+
+\section{Experiments and Results}
+\label{experiments_and_results}
+LinkWidth has been designed to determine the installed and available
+capacity to any host connected from only one host in the network. The
+objective is to determine the installed and available capacity to a
+host, especially having low access link capacity (ideally an
+individual user connected to the Internet through a DSL / Cable ISP
+Link to the Internet). To emulate such a link, we set up an in-lab
+testbed ~(Figure \ref{Basic_TBed}). Here the dashed and double-headed
+arrow represents the traffic shaped link (used to emulate the slow
+access link). The probing host, H3, runs a copy of LinkWidth to
+determine the available capacity to the host which can be seen as a
+crude approximation of the end host. There is also a host, H1, which
+generates the cross traffic (viz. CBR-UDP and elastic HTTP cross
+traffic to H2). For measuring the Installed and Available Capacity of
+across hosts connected across a Wide Area Network we run LinkWidth
+and other known tools to probe for installed and available capacity to
+hosts connected to the Interest ~(Figure \ref{Pub_Conn}) and to the
+PlanetLab Network \cite{planetlab_url}. The next two subsections
+describe in detail the installed and available capacity estimation
+over an in-lab test-bed and across hosts connected to the Internet
+and to the PlanetLab Network.
+
+\subsection{\bf Network Topology and Experimental Setup for Lab Experiments}
+\label{in_lab_exp}
+The following topology ~(Figure \ref{Basic_TBed}) was used for the in-lab experiments. Our motivation is to measure the Installed and Available Capacity of the traffic shaped slow access link, shown using the dashed and double-headed arrow (connecting H2 to router R2), from the probe host H3, in the absence / presence of cross traffic generated by host H1 connected to the network using a fast 100Mbps Fast Ethernet Link. 
+  
+\begin{figure}[htp]
+  \includegraphics[width=3.4in]{plots/basic_topology_inlab_exp.png} 
+  \caption{In Lab Test Bed : Used for measuring the installed and available capacity of the slow link connecting H2 to router R2}
+  \label{Basic_TBed}
+\end{figure}
+
+
+\subsubsection*{\bf Test bed configuration}
+  \noindent {\bf CPU:} Intel Celeron 2.0 Ghz.\\
+  {\bf OS:} Linux 2.4/Linux 2.6.17 (patched with Linux high resolution timer) \\
+  {\bf Packages:} RedHat 9.0 / Fedora Core 5 \\
+  {\bf Network Interface Card:} Integrated 10/100 Ethernet Adaptors \\
+  {\bf Network Link Emulation:} Nistnet \cite{nistnet_url} (for emulating the slow access link we used nistnet to traffic shape a 100 Mbps   ethernet link	to the required link capacity) 
+
+ Figure \ref{Basic_TBed} describes how to experimental testbed was
+setup. Host H1 generates cross traffic to the host H2 which is
+connected to the rest of the network through a traffic shaped slow
+link (shown through the dashed and double-headed arrow connecting H2
+to the router R2). Router R2 emulates a slow access link using Nistnet
+\cite{nistnet_url} network link emulation program. The probe host H3
+runs a copy of LinkWidth and various other installed / available
+capacity estimation tools. The operating system used on all the
+machines was Linux 2.6.15. The probe host ran both Linux 2.4 as well
+as Linux 2.6.17 patched with the {\it Linux High Resolution Timer }
+\cite{linux_high_res_timer_url} .
+   
+\subsection{\bf Network Topology and Experimental Setup for Hosts Connected Across the Internet}
+\label{internet_exp}
+The topology ~(Figure \ref{Pub_Conn}) was used for the measuring the
+capacity available capacity of hosts connected across the
+Internet. Basically the measurement involved measuring the installed
+and available capacity of the end-to-end path connecting hosts across
+real Internet using LinkWidth. The idea is to validate the results we
+obtain by running LinkWidth against what we get when we run other
+tools (IPERF and PATHCHAR).
+
+\begin{figure}[htp]
+  \includegraphics[width=3.4in]{plots/basic_topology_internet.png} 
+  \caption{Measuring Capacity of Hosts Connected to the Internet}
+  \label{Pub_Conn}
+\end{figure}	
+
+
+\subsection{\bf Experiments and Results}
+ 
+The experiments for measuring installed and available capacity were
+performed both in an in-lab setup (where we could control parameters
+such as bottleneck link capacity and cross traffic rate) as well as
+across hosts connected to the Internet (where such parameters
+couldn' t be controlled). \ subsubsection *
+					   {
+					   \bf Results of Measuring Installed
+					   and Available Capacity}
+
+					   For the in -
+					   lab experiments we used the
+					   topology as shown in Figure \ ref
+					   {
+					   Basic_TBed}
+					   as described in previous subsection
+					   ~ (subsection \ ref
+					      {
+					      in_lab_exp}
+					   ).
+					   The measurement of installed and
+					   available capacity involved
+					   generation of non -
+					   elastic Constant Bit -
+					   Rate (CBR) UDP traffic and elastic
+					   HTTP traffic.
+					   {
+  \bf Note:				   All measurements units used in this
+					   paper are Mega Bits Per
+					   Second (Mbps) where $1$ Mbps = $1$}
+					   x
+					   {
+					   \bf $10 ^
+					   {
+					   6}
+					   $ bits.}
+
+					   \begin
+					   {
+					   table *}
+					   [ht] \ begin
+					   {
+					   tabular *}
+					   {
+					   7.05i n}
+					   [b]
+					   {
+					   |p
+					   {
+					   2, 0i n}
+					   |l | l | l | l |}
+					   \hline
+					   {
+					   \bf CBR / UDP Cross}
+					   &&&&\\
+					   {
+					   \bf Traffic Rate (Mbps)}
+					   &
+					   {
+					   \bf 0}
+					   &
+					   {
+					   \bf 20}
+					   &
+					   {
+					   \bf 40}
+					   &
+					   {
+					   \bf 50}
+					   \\\hline \ bf
+					   {
+					   LinkWidth}
+					   &88 (I) /
+					   87 (A) \ footnotemark[1] 90 (I) /
+					   78 (A) \ footnotemark[2] & 66 (I) /
+					   63 (A) & 48 (I) / 45 (A) & 43 (I) /
+					   40 (A) \\\ hline \ bf
+					   {
+					   Iperf}
+					   &82 & 0.50 - 40 & 5 - 38 & 6 -
+					   15 \\\ hline \ bf
+					   {
+					   Bing}
+					   &83 & 88 & 90 & 70 \\\ hline \ bf
+					   {
+					   Pchar}
+					   &82 & 68 & 45 & 38 \\\ hline \ bf
+					   {
+					   Pathchar}
+					   &80 & 62 & 45 & 32 \\\ hline \ bf
+					   {
+					   Clink}
+					   &78 & 48 & 47 & 43 \\\ hline \ bf
+					   {
+					   Pathrate}
+					   &98 & N / A & N / A & N /
+					   A \ footnotemark[3] \\\ hline \ bf
+					   {
+					   PathLoad}
+					   &95 & 87 - 90 & 64.20 - 92.40 & 0 -
+					   3.3 \ footnotemark[5] \\\ hline \
+					   bf
+					   {
+					   PathChirp}
+					   &73 & 65 & 66.5 & 66.5 \\\ hline
+					   \ bf
+					   {
+					   abget}
+					   &30 - 40U / 50 -
+					   60 D \ footnotemark[4] & 20 -
+					   30U / 0 - 20 D & 10 - 20U / 20 -
+					   40 D & 40 - 50U / 20 -
+					   50 D \\\ hline \ end
+					   {
+					   tabular *}
+					   \label
+					   {
+					   in_lab_cbr}
+					   \caption
+					   {
+  Installed and Available Capacity for CBR / UDP Cross Traffic (Units:Mbps)}
+					   \end
+					   {
+					   table *}
+
+					   \footnotetext[1]
+					   {
+					   I = Installed Capacity / A =
+					   Available Capacity}
+					   \footnotetext[2]
+					   {
+					   The first result is obtained with
+					   Linux 2.4 while the second is
+					   obtained with Linux 2.6 .17 patched
+					   with the high precision timer
+					   patched.Very evidently,
+					   using the high precision timer
+					   patch,
+					   we can send packets back - to -
+					   back with least possible delays;
+					   while in case of measurement of
+					   available capacity,
+					   we cannot generate the precise
+					   inter -
+					   packet delays packet delays less
+					   than 1 usec,
+					   which prevents us from sending the
+					   packet at the full capacity by
+					   decreasing the inter -
+					   packet gaps to small non -
+					   zero values.Evidently,
+					   this is an upper bound of the
+					   smallest possible delays which
+					   prevents us from controlling
+					   sending rates faster than about 78
+					   Mbps (even in the absence of cross
+						 traffic)}
+					   \footnotetext[4]
+					   {
+					   U = Available capacity for
+					   uploading to server / D =
+					   Available capacity for downloading
+					   from server}
+
+
+					   The CBR -
+					   UDP traffic was generated using
+					   {
+					   \bf Real - time UDP Data
+					   Emitter (RUDE)}
+					   and
+					   {
+					   \bf Collector of RUDE (CRUDE)}
+					   \cite
+					   {
+					   rude_url}
+					   .To generate TCP workloads, we used
+					   {
+					   \bf HTTPERF}
+					   \cite
+					   {
+					   httperf_url}
+					   .
+					   The slow link (shown as the dashed
+							  and double -headed
+							  link in Figure \ ref
+							  {
+							  Basic_TBed}) was
+					   emulated using Nistnet.
+					   To measure the installed and
+					   available capacity to H2 from
+					   R2 (over the slow access link) in
+					   the presence of cross - traffic,
+					   we ran LinkWidth and some other
+					   tools viz.IPERF, pathchar,
+					   pathload,
+					   between the probing host H3 and H2.
+					   We thus present in table \ ref
+					   {
+					   in_lab_cbr} the results obtained from measurement of installed and available capacity of the slow link using the various tools and by varying the CBR / UDP cross - traffic flowing over the slow access link connecting R2 to host H2.As evident from the results, what we measure as the installed capacity is the actually the un - utilized capacity of the link.Unlike reactive TCP traffic, CBR / UDP is aggressive and doesn 't slow down in the presence of
+cross-traffic. Thus we are never able to achieve the full capacity of
+the link in case of aggressive CBR/UDP cross traffic. Thus what we
+measure as the installed capacity is actually the un-utilized link
+capacity (available capacity) and hence what we measure as the
+available capacity is almost the installed capacity.
+
+The same experiment is repeated with decreasing the link capacity of
+the slow access link connecting H2 to R2 to 10 Mbps. The table
+\ref{in_lab_cbr_low} presents the results from the experiment. In both
+cases, part of the link capacity being used up by CBR/UDP cross
+traffic can never be used (the CBR/UDP cross-traffic is as aggressive
+and opportunistic as the probe traffic).
+
+\begin{table*}[htp]
+\begin{tabular*}{4.65in}[b] {|l|l|l|l|}
+\hline
+{\bf CBR/UDP Cross}&&&\\
+{\bf Traffic(Mbps)}&{\bf 0}&{\bf 2}&{\bf 5}\\\hline
+{\bf LinkWidth}&9.6(I)/9.5(A)&9.3(I)/7.4(A)&4.6(I)/3.2(A)\\\hline
+{\bf Iperf}&8.5.1&6.2&3.53\\\hline
+{\bf Bing}&10&7.5&5.8\\\hline
+{\bf Pchar}&10&N/A&N/A\footnotemark[3]\\\hline
+{\bf Pathchar}&10&9.1&6.7\\\hline
+{\bf Clink}&10	&7.2&5.9\\\hline
+{\bf Pathrate}&9.6&9.4-9.6&9.1-9.5\\\hline
+{\bf PathLoad}&9.2&6.2&0-3.4\\\hline	
+{\bf PathChirp}&10&7-10&9.3-9.5\\\hline
+{\bf abget}&10-90 U/0-10 D&10-90 U/0-10 D&10-90 U/0-10 D\\\hline
+
+\end{tabular*}
+\caption{Installed and Available Capacity for CBR/UDP Cross Traffic Rate for Lower Bottleneck Capacity (10Mbps) (Units : Mbps)}
+\label{in_lab_cbr_low}
+\end{table*}
+
+Next, we present results obtained from generating elastic TCP
+cross-traffic. For this we generate two different kinds of workloads,
+one using wget(this results in single, long lived TCP connections for
+large files) and the using HTTPERF (which gives multiple, simultaneous
+short lived ones). In each case the web server is run on the host H2
+while the client programs (wget and httperf) are run on the host
+H1. The probe host H3 is used for measuring the installed and
+available capacity of the traffic shaped slow link connecting H2 to
+the router R2. The following table \ref{table_wget} presents results
+obtained from measuring installed and available capacity in the
+presence of elastic long lived connections (achieved by running many
+single-threaded wgets from H1 to H2 over the traffic shaped bottleneck
+link connecting R2 to H2).
+
+\begin{table*}[ht]
+\begin{tabular*}{6.83in}[4pt,b] {|l|l|l|l|l|}
+%\multicolumn{5}{l}{\bf File Size Being Downloaded=200Kbytes: $\theta$=500Kbps  $\epsilon$=0.1  }\\\hline  
+\hline
+{\bf Bottleneck Link Capacity(Mbps)}&{\bf 10}&{\bf 30}&{\bf 70}&{\bf 100}\\\hline
+\bf{LinkWidth}&9.6(I)/5.5(A)&30(I)/24(A)&70(I)/58(A)&82(I)/75(A)\\\hline
+\bf{Iperf}&6.2&26&29-57&38-67\\\hline
+\bf{Bing}&10&67&95&97\\\hline
+\bf{Pathchar}&9.8&56&66&74\\\hline
+\bf{Clink}&8.2&65&78&82\\\hline
+\bf{Pathrate}&9.2&N/A&N/A&N/A\footnotemark[3]\\\hline
+\bf{Pathload}&7.2&22&50-80&85\\\hline
+{\bf Pathchirp}&7-12&30-60&54&62.5\\\hline
+\bf{abget}&10-90 U/0-10 D&0-10 U/60-70 D&0-10 U/10-70 D&0-20 U/30-70 D\\\hline
+\end{tabular*}
+\label{table_wget}
+\caption{Installed and Available Capacity Estimation in the Presence of Long-Lived WGET Workloads (Units : Mbps)}
+\end{table*}
+
+The TCP connection setup by wget tries to achieve the maximum
+capacity. However, the presence of probing cross traffic from the
+tools mentioned in table \ref{table_wget}, would cause the packets to
+be queued (further may also cause them to be dropped); thereby causing
+TCP to reduce its sending rate. Thus, this lower sending rate would
+make room for the probe traffic and hence the available capacity
+achieved is the one available to the probe traffic in the presence of
+elastic wget traffic. TCP traffic being non-aggressive and elastic,
+makes room for the aggressive probe traffic (in case of tools like
+LinkWidth which doesn' t set up a true up a true end - to - end TCP
+					   connection)
+      or shares the bandwidth equally with the end - to - end TCP
+	probe traffic of tools like IPERF, Pathchirp etc.LinkWidth does take
+	into account the fact that the received dispersion $R_m$ is more than
+	the sending dispersion $R_o$ (in case the aggressive sender is sending
+				      more than the end - to -
+				      end available capacity),
+	thereby halving the sending rate $O_i$.
+      {
+      \it Even then, the criteria we use to decrease
+	  the sending rate in LinkWidth is more aggressive and greedy than
+	  slow start and multiplicative decrease used by plain vanilla TCP}
+    ..This cause LinkWidth to grab a larger share of the end - to - end installed capacity (resulting in a slight over - estimation of the available capacity).However in later subsections, we see that the LinkWidth in fact under - estimates the available capacity in the presence of assymetric and lossy link (s) (just to avoid over - estimation resulting from the measured $R_m$ lower than the actual value of $R_m$).These results however don 't clearly show how much is the actual
+available/utilized capacity of the path is and presence of both probe
+traffic and cross traffic. It only shows how much the probe traffic is
+able to achieve, with no concrete evidence of the of our hypothesis
+that what is achieved is actually a share of the bandwidth (where one
+of the share is for our probe traffic while the other share is due to
+the cross traffic).
+
+ Experiments where the cross-traffic is due to multiple simultaneous
+ TCP connections, where the capacity is equally shared equally (best
+ effort) amongst all multiple (simultaneous connections) and where the
+ probability of the probe traffic to be be successfully sent (without
+ transmission errors and re-ordering) is equally likely as that of the
+ TCP cross-traffic, would give an accurate measure of the available
+ capacity. Moreover, we are trying to achieve a situation where our
+ probe trains are aggressive; while at the same time reactive enough
+ to slow down the sending rate upon reaching a rate where the
+ end-to-end dispersion of the receiver is not more that the sending
+ dispersion by a factor of $\epsilon$. In such a situation the
+ end-to-end dispersion of the packet train (or train of packet pairs)
+ should be same with which it is sent out from the sender ($R_m/R_o
+ \approx 1\pm\epsilon$). Thus we used HTTPERF to generate multiple
+ simultaneous connections over the (traffic shaped slow link) path
+ from the H1 to H2 via R2. We probed the link from H3 to H2, using
+ LinkWidth, IPERF and abget. The results of the experiment can be
+ observed in the table \ref{httperf_table}.
+
+\begin{table*}[htp]
+\begin{tabular*}{4.47in}[4pt,b] {|l|l|l|l|}
+%\multicolumn{4}{l}{\bf Link Capacity=3Mbps : $\theta$=200Kbps $\epsilon$=0.1 : Number of Calls Per Connection=100}\\\hline
+\hline
+\bf{Conn./sec}&{\bf 2}&{\bf 3}&{\bf 10}\\\hline
+\bf{LinkWidth}&2.9(I)/2.0(A)&3(I)/1.08(A)&2.8(I)/0.368(A)\\\hline
+\bf{Iperf}&2.57&0.991&0.406\\\hline
+\bf{abget}&0-100 U/0-10 D&0-100 U/90-100 D&0-100 U/0-100 D\\\hline
+\bf{Conn./sec}&{\bf 2}&{\bf 3}&{\bf 6}\\\hline
+\bf{LinkWidth}&4.8(I)/2.7(A)&5.1(I)/2.3(A)&4.95/0.864\\\hline
+\bf{Iperf}&2.75&2.86&0.991\\\hline
+\bf{abget}&0-100 U/70-90 D&0-100 U/70-90 D&0-100 U/10-30 D\\\hline
+%\multicolumn{4}{l}{\bf Link Capacity=10Mbps : $\theta$=200Kbps $\epsilon$=0.1 : Number of Call Per Connection=1 }\\\hline
+\bf{Conn./sec}&{\bf 2}&{\bf 5}&{\bf 10}\\\hline
+\bf{LinkWidth}&8(I)/4.8(A)&9(I)/3(A)&8/0.97(A)\\\hline
+\bf{Iperf}&5.49&2.3&0.862\\\hline
+\bf{abget}&10-90 U/0-10 D&10-90 U/0-10 D&0-10 U/0-10 D\\\hline
+%\multicolumn{4}{l}{\bf Link Capacity=50Mbps : $\theta$=2Mbps $\epsilon$=0.1 : Number of Call Per Connection=2 and 10 }\\\hline
+\bf{Conn./sec}&{\bf 2}&{\bf 5}&{\bf 25 \footnotemark[6]}\\\hline
+\bf{LinkWidth}&48.6(I)/36(A)&47(I)/12(A)&37(I)/3(A)\\\hline
+\bf{Iperf}&27&5.2&1.2\\\hline
+\bf{abget}&0-100 U/0-100 D&0-100 U/0-100 D&0-100 U/10-90 D\\\hline
+%\multicolumn{4}{l}{\bf Link Capacity=100Mbps : $\theta$=2Mbps $\epsilon$=0.1 : Number of Call Per Connection=15 }\\\hline
+\bf{Conn./sec}&{\bf 1}&{\bf 4}&{\bf 10}\\\hline
+\bf{LinkWidth}&95(I)/80(A)&94(I)/21(A)&94(I)/13(A)\\\hline
+\bf{Iperf}&74&22&10\\\hline
+\bf{abget}&0-100 U/0-100 D&0-100 U/0-100 D&0-100 U/0-100 D\\\hline
+\end{tabular*}
+\caption{Installed and Available Capacity for Short Lived Elastic HTTP Cross Traffic (Units : Mbps)}
+\label{httperf_table}
+\end{table*}
+
+As evident from table \ref{httperf_table} in most of the cases what we
+achieve is only a share of the entire capacity. HTTPERF supports
+simultaneous connections. The number of connections at any time is
+controlled by the connection rate (expressed as the number of
+connections per second) parameter. The number of calls per connection
+controls the number of HTTP requests per connection (we emulate
+session oriented HTTP workloads). The longer the number of calls per
+connections, the longer the lifetime of the connections and the more
+aggressive they are. For N connections per second, sharing the link
+with capacity C, the achieved capacity of our probe should be
+approximately C/(N+1). The results presented in table
+\ref{httperf_table} are thus in accordance with our hypothesis. This
+is in fact what we achieve, and had been verified IPERF. In the process
+we have also evaluated the effectiveness of abget. As evident abget is
+not able to correctly determine the available capacity for very small
+link capacities which is congested with cross traffic. The installed
+and available capacity, as what we observed is close to what is
+achievable by an end-to-end TCP connection (which IPERF does).
+
+\subsubsection*{\bf Measuring Capacity and Available Capacity of Hosts Connected to the Internet and PlanetLab}
+
+There was no way to control the cross-traffic across hosts connected
+to the Internet. That is exactly why we tried to measure the installed
+and available capacity of hosts connected to the Internet using
+LinkWidth and verified them using IPERF (to verify available
+end-to-end available capacity) and pathchar (to verify the end-to-end
+bottleneck capacity) \footnotemark[7]. The following table
+\ref{internet_tbl_inst_cap} gives a comparison of LinkWidth, Pathchar
+and Iperf when measuring the installed and available capacity to three
+separate destinations. The first two are two hosts in two different
+universities connected to the Internet. The third is a privately owned
+computer connected to the Internet through a local ISP. All these
+hosts were probed from a host within our university' s Local Area Network. \
+      begin
+    {
+    table}
+    [htp] \ begin
+    {
+    tabular}
+    [b]
+    {
+    |l | l | l | l |}
+    %\multicolumn
+    {
+    3}
+    {
+    l}
+    {
+    \bf $ \ theta$ = 200 Kbps $ \ epsilon$ = 0.1}
+    \\\hline \ hline \ bf
+    {
+    Tool Used}
+    &\bf
+    {
+    LinkWidth}
+    &\bf
+    {
+    Pathchar}
+    &\bf
+    {
+    Iperf}
+    \\\hline
+      Host 1 & 62 (I) / 0.3 (A) & 42 & 0.5 \\\ hline
+      Host 2 & 56 (I) / 1.03 (A) & 35 & 0.6 \\\ hline
+      Host 3 & 5 (I) / 3.4 (A) & 6 & 5.2 \\\ hline \ end
+    {
+    tabular}
+    \caption
+    {
+    Measuring Installed and Available Capacity of Geographically Dispersed
+	Hosts Connected to the Internet (Units:Mbps)}
+    \ label
+    {
+    internet_tbl_inst_cap}
+    \end
+    {
+    table}
+
+    These experiments were repeated by probing various geographically
+      dispersed hosts, connected to the PlanetLab network.The results are
+      presented in table \ ref
+    {
+    pl_tbl_avbl_cap}
+    . \ begin
+    {
+    table *}
+    [htp] \ begin
+    {
+    tabular *}
+    {
+    7.1i n}
+    [3 pt, b]
+    {
+    |l | l | l | l | l |}
+    %\multicolumn
+    {
+    5}
+    {
+    l}
+    {
+    \bf $ \ theta$ = 200 Kbps $ \ epsilon$ = 0.6}
+    \\\hline \ hline
+    {
+    \bf Tool Used}
+    &
+    {
+    \bf Iperf}
+    &
+    {
+    \bf Pathload}
+    &
+    {
+    \bf Linkwidth}
+    &
+    {
+    \bf Bottleneck Link}
+    \\\hline
+      planetlab -
+      1. cs.princeton.edu (US) & 36.5 (UL) /
+      19.5 (DL) \ footnotemark[9] & 40 & 92 (I) /
+      18 (A) & 216.27 .100 .53 \\\ hline lefthand.eecs.harvard.
+      edu (US) & 5.45 (UL) / 4.94 (DL) & 84 & 94 (I) /
+      7 (A) & 140.247 .2 .62 \\\ hline planet1.pittsburgh.intel -
+      research.net (US) & 11 (UL) / 0.728 (DL) & 42 & 47 (I) /
+      12 (A) & 128.59 .255 .89 \\\ hline planetlab2.cis.upenn.
+      edu (US) & 23 (UL) / 30 (DL) & 97 & 80 (I) /
+      18 (A) & 199.109 .4 .13 \\\ hline planet3.berkeley.intel -
+      research.net (US) & 2.6 (UL) / 0.707 (DL) & 19 & 10 (I) /
+      3 (A) & 128.59 .255 .14 \\\ hline planet2.cc.gt.atl.ga.
+      us (US) & 9.5 (UL) / 9.5 (DL) & 95 & 76 (I) /
+      14 (A) & 143.215 .193 .9 \\\ hline planetlab2.cs.dartmouth.
+      ed (US) & 0.25 (UL) / 0.2 (DL) & 92 & 85 (I) /
+      0.15 (A) & 192.5 .89 .218 \\\ hline planetlab2.xeno.cl.cam.ac.
+      uk (EUR) & 2.59 (UL) / 0.12 (DL) & 96 & 93 (I) /
+      19 (A) & 128.232 .103 .202 \\\ hline planetlab -
+      1.f okus.fraunhofer.de (EUR) & 0.2 (UL) / 1.98 (DL) & 0.8 & 39 (I) /
+      0.172 (A) & 199.109 .4 .13 \\\ hline onelab1.inria.
+      fr (EUR) & 1.94 (UL) / 1.92 (DL) & 86 -
+      97 & 20 (I) /
+      3 (A) & 138.96 .250 .190 \\\ hline supernova.ani.univie.ac.
+      at (EUR) & 2.13 (UL) / 0.7 (DL) & 0 & 38 (I) /
+      1.1 (A) & 131.130 .32 .152 \\\ hline planetlab2.tmit.bme.
+      hu (EUR) & 2.20 (UL) / 2.18 (DL) & $ >
+      $94 \ footnotemark[5] & 84 (I) /
+      2 (A) & 152.66 .244 .49 \\\ hline planetlab -
+      1. man.poznan.pl (EUR) & 2.15 (UL) / 2.15 (DL) & 98 & 6.5 (I) /
+      2.1 (A) & 150.254 .210 .61 \\\ hline csplanetlab1.kaist.ac.
+      kr (ASIA) & 1.4 (UL) / 1.2 (DL) & 6 & 68 (I) /
+      1 (A) & 199.109 .7 .13 \\\ hline ds -
+      pl3.technion.ac.il (ASIA) & 1.4 (UL) / 1.47 (DL) & 97 & 70 (I) /
+      2.8 (A) & 128.139 .233 .2 \\\ hline sjtu2 .6 planetlab.edu.
+      cn (ASIA) & 8 (UL) / 2 (DL) & $ >
+      $17 .38 \ footnotemark[5] & 75.5 (I) /
+      15 (A) & 202.112 .61 .13 \\\ hline \ end
+    {
+    tabular *}
+    \ caption
+    {
+    Measuring Available Capacity of Geographically Dispersed Hosts Connected
+	to the PlanetLab Network (Units:Mbps)}
+    \ label
+    {
+    pl_tbl_avbl_cap}
+    \end
+    {
+    table *}
+    \ footnotetext[9]
+    {
+    UL = Uplink Capacity DL = Downlink Capacity}
+
+    Our results are quite close to those obtained from using IPERF (which
+								    creates an
+								    end - to -
+								    end TCP
+								    connection).
+      Pathload, on the other hand,
+      apparently overestimates the results in the presence of uncontrolled
+      cross -
+      traffic.
+      When probing using LinkWidth in debug mode (with verbose output),
+      we observed lot of packet losses and re -
+      ordering.
+      This is due to the fact that the access link in this case is
+      asymmetric (allowing faster downloads than uploads,
+		  which causes the inter -
+		  packet delay of the reply probe packets to be skewed,
+		  resulting in incorrect estimation of the received
+		  dispersion).
+      Our measurement technique cannot account for error thus introduced in
+      our estimate of installed and available capacity.Moreover,
+      other unknown / unpredictable factors such as host state /
+      activity and network cross - traffic patterns,
+      makes it difficult to pin point if this variation in the inter -
+      packet delay is due to the asymmetic properties of the access link /
+      network or due to the host /
+      network being probed.This variation of the inter -
+      packet delays results in incorrect estimation of the received dispersion
+      $R_
+    {
+      m
+	} $. \ footnotetext[5]
+	{
+	Interrupt Coalescence Detected in Receiver NIC}
+      \ footnotetext[3]
+      {
+      Goes on measuring without converging}
+      \ footnotetext[6]
+      {
+      Number of calls per connection = 2}
+      \footnotetext[7]
+      {
+      IPERF gives an accurate estimate of the available capacity available
+	  for a TCP as it sets up a client -
+	  server connection and tries the send at best effort capacity.
+	  Pathchar, although takes long to converge,
+	  closely estimates the installed /
+	  bottleneck capacity under various scenarios of link capacities and
+	  cross - traffic rate}

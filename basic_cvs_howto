@@ -1,0 +1,85 @@
+This is a basic CVS howto (actually not really one) only to explain how to
+use this repository.
+
+We have a working directory called 'plt_project' in /home/sc2516/Projects/. This 
+document is only to explain how to use it (for checking it out , checking in updated code,
+updating files , adding new files and directories and to delete files and directories from it.
+A more detailed instruction is available in the cvs manpages or on internet sites
+
+Checking out the repository
+
+These commands are specific to bash shell. May be a bit different for other shells . Eg. for tcsh you may need to replace 'export' 
+with 'set env'
+
+1. $ cd <directory where you want to download>
+2. $ export CVS_RSH=ssh
+3. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects/ checkout plt_project
+
+ This will authenticate you through ssh. It will present to you a ssh prompt where you need to input
+ your cs password. 
+
+Checking in your updates
+
+1. $ cd plt_project
+2. $ export CVS_RSH=ssh
+3. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects/ up .
+ (This will only sync your copy of the directory to the one in the repository. To finall
+  upload your copy to the repository you will need to type the final command which is next
+ )
+4. $ cd ../
+5. $ cd -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects commit plt_project
+
+Adding new files in your copy of the directory to the one in the repository
+
+1. $ cd plt_project
+2. $ export CVS_RSH=ssh
+3. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects add <new file name>
+      
+As usual ssh authentication will follow
+
+4. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects/ up .
+
+5. Finally 'commit' the new file to the repository
+
+7. $ cd ../
+8. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects commit plt_project
+
+Adding a new directory to the repository
+(assumes you have already done 'export CVS_RSH=ssh')
+
+1. $ cd plt_project
+2. $ mkdir new_dir
+3. $ touch new_dir/new_file /* add a new file to the new directory */
+4. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects add new_dir
+5. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects add new_dir/new_file
+6. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects/ up .
+ 
+7. $ cd ..  
+8. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects/ commit plt_project
+
+Deleting a file/directory
+(EXECUTE THIS WIH UTMOST CAUTION!)
+
+1. $ export CVS_RSH=ssh
+2. $ cd plt_project
+3. Now assuming you have directory 'old_dir' and with file 'old_file' inside. To delete the file and the 
+   directory from the repository type the following commands
+
+4. $ rm old_dir/old_file /*NOTE : if you want to delete more files from the directory old_dir you may do so by
+                                  doing a 'rm' on all of them one by one. DO NOT do a 'rm -rf old_dir/*' there
+                                  is CVS directory inside the old_dir directory and it must not be deleted. */
+5.  DO NOT delete the empty 'old_dir'
+6. $ cvs  -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects/ remove old_dir/old_file  /* for all the file(s) inside 
+                             									      old_dir directory */
+7. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects/ release old_dir 
+8. $ cvs -d <you cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects/ remove old_dir /* this removes it from the repository but 
+											    future 'checkouts' may show it. 
+9. 'commit' this updated directory
+10. $ cd ../
+11. $ cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects/ commit plt_project
+12. Future checkout for avoiding the removed directory from showing up.
+13. $cvs -d <your cs id>@compute01.cs.columbia.edu:/home/sc2516/Projects/ checkout -p plt_project
+
+	
+
+

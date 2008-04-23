@@ -1,0 +1,82 @@
+LANCOM : LRM
+
+Section 1.  
+Introduction 
+
+{Will be copied from the White paper}
+
+
+Section 2.   (Sambuddho)
+Overview of LANCOM Syntax:
+
+Whole language is in the form of function blocks . The program begins from 
+a main function. From the programmers viewpoint, it is simple a function with name
+'main'. The grammar however doesn't support any specific function by the name of 
+'main'. It only encloses blocks of code in function scopes. The 'main' is also a
+ function. The semantic analysis (actions) must check for that function named 'main'
+ for initiating the compilation. 
+
+Section 3. (Chitra+ Ashish)
+Lexical Conventions :
+ Comments : 
+    - { From Chitra's LRM draft}
+    -  { cite the rule numbers from the latest copy of the grammar }
+    - { 1 - 2 line explaination}
+
+ Tokens :
+    - Identifier and Object names
+     -  { cite the rule numbers from the latest copy of the grammar }
+ Keywords :
+    if-then-else / while-do-done
+    -  { cite the rule numbers from the latest copy of the grammar }
+    - { 1 - 2 line explaination}
+
+
+ Reserved words :
+  - netmask , host_set, dns , service_set , inbound , outbound , allow , deny
+   -  { cite the rule numbers from the latest copy of the grammar }
+    - { 1 - 2 line explaination}
+
+Section 4. (Nipun + Milind)
+Types 
+    - basic data types (eg. ip_addr_t)
+    - complex types (ex. host_group_t)
+    -  { cite the rule numbers from the latest copy of the grammar }
+    - { 1 - 2 line explaination}
+
+ Operators: 
+    - logical and relational operators 
+     -  { cite the rule numbers from the latest copy of the grammar }
+    - { 1 - 2 line explaination}
+ *How operators are to be applied on typed objects*
+
+Section 5. (Sambuddho + Nipun)
+Overview of basic configuration statements
+   - give 1 - 2 line description of the configuration statements ( 1 examples )
+   - give 1 - 2 examples for this this entire subsection ( 1 example )
+
+    -Highlight on netowrk topology and routing description sytices ( 1 example)
+    -Highlight on firewalling configuration description ( 1 example)
+    -Highlight on using the two together. ( 1 example)
+   
+Section 6. (Ashish)
+Loops and Conditionals
+   - if-then-else and while-do-done
+   - cite the rules
+   - 1 - 2 line explaination
+   - give small examples ( 1 - 2).
+ 
+
+Section 7. (Milind)
+
+Flow of control :
+   - grammar rule for function declaration and calling
+     of functions
+
+
+Appendix : (Will attach the LANCOM grammar)
+  - LanCom grammar.
+
+
+   
+
