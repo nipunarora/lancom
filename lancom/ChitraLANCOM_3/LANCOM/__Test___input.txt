@@ -1,0 +1,4 @@
+prog
+int_type_t i,j;
+i = j = 5;
+endprog
