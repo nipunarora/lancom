@@ -7,6 +7,7 @@
  * and open the template in the editor.
  */
 
+
 import java.util.*;
 import java.io.*;
 import java.lang.*;
@@ -59,6 +60,12 @@ public class Policy
                     ipAddress = new Ipaddress(ip);
                     netMask = new Ipaddress(net);
                     
+    }
+    
+    public String getString()
+    {
+        String temp = "direction : " + direction +  "ipAddress: " + ipAddress.getString() + "netmask: " + netMask.getString();
+        return temp;
     }
     
 }
