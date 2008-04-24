@@ -1,0 +1,54 @@
+We introduce LinkWidth, a method for estimating capacity and available
+  bandwidth using single - end controlled TCP packet probes.To estimate
+  capacity, we generate a train of TCP RST packets `` sandwiched ''
+  between trains of TCP SYN packets.Capacity is computed from the
+  end - to - end packet dispersion of the received TCP RST / ACK packets
+  corresponding to the TCP SYN packets going to closed ports.Our
+  technique is significantly different from the rest of the packet - pair
+  based measurement techniques, such as
+{
+\em CapProbe,}
+{
+  \em
+    pathchar}
+    and
+    {
+    \em pathrate,}
+  because the long packet trains minimize errors due
+    to bursty cross - traffic.Additionally, TCP RST packets
+  do
+    not generate
+      additional ICMP replies, thus avoiding cross - traffic due to such
+      packets from interfering with our probes.In addition, we use TCP
+      packets for all our probes to prevent QoS - related traffic shaping
+      (based on packet types)
+  from affecting our measurements (eg.CISCO
+				     routers by default are known have to very
+				   high latency while generating to ICMP TTL
+				   expired replies)
+    . We extend the
+    {
+    \it Train of Packet Pairs}
+  technique to approximate the
+    available link capacity.We use a train of TCP packet pairs with
+    variable intra - pair delays and sizes.This is the first attempt to
+    implement this technique using single - end TCP probes, tested on a
+    range of networks with different bottleneck capacities and cross
+    traffic rates.The method we use for measuring from a single point of
+    control uses TCP RST packets between a train of TCP SYN packets.The
+    idea is quite similar to the technique for measuring the bottleneck
+    capacity.We compare our prototype with
+  {
+  \em pathchirp,}
+  {
+    \em
+      pathload,}
+      {
+      \em IPERF,}
+    which require control of both ends as well as
+      another single end controlled technique
+    {
+    \em abget}
+     , and demonstrate
+      that in most cases our method gives approximately the same results if
+      not better.

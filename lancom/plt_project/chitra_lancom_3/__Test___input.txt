@@ -1,0 +1,4 @@
+prog
+policy_type_t x,y,z;
+
+endprog

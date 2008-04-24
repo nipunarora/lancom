@@ -1,0 +1,55 @@
+
+
+\begin{enumerate}
+ \item \noindent ${\it statement}$ $\rightarrow$ ${\it expression}$ $({\it statement})^{*}$ ${\it delimiter}$ \\ 
+  \item ${\it expression}$ $\rightarrow$ ${\it type\_name}$ ${\it object\_name}$ \\ 
+  \item ${\it expression}$ $\rightarrow$ ${\it object\_name}$ ${\it attrib}$ ${\it attrib\_values}$ \\\\ 
+  
+\item \noindent ${\it attrib}$ $\rightarrow$ ${\tt topology}$ \\ 
+\item ${\it attrib}$ $\rightarrow$ ${\tt host\_group}$ \\
+ \item ${\it attrib}$ $\rightarrow$ ${\tt host}$ \\ 
+\item ${\it attrib}$ $\rightarrow$ ${\tt service\_group}$ \\ 
+\item ${\it attrib}$ $\rightarrow$ ${\tt role}$ \\ 
+\item ${\it attrib}$ $\rightarrow$ ${\tt policy}$ \\\\ 
+
+
+\item \noindent ${\it attrib\_values}$ $\rightarrow$ ${\it topology}$ \\ 
+\item ${\it attrib\_values}$ $\rightarrow$ ${\it host\_group}$ \\ 
+\item ${\it attrib\_values}$ $\rightarrow$ ${\it host}$ \\ 
+\item ${\it attrib\_values}$ $\rightarrow$ ${\it service}$ \\ 
+\item ${\it attrib\_values}$ $\rightarrow$ ${\it service\_group}$ \\ 
+\item ${\it attrib\_values}$ $\rightarrow$ ${\it role}$ \\ 
+\item ${\it attrib\_values}$ $\ rightarrow$ ${\it policy}$ \\\\ 
+
+\item \noindent ${\it type}$ $\rightarrow$ ${\tt topology\_type\_t}$ \\ 
+\item ${\it type}$ $\rightarrow$ ${\tt host\_type\_t}$ \\ 
+\item ${\it type}$ $\rightarrow$ ${\tt host\_group\_type\_t}$ \\ 
+\item ${\it type}$ $\rightarrow$ ${\tt service\_group\_type\_t}$ \\ 
+\item ${\it type}$ $\rightarrow$ ${\tt role\_type\_t}$ \\ 
+\item ${\it type}$ $\rightarrow$ ${\tt policy\_t}$ \\ 
+\item ${\it object\_name}$ $\rightarrow$ $[{\tt 0-9,a-z,A-Z}]^{+}$ \\\\ 
+
+\item \noindent ${\it delimiter}$ $\rightarrow$ ${\tt;}$ \\ 
+
+\item \noindent ${\it topology}$ $\rightarrow$ $({\it host\_group})^{*}$ $({\it role})^{*}$ \\ 
+\item ${\it topology}$ $\rightarrow$ $({\it service\_group})^{*}$ $({\it role})^{*}$ \\ 
+\item ${\it host\_groups}$ $\rightarrow$ $({\it host})^{+}$ $({\it dns})^{*}$ $({\it def\_gw})^{*}$ \\
+\item ${\it dns}$ $\rightarrow$ ${\it host}$ \\ 
+\item ${\it def\_gw}$ $\rightarrow$ ${\it host}$ \\ 
+\item ${\it host}$ $\rightarrow$ (${\it interface\_name}$) (?) ${\it ip\_addr}$ ${\it netmask}$ \\ 
+\item ${\it netmask}$ $\rightarrow$ ${\it ip\_addr}$ \\ 
+\item ${\it interface\_name}$ $\rightarrow$ $[{\tt 0 - 9, a - z, A - Z}]^{+}$ \\ 
+\item ${\it ip\_addr}$ $\rightarrow$ {\tt [0-255]}.{\tt [0-255]}.{\tt [0-255]}.{\tt [0-255]}\\
+\item ${\it service\_group}$ $\rightarrow$ ${\it ip\_addr}$ ${\it netmask}$ ${\it serv\_listen\_port}$ \\ 
+\item ${\it serv\_listen\_port}$ $\rightarrow$ {\tt [0-65536]}\\\\
+
+\item \noindent ${\it role}$ $\rightarrow$ $({\it policy})^{*}$ \\
+\item ${\it policy}$ $\rightarrow$ ${\it direction}$ ${\it verdict}$ ${proto}$ ${\it port}$ ${\it port}$ \\ 
+\item ${\it policy}$ $\rightarrow$ ${\it direction}$ ${\it verdict}$ ${\it icmp\_cntrl\_message}$ \\ 
+\item ${\it direction}$ $\rightarrow$ ${\tt inbound}$ \\ 
+\item ${\it direction}$ $\rightarrow$ ${\tt outbound}$ \\ 
+\item ${\it verdict}$ $\rightarrow$ $({\tt allow}|{\tt deny})$ \\ 
+\item ${\it proto}$ $\rightarrow$ ({\tt UDP $ | $ TCP}) \\ 
+\item ${\it icmp\_cntrl\_message}$ $\rightarrow$ ({\tt ICMP\_MESSAGE\_TYPE}) \\ 
+\item ${\it port}$ $\rightarrow$ {\tt [0-65535]}\\
+\end{enumerate}
