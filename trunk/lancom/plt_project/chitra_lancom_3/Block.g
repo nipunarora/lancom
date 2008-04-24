@@ -15,6 +15,8 @@ tokens {
 	//import javalancom.Scope;
 	//import javalancom.Symbol;
 	import java.util.HashMap;
+	import java.io.*;
+	import java.util.Vector;
 	import java.util.Set;
 	import java.util.Iterator;
 	import java.util.Map;
@@ -147,17 +149,17 @@ set_oper
  			Set entries = map.entrySet();
 			Iterator iter = entries.iterator();
 			//p = (Policy)( $e.sym );
-			System.out.println($e.sym.getString());
+			System.out.println($e.sym.getValue());
 			//System.out.println("Symbol Val: " + $e.sym.pol[0]);
 			while(iter.hasNext() && $e.sym != null)
 			{
 				Map.Entry entry = (Map.Entry)iter.next();
 				String key = (String)entry.getKey();
 				Symbol s = new Symbol(key, $e.sym.getType(), $e.sym.lookupValue());
-				System.out.println(s.getString());
+				System.out.println(s.getValue());
 				//-- COMMENT: Somehow this statement is not reflecting a change in the symbol value
 				currentScope.setSymbolValue(key, s);
-				System.out.println("Symbol table: " + s.getType() + " " + s.getString());
+				System.out.println("Symbol table: xxx " + s.getType() + " " + s.getValue());
 			}
 			currentScope.printSymbols();
  		}
@@ -254,43 +256,15 @@ declr_stmt
 	{
 	//	System.out.println(" commas : "+ count_com);
 		
-		if($next_var.text != null)			
+		if(count_com > 0)			
               		 currentScope.defineSymbol($next_var.text, $type_name.text);
 	} 
-	';' {int [] n = new int [count_com];
-		n[0] = 20;
-		n[1] = 20;
-		System.out.println("  n[0] : "+ n[0] +"n[1]:"+n[1]);
-		}
-	{
-		currentScope.printSymbols();
-	}
-	;
+	';' 
+		;
 
      //                     object_values
         //      	:	//object_name|serv_group | topology | host_group | role | host | policy | ip_addr | int_value | char_value ;
-object_values returns [Symbol sym]
-	: char_value
-	| int_value	
-	{ 
-		$sym = $int_value.sym;
-	}
-	| STRING
-	| ip_addr
-/*	{
-	  $sym = $ip_addr.sym;
-}*/
-	| policy { $sym = $policy.sym;}
-	| host /* how do I return back host type */
-	| role /* Similarly with other types */
-	| host_group
-	| topology
-	| serv_group
-	| interf
-	| route
-	//	| object_name
-	;
-//	object_values: object_name|serv_group|topology|host_group|role|host|policy|ip_addr|STRING|int_value|char_value;
+
 type_name
 	:	'topology_type_t'
 	|	'host_type_t'
@@ -304,33 +278,64 @@ type_name
 	|	'int_type_t'
 	|	'char_type_t'
 	;	
+	
+object_values returns [Symbol sym]
+	: char_value
+	| int_value	
+	{ 
+		$sym = $int_value.sym;
+	}
+	| STRING
+	| ip_addr
+	{
+	  $sym = $ip_addr.sym;
+}
+	| policy   { $sym = $policy.sym;}
+	| host   {
+	$sym = $host.sym ; 
+	}
+	| role /* Similarly with other types */
+	| host_group 
+	| topology
+	| serv_group
+	| interf { $sym = $interf.sym;}
+	| route
+	//	| object_name
+	;
+//	object_values: object_name|serv_group|topology|host_group|role|host|policy|ip_addr|STRING|int_value|char_value;
+
 
 role  : 'role' '{' policy (COMMA policy)* '}'
 	;
+//policy  :	direction verdict proto (port)?  ;//ip_addr 'netmask' src_netmask=ip_addr  sport=(port)?;
 
-policy returns [Symbol sym]	:	dir=direction verd=verdict protocol=proto (sport=port)?  //ip_addr 'netmask' src_netmask=ip_addr  sport=(port)?
+policy returns [Symbol sym]	: 
+  	{int src_port = 0;}
+  	dir=direction verd=verdict protocol=proto src_ip=ip_addr 'netmask' netmask_ip=ip_addr (sport=port  {src_port++;} )?  //ip_addr 'netmask' src_netmask=ip_addr  sport=(port)?
 {
-	/* for filtering TCP /UDP messages */
-//	Policy pl;
-                         
-	Policy pl = new Policy($dir.text,$verd.text, $protocol.text, $sport.text);
-	
+	Policy pl;
+                          if(src_port>0){
+	 pl = new Policy($dir.text,$verd.text, $protocol.text, $src_ip.text,$netmask_ip.text,$sport.text);
+	}
+	 else{
+ 	  pl = new Policy($dir.text,$verd.text, $protocol.text, $src_ip.text,$netmask_ip.text,"0");		
+ 	  }
                           Symbol s = new Symbol("policy_tcp_udp","policy_type_t",pl);
 	$sym = s;
 //	currentScope.printSymbols();
 }
-	| 	dir=direction verd=verdict icmp_mesg=icmp_cntrl_message //src_ip=ip_addr 'netmask' src_netmask=ip_addr 
+	| 	dir=direction verd=verdict icmp_mesg=icmp_cntrl_message  src_ip=ip_addr 'netmask' src_netmask=ip_addr 
 	{
-	/* for ICMP message types */
+	
 //	Policy pl;
-	Policy p2 = new Policy($dir.text,$verd.text, $icmp_mesg.text, "0");
+	Policy p2 = new Policy($dir.text,$verd.text, $icmp_mesg.text, $src_ip.text,$src_netmask.text);
 	
                           Symbol s = new Symbol("policy_icmp","policy_type_t",p2);
 	$sym = s;
 //	currentScope.printSymbols();
 	}
+	;	
 	
-	;
 
 topology:	(host_group)+ role
 	|	(serv_group)+ role	
@@ -344,7 +349,7 @@ int_value returns [Symbol sym]
 			IntType temp = new IntType(v);
 			Symbol s = new Symbol("literal", "int_type_t", temp);
 			$sym = s;
-			return $sym;
+		//	return $sym;
 		}
 //	|	object_name
 	;
@@ -388,8 +393,8 @@ object_name
 //	:	ID 
 //	;
 
-interface_name
-:   'ifname' (ID) 'card_id'  NUMBER ('/' NUMBER)?  ;
+//interface_name
+//:   'ifname' (ID) 'card_id'  NUMBER ('/' NUMBER)?  ;
 // 	:   'ifname' (OBJECT_NAME) 'card_id'  NUMBER ('/' NUMBER)?
 	
 //ip_addr	: (IPADDR_BYTE) '.' (IPADDR_BYTE) '.' (IPADDR_BYTE) '.' (IPADDR_BYTE); 
@@ -406,15 +411,16 @@ interface_name
 	;
 */
 
-ip_addr   /*returns [Symbol sym]*/ :  (NUMBER)DOT(NUMBER)DOT(NUMBER)DOT(NUMBER) 
-/*{
-			// Nipun : required class
-		IpAddr ip = new IpAddr ($ip_string.text); //usure about the text error
-		Symbol s = new Symbol("ip_addr_string", "ip_addr_t", ip);
+ip_addr    returns [Symbol sym]:  (a=NUMBER)DOT(b=NUMBER)DOT(c=NUMBER)DOT(d=NUMBER) 
+	{
+			
+		Ipaddress ip = new Ipaddress($a.text+"."+$b.text+"."+$c.text+"."+$d.text);
+		System.out.println (" ip address being sent : "+ip.getString());
+		Symbol s = new Symbol("ip_addr_string", "ipaddr_t", ip);
 		$sym = s;
-		return $sym;
+//		return $sym;
 	
-	}*/
+	}
 	
 	;
 
@@ -434,15 +440,15 @@ nmask	: 'netmask' ip_addr;//NM LETTER+;
 }*/
 
 
-host	/*returns [Symbol sym]*/: 'ip_addr' ip_addr 'netmask' ip_addr 
-/*{
+host	returns [Symbol sym]: 'ip_addr' ip_string=ip_addr 'netmask' netmask_string=ip_addr 
+{
 
 	Host h = new Host ($ip_string.text,$netmask_string.text); //usure about the text error
 	Symbol s = new Symbol("host_descr_string", "host_type_t", h);
 	$sym = s;
-	return $sym;
+//	return $sym;
 
-}*/
+}
 
 
 //	| object_name
@@ -462,9 +468,19 @@ host_group
 	: 'host_group'  '{' host (',' host)* '}'         //   ( 'DNS'  '{' dns_set '}' )?  ( 'GATEWAY' '{' gateway '}')? 
 	;
 
-interf
-	:   interface_name ip_addr 'netmask' ip_addr ;//( 'dns'  '{' ip_addr (','  ip_addr)* '}' )?  ( 'gw' '{' ip_addr (','  ip_addr)* '}')?  ;
-
+interf returns [Symbol sym]
+	: { 
+	     Vector <Ipaddress> dns_ip;
+	       dns_ip = new Vector <Ipaddress>() ;	     
+	         }
+	 'ifname' (interface_name=ID) interface_ip= ip_addr 'netmask' interface_netmask= ip_addr 
+	 'dns'  '{' i=ip_addr {dns_ip.add(new Ipaddress($i.text));}  ( ','  j=ip_addr{dns_ip.add(new Ipaddress($j.text));} )* '}'   
+	  'gw'  gw_ip=ip_addr   
+	{
+	Interface iface = new Interface ($interface_name.text,$interface_ip.text,$interface_netmask.text,$gw_ip.text, dns_ip);
+	Symbol s = new Symbol("interface_descriptor", "interface_type_t", iface);
+	$sym = s;  
+	} ;
   
 /*route returns [Symbol sym]	: 'host' dst=ip_addr 'gw' gw=ip_addr
 	{
