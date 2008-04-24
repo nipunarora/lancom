@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-package Lancom;
+
 import java.util.*;
 import java.lang.*;
 import java.io.*;
@@ -62,10 +62,14 @@ public class Ipaddress
             {
                 error = true;
             }
-        }catch(NumberFormatException e)
+            if(error == true)
+            {
+                throw new ExceedsLancomSizeException();
+            }
+        }catch(Exception e)
         {
-          /**Print out exception if its not a number*/
-            System.out.println("This is not a string ");
+          /**Print out exception if its not a number or exceeds lancom size*/
+            System.out.println("This is not a string/ or it exceeds Lancom specified size ");
             e.printStackTrace();
         }
        
