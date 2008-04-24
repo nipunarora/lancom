@@ -29,5 +29,11 @@ public class Host {
         ipAddress = new Ipaddress(ip);
         netMask = new Ipaddress(nm);
     }
+    /** prints out the value in this data structure can be used for debugging */
+    public String getString()
+    {
+        String temp = "ipAddress: " + ipAddress.getString() + "netMask : "  + netMask.getString();
+        return temp;
+    }
     
 }
