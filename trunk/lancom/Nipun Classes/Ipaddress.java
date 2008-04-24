@@ -53,11 +53,17 @@ public class Ipaddress
         }
         
         try
-        {
-            p1 = Integer.parseInt(ip.substring(0,2));
-            p2 = Integer.parseInt(ip.substring(4,6));
-            p3 = Integer.parseInt(ip.substring(8,10));
-            p4 = Integer.parseInt(ip.substring(12,14));
+        {   
+            if(error == true)
+            {
+                throw new ExceedsLancomSizeException();
+            }
+            
+            StringTokenizer st = new StringTokenizer(ip,".");
+            p1 = Integer.parseInt(st.nextToken());
+            p2 = Integer.parseInt(st.nextToken());
+            p3 = Integer.parseInt(st.nextToken());
+            p4 = Integer.parseInt(st.nextToken());
             if(p1>255||p2>255||p3>255||p4>255)
             {
                 error = true;
@@ -68,16 +74,17 @@ public class Ipaddress
             }
         }catch(Exception e)
         {
-          /**Print out exception if its not a number or exceeds lancom size*/
+            /**Print out exception if its not a number or exceeds lancom size*/
             System.out.println("This is not a string/ or it exceeds Lancom specified size ");
             e.printStackTrace();
         }
        
     }
-
+    
     public String getString()
     {
         String temp = String.valueOf(this.p1)+ "." + String.valueOf(this.p2)+ "." + String.valueOf(this.p3)+ "." + String.valueOf(this.p4);
         return temp;
-    }    
+    }
+    
 }
