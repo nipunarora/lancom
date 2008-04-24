@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-package Lancom;
+
 import java.util.*;
 import java.lang.*;
 import java.io.*;
@@ -19,13 +19,15 @@ import java.io.*;
 public class Host {
     
     
-    public String interfaceName = new String();
     
     public Ipaddress ipAddress;
     public Ipaddress netMask;
     
     /** Creates a new instance of Host */
-    public Host() {
+    public Host(String ip, String nm) 
+    {
+        ipAddress = new Ipaddress(ip);
+        netMask = new Ipaddress(nm);
     }
     
 }
