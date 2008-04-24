@@ -27,7 +27,7 @@ public class Host {
     public Host(String ip, String nm) 
     {
         ipAddress = new Ipaddress(ip);
-        netMask = new Ipaddress(netMask);
+        netMask = new Ipaddress(nm);
     }
     /** prints out the value in this data structure can be used for debugging */
     public String getString()
