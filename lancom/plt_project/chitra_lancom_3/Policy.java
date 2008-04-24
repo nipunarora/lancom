@@ -1,27 +1,72 @@
-public class Policy
-{
-	public String pol[] = new String [4];
-	public Policy(String p1 , String p2 , String p3 , String p4)
-	{
-		pol[0] = p1;
-	       	pol[1] = p2;
-	       	pol[2] = p3;
-	       	pol[3] = p4;
-	        
-	}
 /*
-	public IntType(int v)
-	{
-		value = v;
-	}
-	
-	public void setValue(int v)
-	{
-		value = v;
-	}
-*/	
-	public Policy getValue()
-	{
-		return this;
-	}
+ * Policy.java
+ *
+ * Created on April 23, 2008, 4:13 AM
+ *
+ * To change this template, choose Tools | Template Manager
+ * and open the template in the editor.
+ */
+
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+/**
+ *
+ * @author Nipun Arora
+ */
+public class Policy 
+{
+    
+    String direction;
+    String verdict;
+    String protocol;
+    String icmpMessage;
+    Ipaddress ipAddress;
+    Ipaddress netMask;
+    int sourcePort;
+    
+    
+    /** Creates a new instance of Policy */
+    public Policy(String dir, String verd, String proto, String ip, String net, String source) 
+    {
+        try
+        {
+                    direction = new String (dir);
+                    verdict = new String(verd);
+                    protocol= new String (proto);
+                    ipAddress = new Ipaddress(ip);
+                    netMask = new Ipaddress(net);
+                    sourcePort = Integer.parseInt(source);
+                    if(sourcePort> 65536)
+                    {
+                        throw new ExceedsLancomSizeException();
+                    }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Exception occured in class policy");
+            e.printStackTrace();
+        }
+
+    }
+    
+    public Policy(String dir, String verd, String icmp, String ip, String net)
+    {
+                    direction = new String (dir);
+                    verdict = new String(verd);
+                    icmpMessage = new String(icmp);
+                    ipAddress = new Ipaddress(ip);
+                    netMask = new Ipaddress(net);
+                    
+    }
+    
+    public String getString()
+    {
+        String temp = "direction : " + direction +  "ipAddress: " + ipAddress.getString() + "netmask: " + netMask.getString();
+        System.out.println(temp); 
+	 return temp;
+    }
+    
 }
