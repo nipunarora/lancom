@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-
+package Lancom;
 import java.io.*;
 import java.util.*;
 import java.lang.*;
@@ -23,7 +23,7 @@ public class Interface
     Ipaddress ipAddress;
     Ipaddress netMask;
     Ipaddress defaultGateway;
-    Vector dns;
+    Vector <Ipaddress> dns;
     
     
     /** Creates a new instance of Interface */
@@ -36,5 +36,10 @@ public class Interface
         dns = new Vector(ipaddr);
     }
     
+    public String getString()
+    {
+        String temp = "name : " + name + " Ipaddress" + ipAddress.getString() + "netMask :  " + netMask.getString() + "default : " + defaultGateway.getString();
+        
+    }
     
 }
