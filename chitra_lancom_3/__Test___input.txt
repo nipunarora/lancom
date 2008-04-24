@@ -1,4 +1,0 @@
-prog
-policy_type_t x,y;
-x = inbound allow tcp 1;
-endprog
