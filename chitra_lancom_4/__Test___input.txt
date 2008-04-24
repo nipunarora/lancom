@@ -1,3 +1,0 @@
-prog
-int_type_t p;
-endprog
