@@ -74,5 +74,10 @@ public class Ipaddress
         }
        
     }
-    
+
+    public String getString()
+    {
+        String temp = String.valueOf(this.p1)+ "." + String.valueOf(this.p2)+ "." + String.valueOf(this.p3)+ "." + String.valueOf(this.p4);
+        return temp;
+    }    
 }
