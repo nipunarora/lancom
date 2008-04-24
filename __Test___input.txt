@@ -1,3 +1,0 @@
-prog
-echo "Hello World!";
-endprog
