@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-
+package Lancom;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
@@ -27,7 +27,7 @@ public class Host {
     public Host(String ip, String nm) 
     {
         ipAddress = new Ipaddress(ip);
-        netMask = new Ipaddress(nm);
+        netMask = new Ipaddress(netMask);
     }
     /** prints out the value in this data structure can be used for debugging */
     public String getString()
