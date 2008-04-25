@@ -96,18 +96,25 @@ class Scope {
     public int setSymbolValue(String name, Symbol sym) 
     {
         Symbol s = symbolMap.get(name);
-    
+        if( s == null)
+	{
+	 System.out.println("S== NULL for name :"+name+" sym.getName()"+sym.getName());
+	 return -1;
+	}	
 	  /* First look in the current scope */
-        if ( (s != null) && s.type == sym.type) 
+	System.out.println("s.type : "+s.type+"Sym.type : "+sym.type);
+        if ( (s != null) && s.type.equals(sym.type)) 
         {
 		symbolMap.remove(name);
 		symbolMap.put(name, sym);
+		return 0;
         }
 	  
         /* if not, then check parent's scope */
         if ( parent != null ) 
         {
             parent.setSymbolValue(name, sym);
+	    
         }
         return -1; // couldn't find it
     }
