@@ -63,7 +63,19 @@ public class Symbol {
 		}
 		if(this.type.equals("interface_type_t"))
 		{
+			if(this.value == null)
+			{
+				System.out.println("this value is null");
+				
+			}
+			
 			Interface temp = (Interface)this.value;
+			if(temp.getString() == null)
+			{
+				System.out.println("interf string is null");
+				
+			}		
+		
 			return (new String(temp.getString()));
 			
 			//val = n.toString();
