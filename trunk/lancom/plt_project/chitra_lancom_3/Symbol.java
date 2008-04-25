@@ -45,25 +45,34 @@ public class Symbol {
     public String getString()
     {
 	  String val ;
-	  	if(this.type == "int_type_t")
+	  	if(this.type.equals("int_type_t"))
 		{
 			IntType temp = (IntType)this.value;
 			Integer n = temp.getValue();
-			val = n.toString();
+
+			return (new String(n.toString()));
+				
 		}
 
-		if(this.type == "policy_type_t")
+		if(this.type.equals("policy_type_t"))
 		{
 			Policy temp = (Policy)this.value;
-			val = temp.pol[1];
+			return (new String(temp.getString()));
+			
 			//val = n.toString();
 		}
-
+		if(this.type.equals("interface_type_t"))
+		{
+			Interface temp = (Interface)this.value;
+			return (new String(temp.getString()));
+			
+			//val = n.toString();
+		}
 
 		else
 		{ 
 			val = this.type;
 		}
-		return val;
+		return val; 
     }
 }
