@@ -18,19 +18,22 @@ import java.util.*;
  */
 public class Hostgroup {
     
-    String ethName;
-    Ipaddress ip1;
-    Ipaddress nm1;
+    Vector <Host> hostGroup;
     
     /** Creates a new instance of Hostgroup */
-    public Hostgroup(String ethName, String Ipaddress, String netMask) {
-        ethName = new String(ethName);
-        ip1 = new Ipaddress(Ipaddress);
-        nm1 = new Ipaddress(netMask);
+    public Hostgroup(Vector <Host>h) {
+        hostGroup= new Vector<Host>(h);
     }
         
-    public String toString()
+    public String getString()
     {
-        
+        String temp= new String(" ");
+        Iterator <Host> hostiter= hostGroup.iterator();
+        while(hostiter.hasNext())
+        {
+            temp= temp.concat(hostiter.next().getString());
+        }
+       return temp; 
     }
+   
 }
