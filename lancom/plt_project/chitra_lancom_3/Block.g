@@ -155,21 +155,42 @@ set_oper
 			{
 				Map.Entry entry = (Map.Entry)iter.next();
 				String key = (String)entry.getKey();
+				System.out.println(" going to search for symbol with name : "+key);
 				Symbol s = new Symbol(key, $e.sym.getType(), $e.sym.lookupValue());
 				//System.out.println(s.getString());
 				//-- COMMENT: Somehow this statement is not reflecting a change in the symbol value
-				currentScope.setSymbolValue(key, s);
+				if (currentScope.setSymbolValue(key, s) == -1)	
+				    {
+				     System.out.println(" problem setting symbol : ");
+				    }
 				
 				System.out.println("Symbol table:  " + s.getName()+" "+ s.getType() + " " + s.getString());
 				
-				/*
-				Interface t = (Interface)currentScope.lookup("i");
-			 	if( t == null){
-				 System.out.println("NULL");}
-				System.out.println(" "+t.getString());*/
 				
+				//Interface t = (Interface)currentScope.lookup("i");
+			// 	Interface u = (Interface)currentScope.lookup("j");
+			 	//Interface v = (Interface)currentScope.lookup("k");
+			 	
+			 	//if( t == null){
+				// System.out.println("NULL");}
+				 
+			//	 if( u == null){
+			//	 System.out.println("NULL");}
+				 
+				// if( v == null){
+				// System.out.println("NULL");}
+				
+				//if(t != null){ 
+			//	System.out.println(" "+t.getString());
+			//	}
+			//	if(u != null){ 
+			//	System.out.println(" "+u.getString());
+			//	}
+			//	if(v != null){ 
+			//	System.out.println(" "+v.getString());
+			//	}
 				//System.out.println(" current symbol table");				
-			 //	currentScope.printSymbols();
+			//	currentScope.printSymbols();
 			}
 //			currentScope.printSymbols();
  		}
@@ -425,7 +446,7 @@ ip_addr    returns [Symbol sym]:  (a=NUMBER)DOT(b=NUMBER)DOT(c=NUMBER)DOT(d=NUMB
 	{
 			
 		Ipaddress ip = new Ipaddress($a.text+"."+$b.text+"."+$c.text+"."+$d.text);
-		System.out.println (" ip address being sent : "+ip.getString());
+	//	System.out.println (" ip address being sent : "+ip.getString());
 		Symbol s = new Symbol("ip_addr_string", "ipaddr_t", ip);
 		$sym = s;
 //		return $sym;
