@@ -137,7 +137,7 @@ set_oper
 			Assignment ans = new Assignment(s, $op.text);
 			map.put($var.text, ans);
 			System.out.println("here");
-//			currentScope.printSymbols();
+		//	currentScope.printSymbols();
 	 	}
  		assignment_expr //(',' assignment_expr)*
  	
@@ -149,19 +149,29 @@ set_oper
  			Set entries = map.entrySet();
 			Iterator iter = entries.iterator();
 			//p = (Policy)( $e.sym );
-			System.out.println($e.sym.getValue());
+			//System.out.println($e.sym.getString());
 			//System.out.println("Symbol Val: " + $e.sym.pol[0]);
 			while(iter.hasNext() && $e.sym != null)
 			{
 				Map.Entry entry = (Map.Entry)iter.next();
 				String key = (String)entry.getKey();
 				Symbol s = new Symbol(key, $e.sym.getType(), $e.sym.lookupValue());
-				System.out.println(s.getValue());
+				//System.out.println(s.getString());
 				//-- COMMENT: Somehow this statement is not reflecting a change in the symbol value
 				currentScope.setSymbolValue(key, s);
-				System.out.println("Symbol table: xxx " + s.getType() + " " + s.getValue());
+				
+				System.out.println("Symbol table:  " + s.getName()+" "+ s.getType() + " " + s.getString());
+				
+				/*
+				Interface t = (Interface)currentScope.lookup("i");
+			 	if( t == null){
+				 System.out.println("NULL");}
+				System.out.println(" "+t.getString());*/
+				
+				//System.out.println(" current symbol table");				
+			 //	currentScope.printSymbols();
 			}
-			currentScope.printSymbols();
+//			currentScope.printSymbols();
  		}
  
  	;
