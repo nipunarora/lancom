@@ -376,30 +376,129 @@ role  returns [Symbol sym]:
 //policy  :	direction verdict proto (port)?  ;//ip_addr 'netmask' src_netmask=ip_addr  sport=(port)?;
 
 policy returns [Symbol sym]	: 
-  	{int src_port = 0;}
-  	dir=direction verd=verdict protocol=proto src_ip=ip_addr 'netmask' netmask_ip=ip_addr (sport=port  {src_port++;} )?  //ip_addr 'netmask' src_netmask=ip_addr  sport=(port)?
+  	{int src_port = 0;
+  	 boolean ip_object_used , netmask_object_used ;
+  	 ip_object_used = false;
+  	 netmask_object_used = false;
+  	}
+  	dir=direction verd=verdict protocol=proto (src_ip=ip_addr|(ip_obj=object_name {ip_object_used = true;}))
+  	 'netmask' (netmask_ip=ip_addr|(netmask_ip_obj = object_name {netmask_object_used = true;})) (sport=port  {src_port++;} )?  //ip_addr 'netmask' src_netmask=ip_addr  sport=(port)?
 {
+	Ipaddress sip =null, snetmask=null;
+	if(ip_object_used == true && netmask_object_used ==false)
+	{
+	  Symbol s = currentScope.getSymbol($ip_obj.text);
+	   sip = (Ipaddress) s.lookupValue();
+	  }
+	else if (ip_object_used == false  && netmask_object_used ==true)
+	{
+      	  Symbol s = currentScope.getSymbol($netmask_ip_obj.text);
+	   snetmask = (Ipaddress) s.lookupValue();
+	}
+	else if(ip_object_used ==true && netmask_object_used ==true)
+	{
+	  Symbol s_ip =  currentScope.getSymbol($ip_obj.text);
+	   sip = (Ipaddress) s_ip.lookupValue();
+  	  Symbol s_nmask = currentScope.getSymbol($netmask_ip_obj.text);
+	   snetmask = (Ipaddress) s_nmask.lookupValue();
+	}
+	else{
+	sip = new Ipaddress($src_ip.text);
+	snetmask = new Ipaddress($netmask_ip.text);
+	}
+
+
+	if(sip != null)
+	 {
+	   System.out.println( " source ip for policy :  "+ sip.getString());
+	   }
+	 if(snetmask != null)
+	 {
+	  System.out.println(" source netmask for policy :"+snetmask.getString());
+	 }  
+
+
 	Policy pl;
                           if(src_port>0){
-	 pl = new Policy($dir.text,$verd.text, $protocol.text, $src_ip.text,$netmask_ip.text,$sport.text);
+	 pl = new Policy($dir.text,$verd.text, $protocol.text, sip.getString(),snetmask.getString(),$sport.text);
 	}
 	 else{
- 	  pl = new Policy($dir.text,$verd.text, $protocol.text, $src_ip.text,$netmask_ip.text,"0");		
+ 	  pl = new Policy($dir.text,$verd.text, $protocol.text, sip.getString(),snetmask.getString(),"0");		
  	  }
+ 	  
+ 	   	  
                           Symbol s = new Symbol("policy_tcp_udp","policy_type_t",pl);
 	$sym = s;
 //	currentScope.printSymbols();
 }
-	| 	dir=direction verd=verdict icmp_mesg=icmp_cntrl_message  src_ip=ip_addr 'netmask' src_netmask=ip_addr 
+	| 
+	
+	{int src_port = 0;
+  	 boolean ip_object_used , netmask_object_used ;
+  	 ip_object_used = false;
+  	 netmask_object_used = false;
+  	}
+		
+	dir=direction verd=verdict icmp_mesg=icmp_cntrl_message  (src_ip=ip_addr | (ip_obj=object_name {ip_object_used = true;})) 
+	    'netmask' (src_netmask=ip_addr | (netmask_ip_obj  = object_name {netmask_object_used = true;}))
 	{
 	
 //	Policy pl;
-	Policy p2 = new Policy($dir.text,$verd.text, $icmp_mesg.text, $src_ip.text,$src_netmask.text);
+
+	Ipaddress sip =null , snetmask=null;
+	if(ip_object_used == true && netmask_object_used ==false)
+	{
+	  Symbol s = currentScope.getSymbol($ip_obj.text);
+	   sip = (Ipaddress) s.lookupValue();
+	  }
+	else if (ip_object_used == false  && netmask_object_used ==true)
+	{
+      	  Symbol s = currentScope.getSymbol($netmask_ip_obj.text);
+	   snetmask = (Ipaddress) s.lookupValue();
+	}
+	else if(ip_object_used ==true && netmask_object_used ==true)
+	{
+	  Symbol s_ip =  currentScope.getSymbol($ip_obj.text);
+	   sip = (Ipaddress) s_ip.lookupValue();
+  	  Symbol s_nmask = currentScope.getSymbol($netmask_ip_obj.text);
+	   snetmask = (Ipaddress) s_nmask.lookupValue();
+	}
+	else{
+	sip = new Ipaddress($src_ip.text);
+	snetmask = new Ipaddress($netmask_ip.text);
+	}
+
+	if(sip != null)
+	 {
+	   System.out.println( " source ip for policy :  "+ sip.getString());
+	   }
+	 if(snetmask != null)
+	 {
+	  System.out.println(" source netmask for policy :"+snetmask.getString());
+	 }  
+	   
+	Policy p2 = new Policy($dir.text,$verd.text, $icmp_mesg.text, sip.getString(),snetmask.getString());
 	
                           Symbol s = new Symbol("policy_icmp","policy_type_t",p2);
 	$sym = s;
 //	currentScope.printSymbols();
 	}
+/*	|
+	policy_obj_name=object_name
+	{
+	 Policy p3;
+	 Symbol s = currentScope.getSymbol($policy_obj_name.text);
+                            if (s == null)
+                             {
+                               System.out.println (" policy: symbol not found ");
+                              }
+                             else
+                             {
+                                p3 = (Policy)(s.lookupValue()).clone();
+                                Symbol s = new Symbol(s.getName(),s.getType(),p3);
+                                } 
+	  $sym = s;
+	} */
 	;	
 	
 
@@ -417,7 +516,23 @@ int_value returns [Symbol sym]
 			$sym = s;
 		//	return $sym;
 		}
-//	|	object_name
+/*	|int_obj_name=object_name
+	{
+	IntType i;
+	 Symbol s = currentScope.getSymbol($int_obj_name.text);
+                            if (s == null)
+                             {
+                               System.out.println (" int_value : symbol not found ");
+                              }
+                             else
+                             {
+                                i = (IntType)(s.lookupValue()).clone();
+                                Symbol s = new Symbol(s.getName(),s.getType(),i);
+                                } 
+	  $sym = s;
+	
+	}*/
+	
 	;
 
 char_value  /*returns [Symbol sym]*/
@@ -452,8 +567,12 @@ icmp_cntrl_message
 port	:	NUMBER;
 
 
-object_name
-	:	ID;
+object_name returns [String obj_name]
+	:  ID	
+	{ $obj_name = new String ($ID.text);
+	   
+	}
+	;
 
 //OBJECT_NAME
 //	:	ID 
@@ -506,12 +625,47 @@ nmask	: 'netmask' ip_addr;//NM LETTER+;
 }*/
 
 
-host	returns [Symbol sym]: 'ip_addr' ip_string=ip_addr 'netmask' netmask_string=ip_addr 
+host	returns [Symbol sym]:
+	{boolean ip_object_used =false, netmask_object_used = false;}	
+	 'ip_addr' (ip_string=ip_addr|(ip_obj=object_name {ip_object_used=true; System.out.println (" found object name :"+$ip_obj.text);} )) 'netmask' (netmask_string=ip_addr | 
+	                   (netmask_ip_obj = object_name {netmask_object_used = true;}))
 {
-
-	Host h = new Host ($ip_string.text,$netmask_string.text); //usure about the text error
-	Symbol s = new Symbol("host_descr_string", "host_type_t", h);
-	$sym = s;
+	Host h;
+	if(ip_object_used == true && netmask_object_used ==false)
+	{
+	  Symbol s = currentScope.getSymbol($ip_obj.text);
+	  Ipaddress ip = (Ipaddress) s.lookupValue();
+	  System.out.println(" >> "+ip.getString());
+	  h = new Host	( ip.getString(),$netmask_string.text);
+	  Symbol s_ret = new Symbol("host_descr_string", "host_type_t", h);
+	 $sym = s_ret;
+	}
+	else if (ip_object_used == false  && netmask_object_used ==true)
+	{
+      	  Symbol s = currentScope.getSymbol($netmask_ip_obj.text);
+	  Ipaddress ip = (Ipaddress) s.lookupValue();
+	  h = new Host	( $ip_string.text,ip.getString());
+	  Symbol s_ret = new Symbol("host_descr_string", "host_type_t", h);
+	  $sym = s_ret;
+	}
+	else if(ip_object_used ==true && netmask_object_used ==true)
+	{
+	  Symbol s_ip =  currentScope.getSymbol($ip_obj.text);
+	  Ipaddress ip = (Ipaddress) s_ip.lookupValue();
+	 
+  	  Symbol s_nmask = currentScope.getSymbol($netmask_ip_obj.text);
+	  Ipaddress nmask = (Ipaddress) s_nmask.lookupValue();
+	 
+	  h = new Host	( ip.getString(),nmask.getString());
+	  Symbol s_ret = new Symbol("host_descr_string", "host_type_t", h);
+	 $sym = s_ret;
+	
+	}
+	else{
+	h = new Host ($ip_string.text,$netmask_string.text); //usure about the text error
+	Symbol s_ret = new Symbol("host_descr_string", "host_type_t", h);
+	$sym = s_ret;
+	}
 //	return $sym;
 
 }
