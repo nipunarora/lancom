@@ -49,11 +49,16 @@ public class Symbol {
 		{
 			IntType temp = (IntType)this.value;
 			Integer n = temp.getValue();
-
 			return (new String(n.toString()));
 				
 		}
-
+		if(this.type.equals("role_type_t"))
+		{
+			Role temp = (Role)this.value;
+			return (new String(temp.getString()));
+			
+			//val = n.toString();
+		}
 		if(this.type.equals("policy_type_t"))
 		{
 			Policy temp = (Policy)this.value;
@@ -61,6 +66,23 @@ public class Symbol {
 			
 			//val = n.toString();
 		}
+		
+		if(this.type.equals("host_group_type_t"))
+		{
+			Hostgroup temp = (Hostgroup)this.value;
+			return (new String(temp.getString()));
+			
+			//val = n.toString();
+		}
+	
+		if(this.type.equals("route_type_t"))
+		{
+			Route temp = (Route)this.value;
+			return (new String(temp.getString()));
+			
+			//val = n.toString();
+		}
+
 		if(this.type.equals("interface_type_t"))
 		{
 			if(this.value == null)
