@@ -83,7 +83,31 @@ prog
  	|  'apply' 'role' role
  	| 'undo' 'role' object_name
  	| 'undo' 'role' role
- 	| 'apply' 'policy' object_name
+ 	| 'apply' 'policy' var=object_name
+ 	{
+ 	  Policy p = (Policy) currentScope.lookup($var.text);
+ 	 if(p!=null)
+ 	 {
+ 	  String command = "/sbin/iptables";
+ 	 String verd = null;
+ 	 if(p.verdict.equals("allow"))
+ 	  {
+ 	    verd = "ACCEPT";
+ 	    }
+ 	  if(p.verdict.equals(" deny "))
+ 	  {
+ 	    verd = "DROP";
+ 	    }  
+ 	   if( verd == null)
+ 	      { 
+ 	      System.out.println("verdict is null");
+ 	      }
+ 	 String arg = "  -I INPUT -p "+p.protocol+" -s " + p.ipAddress.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	  System.out.println(command+arg);
+ 	  
+ 	 }
+ 	 else  { System.out.println(" p is null");}
+ 	}
  	| 'apply' 'policy' policy
  	| 'undo' 'policy' object_name
  	| 'undo' 'policy' policy
@@ -192,7 +216,7 @@ set_oper
 				//System.out.println(" current symbol table");				
 			//	currentScope.printSymbols();
 			}
-//			currentScope.printSymbols();
+		//	currentScope.printSymbols();
  		}
  
  	;
@@ -326,17 +350,28 @@ object_values returns [Symbol sym]
 	$sym = $host.sym ; 
 	}
 	| role /* Similarly with other types */
-	| host_group 
+	| host_group { $sym = $host_group.sym;} 
 	| topology
 	| serv_group
 	| interf { $sym = $interf.sym;}
-	| route
+	| route {$sym = $route.sym;}
 	//	| object_name
 	;
 //	object_values: object_name|serv_group|topology|host_group|role|host|policy|ip_addr|STRING|int_value|char_value;
 
 
-role  : 'role' '{' policy (COMMA policy)* '}'
+role  returns [Symbol sym]: 
+	{ 
+	      Vector <Policy> policies;
+	      policies = new Vector <Policy>() ;	     
+	 }
+	'role' '{' p_i=policy {policies.add((Policy)p_i.lookupValue());} (COMMA p_j=policy {policies.add((Policy)p_j.lookupValue());} )* '}'
+	{
+	Role role = new Role (policies);
+	Symbol s = new Symbol ("role_group_type_t","role_group_type_t",role);
+	$sym = s;  		
+	}
+	
 	;
 //policy  :	direction verdict proto (port)?  ;//ip_addr 'netmask' src_netmask=ip_addr  sport=(port)?;
 
@@ -495,8 +530,18 @@ gateway	: ip_addr (',' ip_addr)*;
 
 
 
-host_group
-	: 'host_group'  '{' host (',' host)* '}'         //   ( 'DNS'  '{' dns_set '}' )?  ( 'GATEWAY' '{' gateway '}')? 
+host_group returns [Symbol sym]
+	: 
+	{
+	Vector <Host> hosts;
+	hosts = new Vector <Host> ();
+	}
+	'host_group'  '{' i=host  {hosts.add((Host)i.lookupValue()); }  (',' j=host {hosts.add((Host)j.lookupValue());} )* '}'         //   ( 'DNS'  '{' dns_set '}' )?  ( 'GATEWAY' '{' gateway '}')? 
+	{
+	Hostgroup hgroup = new Hostgroup (hosts);
+	Symbol s = new Symbol ("host_group_type_t","host_group_type_t",hgroup);
+	$sym = s;  		
+	}
 	;
 
 interf returns [Symbol sym]
@@ -513,27 +558,27 @@ interf returns [Symbol sym]
 	$sym = s;  
 	} ;
   
-/*route returns [Symbol sym]	: 'host' dst=ip_addr 'gw' gw=ip_addr
+route returns [Symbol sym]	: 'host' dst=ip_addr 'gw' gw=ip_addr
 	{
 	  Route rh = new Route ($dst.text, $gw.text);
 	  Symbol s = new Symbol("host_route_string", "route_type_t", rh);
 	  $sym = s;
-	  return $sym;
+	  
 	}	
 		
-	| 'net' dst=ip_addr 'netmask' netmask=ip_addr 'gw' gw= ip_addr
+	| 'net' dst=ip_addr 'netmask' netmask_ip=ip_addr 'gw' gw= ip_addr
 	{
-	 Route rn = new Route ($dst.text,$netmask.text,$gw.text);
-   	  Symbol s = new Symbol("net_route_string", "host_type_t", rn);
+	 Route rn = new Route ($dst.text,$netmask_ip.text,$gw.text);
+   	  Symbol s = new Symbol("net_route_string", "route_type_t", rn);
 	  $sym = s;
-	  return $sym;
+	  
 	}
-	;*/
+	;
 
 
-route : 'host' ip_addr 'gw' ip_addr
-| 'net' ip_addr 'netmask' ip_addr 'gw' ip_addr
-;
+//route : 'host' ip_addr 'gw' ip_addr
+//| 'net' ip_addr 'netmask' ip_addr 'gw' ip_addr
+//;
 
 
 
