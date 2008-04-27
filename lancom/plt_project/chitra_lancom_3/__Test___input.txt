@@ -1,4 +1,6 @@
 prog
-policy_type_t x,y,z;
-
-endprog
+policy_type_t p;
+p=inbound allow tcp 1.1.1.1 netmask 2.2.2.2 80;
+role_type_t r;
+r=role{outbound deny udp 3.3.3.3 netmask 4.4.4.4 200,p};
+endprog;

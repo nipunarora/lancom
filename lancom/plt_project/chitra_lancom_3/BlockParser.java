@@ -1,11 +1,14 @@
-// $ANTLR 3.0.1 /home/sambuddho/plt_project/chitra_lancom_3/Block.g 2008-04-23 14:27:36
+// $ANTLR 3.0.1 D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g 2008-04-26 23:11:09
 
 	//import javalancom.Scope;
 	//import javalancom.Symbol;
 	import java.util.HashMap;
+	import java.io.*;
+	import java.util.Vector;
 	import java.util.Set;
 	import java.util.Iterator;
 	import java.util.Map;
+	import java.util.zip.DataFormatException;
 
 
 
@@ -18,27 +21,27 @@ import org.antlr.runtime.debug.*;
 import java.io.IOException;
 public class BlockParser extends DebugParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "PLUS", "MINUS", "MULT", "DIV", "NUMBER", "NM", "STRING", "ID", "COMMA", "CHAR", "ICMP_MESSAGE_TYPE", "DOT", "LETTER", "DIGIT", "EscapeSequence", "LINE_COMMENT", "EQUAL", "WHITESPACE", "'prog'", "'endprog'", "';'", "'ifconfig'", "'apply'", "'topology'", "'undo'", "'role'", "'policy'", "'host_group'", "'route'", "'add'", "'delete'", "'to'", "'from'", "'show'", "'numeric'", "'fw'", "'if'", "'('", "')'", "'else'", "'endif'", "'while'", "'endwhile'", "'echo'", "'?'", "':'", "'||'", "'&&'", "'|'", "'&'", "'=='", "'!='", "'<'", "'>'", "'<='", "'>='", "'~'", "'*='", "'/='", "'+='", "'-='", "'topology_type_t'", "'host_type_t'", "'host_group_type_t'", "'serv_group_type_t'", "'role_type_t'", "'policy_type_t'", "'route_type_t'", "'interface_type_t'", "'ipaddr_t'", "'int_type_t'", "'char_type_t'", "'{'", "'}'", "'inbound'", "'outbound'", "'allow'", "'deny'", "'udp'", "'tcp'", "'ifname'", "'card_id'", "'netmask'", "'ip_addr'", "'host'", "'gw'", "'net'", "'service_set'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "PLUS", "MINUS", "MULT", "DIV", "NUMBER", "NM", "STRING", "ID", "COMMA", "CHAR", "ICMP_MESSAGE_TYPE", "DOT", "LETTER", "DIGIT", "EscapeSequence", "LINE_COMMENT", "EQUAL", "WHITESPACE", "'prog'", "'endprog'", "';'", "'ifconfig'", "'apply'", "'topology'", "'undo'", "'role'", "'policy'", "'host_group'", "'route'", "'add'", "'delete'", "'to'", "'from'", "'show'", "'numeric'", "'fw'", "'if'", "'('", "')'", "'else'", "'endif'", "'while'", "'endwhile'", "'echo'", "'?'", "':'", "'||'", "'&&'", "'|'", "'&'", "'=='", "'!='", "'<'", "'>'", "'<='", "'>='", "'~'", "'*='", "'/='", "'+='", "'-='", "'topology_type_t'", "'host_type_t'", "'host_group_type_t'", "'serv_group_type_t'", "'role_type_t'", "'policy_type_t'", "'route_type_t'", "'interface_type_t'", "'ipaddr_t'", "'int_type_t'", "'char_type_t'", "'{'", "'}'", "'netmask'", "'inbound'", "'outbound'", "'allow'", "'deny'", "'udp'", "'tcp'", "'ip_addr'", "'ifname'", "'dns'", "'gw'", "'host'", "'net'", "'service_set'"
     };
-    public static final int LINE_COMMENT=19;
+    public static final int COMMA=12;
+    public static final int MINUS=5;
     public static final int LETTER=16;
     public static final int NUMBER=8;
     public static final int CHAR=13;
+    public static final int STRING=10;
+    public static final int LINE_COMMENT=19;
+    public static final int ICMP_MESSAGE_TYPE=14;
     public static final int WHITESPACE=21;
-    public static final int MULT=6;
-    public static final int MINUS=5;
-    public static final int ID=11;
-    public static final int EOF=-1;
-    public static final int COMMA=12;
-    public static final int EQUAL=20;
-    public static final int PLUS=4;
-    public static final int DIGIT=17;
-    public static final int DIV=7;
     public static final int NM=9;
     public static final int DOT=15;
+    public static final int EQUAL=20;
     public static final int EscapeSequence=18;
-    public static final int ICMP_MESSAGE_TYPE=14;
-    public static final int STRING=10;
+    public static final int EOF=-1;
+    public static final int DIV=7;
+    public static final int PLUS=4;
+    public static final int DIGIT=17;
+    public static final int MULT=6;
+    public static final int ID=11;
     public static final String[] ruleNames = new String[] {
         "invalidRule", "prog", "statement_list", "statement", "statement_expr", 
         "config_statement", "route_oper", "set_oper", "config_display", 
@@ -46,12 +49,11 @@ public class BlockParser extends DebugParser {
         "expression", "assignment_expr", "conditional_expr", "logicalOR_expr", 
         "logicalAND_expr", "bitwiseOR_expr", "bitwiseAND_expr", "equality_expr", 
         "relational_expr", "expr", "term", "unary_expr", "postfix_expression", 
-        "assignment_operator", "factor", "literal", "declr_stmt", "object_values", 
-        "type_name", "role", "policy", "topology", "int_value", "char_value", 
+        "assignment_operator", "factor", "literal", "declr_stmt", "type_name", 
+        "object_values", "role", "policy", "topology", "int_value", "char_value", 
         "direction", "verdict", "proto", "icmp_cntrl_message", "port", "object_name", 
-        "interface_name", "ip_addr", "nmask", "host", "dns_set", "gateway", 
-        "host_group", "interf", "route", "serv_group", "serv_listen_port", 
-        "host_name"
+        "ip_addr", "nmask", "host", "dns_set", "gateway", "host_group", 
+        "interf", "route", "serv_group", "serv_listen_port", "host_name"
     };
 
     public int ruleLevel = 0;
@@ -81,20 +83,20 @@ public class BlockParser extends DebugParser {
 
 
     public String[] getTokenNames() { return tokenNames; }
-    public String getGrammarFileName() { return "/home/sambuddho/plt_project/chitra_lancom_3/Block.g"; }
+    public String getGrammarFileName() { return "D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g"; }
 
           
     	Scope globalScope = new Scope(null);
     	Scope currentScope = globalScope;
     	Map<String, Assignment> map = new HashMap<String, Assignment>(); 
-
+    
         	public static void main(String[] args) throws Exception 
         	{
             	BlockLexer lex = new BlockLexer(new ANTLRFileStream(args[0]));
     	       	CommonTokenStream tokens = new CommonTokenStream(lex);
-
+    
             	BlockParser parser = new BlockParser(tokens);
-
+    
     	        try 
     	        {
     	            parser.role();
@@ -108,23 +110,23 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start prog
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:47:1: prog : 'prog' ( statement_list )+ 'endprog' ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:50:1: prog : 'prog' ( statement_list )+ 'endprog' ;
     public final void prog() throws RecognitionException {
         try { dbg.enterRule("prog");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(47, 1);
+        dbg.location(50, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:48:2: ( 'prog' ( statement_list )+ 'endprog' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:51:2: ( 'prog' ( statement_list )+ 'endprog' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:48:4: 'prog' ( statement_list )+ 'endprog'
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:51:4: 'prog' ( statement_list )+ 'endprog'
             {
-            dbg.location(48,4);
+            dbg.location(51,4);
             match(input,22,FOLLOW_22_in_prog83); 
-            dbg.location(48,11);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:48:11: ( statement_list )+
+            dbg.location(51,11);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:51:11: ( statement_list )+
             int cnt1=0;
             try { dbg.enterSubRule(1);
 
@@ -135,7 +137,7 @@ public class BlockParser extends DebugParser {
 
                 int LA1_0 = input.LA(1);
 
-                if ( (LA1_0==NUMBER||(LA1_0>=STRING && LA1_0<=ID)||LA1_0==CHAR||(LA1_0>=24 && LA1_0<=26)||(LA1_0>=28 && LA1_0<=29)||(LA1_0>=31 && LA1_0<=34)||(LA1_0>=39 && LA1_0<=41)||LA1_0==45||LA1_0==47||LA1_0==60||(LA1_0>=65 && LA1_0<=75)||(LA1_0>=78 && LA1_0<=79)||LA1_0==84||(LA1_0>=87 && LA1_0<=88)||(LA1_0>=90 && LA1_0<=91)) ) {
+                if ( (LA1_0==NUMBER||(LA1_0>=STRING && LA1_0<=ID)||LA1_0==CHAR||(LA1_0>=24 && LA1_0<=26)||(LA1_0>=28 && LA1_0<=29)||(LA1_0>=31 && LA1_0<=34)||(LA1_0>=39 && LA1_0<=41)||LA1_0==45||LA1_0==47||LA1_0==60||(LA1_0>=65 && LA1_0<=75)||(LA1_0>=79 && LA1_0<=80)||(LA1_0>=85 && LA1_0<=86)||(LA1_0>=89 && LA1_0<=91)) ) {
                     alt1=1;
                 }
 
@@ -146,9 +148,9 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:48:11: statement_list
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:51:11: statement_list
             	    {
-            	    dbg.location(48,11);
+            	    dbg.location(51,11);
             	    pushFollow(FOLLOW_statement_list_in_prog85);
             	    statement_list();
             	    _fsp--;
@@ -169,7 +171,7 @@ public class BlockParser extends DebugParser {
             } while (true);
             } finally {dbg.exitSubRule(1);}
 
-            dbg.location(48,27);
+            dbg.location(51,27);
             match(input,23,FOLLOW_23_in_prog88); 
 
             }
@@ -181,7 +183,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(49, 3);
+        dbg.location(52, 3);
 
         }
         finally {
@@ -196,21 +198,21 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start statement_list
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:51:2: statement_list : ( statement | declr_stmt );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:54:2: statement_list : ( statement | declr_stmt );
     public final void statement_list() throws RecognitionException {
         try { dbg.enterRule("statement_list");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(51, 2);
+        dbg.location(54, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:52:3: ( statement | declr_stmt )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:55:3: ( statement | declr_stmt )
             int alt2=2;
             try { dbg.enterDecision(2);
 
             int LA2_0 = input.LA(1);
 
-            if ( (LA2_0==NUMBER||(LA2_0>=STRING && LA2_0<=ID)||LA2_0==CHAR||(LA2_0>=24 && LA2_0<=26)||(LA2_0>=28 && LA2_0<=29)||(LA2_0>=31 && LA2_0<=34)||(LA2_0>=39 && LA2_0<=41)||LA2_0==45||LA2_0==47||LA2_0==60||(LA2_0>=78 && LA2_0<=79)||LA2_0==84||(LA2_0>=87 && LA2_0<=88)||(LA2_0>=90 && LA2_0<=91)) ) {
+            if ( (LA2_0==NUMBER||(LA2_0>=STRING && LA2_0<=ID)||LA2_0==CHAR||(LA2_0>=24 && LA2_0<=26)||(LA2_0>=28 && LA2_0<=29)||(LA2_0>=31 && LA2_0<=34)||(LA2_0>=39 && LA2_0<=41)||LA2_0==45||LA2_0==47||LA2_0==60||(LA2_0>=79 && LA2_0<=80)||(LA2_0>=85 && LA2_0<=86)||(LA2_0>=89 && LA2_0<=91)) ) {
                 alt2=1;
             }
             else if ( ((LA2_0>=65 && LA2_0<=75)) ) {
@@ -218,7 +220,7 @@ public class BlockParser extends DebugParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("51:2: statement_list : ( statement | declr_stmt );", 2, 0, input);
+                    new NoViableAltException("54:2: statement_list : ( statement | declr_stmt );", 2, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
@@ -229,9 +231,9 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:52:5: statement
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:55:5: statement
                     {
-                    dbg.location(52,5);
+                    dbg.location(55,5);
                     pushFollow(FOLLOW_statement_in_statement_list104);
                     statement();
                     _fsp--;
@@ -242,9 +244,9 @@ public class BlockParser extends DebugParser {
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:53:6: declr_stmt
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:56:6: declr_stmt
                     {
-                    dbg.location(53,6);
+                    dbg.location(56,6);
                     pushFollow(FOLLOW_declr_stmt_in_statement_list111);
                     declr_stmt();
                     _fsp--;
@@ -261,7 +263,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(54, 3);
+        dbg.location(57, 3);
 
         }
         finally {
@@ -276,15 +278,15 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start statement
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:56:2: statement : ( condition_statement | iteration_statement | statement_expr | print_statement );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:59:2: statement : ( condition_statement | iteration_statement | statement_expr | print_statement );
     public final void statement() throws RecognitionException {
         try { dbg.enterRule("statement");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(56, 2);
+        dbg.location(59, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:57:3: ( condition_statement | iteration_statement | statement_expr | print_statement )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:60:3: ( condition_statement | iteration_statement | statement_expr | print_statement )
             int alt3=4;
             try { dbg.enterDecision(3);
 
@@ -315,11 +317,11 @@ public class BlockParser extends DebugParser {
             case 39:
             case 41:
             case 60:
-            case 78:
             case 79:
-            case 84:
-            case 87:
-            case 88:
+            case 80:
+            case 85:
+            case 86:
+            case 89:
             case 90:
             case 91:
                 {
@@ -333,7 +335,7 @@ public class BlockParser extends DebugParser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("56:2: statement : ( condition_statement | iteration_statement | statement_expr | print_statement );", 3, 0, input);
+                    new NoViableAltException("59:2: statement : ( condition_statement | iteration_statement | statement_expr | print_statement );", 3, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
@@ -345,9 +347,9 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:57:5: condition_statement
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:60:5: condition_statement
                     {
-                    dbg.location(57,5);
+                    dbg.location(60,5);
                     pushFollow(FOLLOW_condition_statement_in_statement126);
                     condition_statement();
                     _fsp--;
@@ -358,9 +360,9 @@ public class BlockParser extends DebugParser {
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:58:5: iteration_statement
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:61:5: iteration_statement
                     {
-                    dbg.location(58,5);
+                    dbg.location(61,5);
                     pushFollow(FOLLOW_iteration_statement_in_statement132);
                     iteration_statement();
                     _fsp--;
@@ -371,9 +373,9 @@ public class BlockParser extends DebugParser {
                 case 3 :
                     dbg.enterAlt(3);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:59:5: statement_expr
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:62:5: statement_expr
                     {
-                    dbg.location(59,5);
+                    dbg.location(62,5);
                     pushFollow(FOLLOW_statement_expr_in_statement138);
                     statement_expr();
                     _fsp--;
@@ -384,9 +386,9 @@ public class BlockParser extends DebugParser {
                 case 4 :
                     dbg.enterAlt(4);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:60:5: print_statement
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:63:5: print_statement
                     {
-                    dbg.location(60,5);
+                    dbg.location(63,5);
                     pushFollow(FOLLOW_print_statement_in_statement144);
                     print_statement();
                     _fsp--;
@@ -403,7 +405,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(61, 3);
+        dbg.location(64, 3);
 
         }
         finally {
@@ -418,15 +420,15 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start statement_expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );
     public final void statement_expr() throws RecognitionException {
         try { dbg.enterRule("statement_expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(63, 2);
+        dbg.location(66, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:64:3: ( ';' | expression ';' | config_statement ';' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:67:3: ( ';' | expression ';' | config_statement ';' )
             int alt4=3;
             try { dbg.enterDecision(4);
 
@@ -445,7 +447,7 @@ public class BlockParser extends DebugParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 2, input);
+                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 2, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -459,16 +461,16 @@ public class BlockParser extends DebugParser {
             case 31:
             case 41:
             case 60:
-            case 78:
             case 79:
-            case 84:
-            case 87:
+            case 80:
+            case 85:
+            case 86:
             case 91:
                 {
                 alt4=2;
                 }
                 break;
-            case 88:
+            case 89:
                 {
                 int LA4_4 = input.LA(2);
 
@@ -493,7 +495,7 @@ public class BlockParser extends DebugParser {
                                         if ( (LA4_18==NUMBER) ) {
                                             int LA4_20 = input.LA(9);
 
-                                            if ( (LA4_20==89) ) {
+                                            if ( (LA4_20==88) ) {
                                                 int LA4_22 = input.LA(10);
 
                                                 if ( (LA4_22==NUMBER) ) {
@@ -522,7 +524,7 @@ public class BlockParser extends DebugParser {
                                                                             }
                                                                             else {
                                                                                 NoViableAltException nvae =
-                                                                                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 36, input);
+                                                                                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 36, input);
 
                                                                                 dbg.recognitionException(nvae);
                                                                                 throw nvae;
@@ -530,7 +532,7 @@ public class BlockParser extends DebugParser {
                                                                         }
                                                                         else {
                                                                             NoViableAltException nvae =
-                                                                                new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 34, input);
+                                                                                new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 34, input);
 
                                                                             dbg.recognitionException(nvae);
                                                                             throw nvae;
@@ -538,7 +540,7 @@ public class BlockParser extends DebugParser {
                                                                     }
                                                                     else {
                                                                         NoViableAltException nvae =
-                                                                            new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 32, input);
+                                                                            new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 32, input);
 
                                                                         dbg.recognitionException(nvae);
                                                                         throw nvae;
@@ -546,7 +548,7 @@ public class BlockParser extends DebugParser {
                                                                 }
                                                                 else {
                                                                     NoViableAltException nvae =
-                                                                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 30, input);
+                                                                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 30, input);
 
                                                                     dbg.recognitionException(nvae);
                                                                     throw nvae;
@@ -554,7 +556,7 @@ public class BlockParser extends DebugParser {
                                                             }
                                                             else {
                                                                 NoViableAltException nvae =
-                                                                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 28, input);
+                                                                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 28, input);
 
                                                                 dbg.recognitionException(nvae);
                                                                 throw nvae;
@@ -562,7 +564,7 @@ public class BlockParser extends DebugParser {
                                                         }
                                                         else {
                                                             NoViableAltException nvae =
-                                                                new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 26, input);
+                                                                new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 26, input);
 
                                                             dbg.recognitionException(nvae);
                                                             throw nvae;
@@ -570,7 +572,7 @@ public class BlockParser extends DebugParser {
                                                     }
                                                     else {
                                                         NoViableAltException nvae =
-                                                            new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 24, input);
+                                                            new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 24, input);
 
                                                         dbg.recognitionException(nvae);
                                                         throw nvae;
@@ -578,7 +580,7 @@ public class BlockParser extends DebugParser {
                                                 }
                                                 else {
                                                     NoViableAltException nvae =
-                                                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 22, input);
+                                                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 22, input);
 
                                                     dbg.recognitionException(nvae);
                                                     throw nvae;
@@ -586,7 +588,7 @@ public class BlockParser extends DebugParser {
                                             }
                                             else {
                                                 NoViableAltException nvae =
-                                                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 20, input);
+                                                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 20, input);
 
                                                 dbg.recognitionException(nvae);
                                                 throw nvae;
@@ -594,7 +596,7 @@ public class BlockParser extends DebugParser {
                                         }
                                         else {
                                             NoViableAltException nvae =
-                                                new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 18, input);
+                                                new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 18, input);
 
                                             dbg.recognitionException(nvae);
                                             throw nvae;
@@ -602,7 +604,7 @@ public class BlockParser extends DebugParser {
                                     }
                                     else {
                                         NoViableAltException nvae =
-                                            new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 16, input);
+                                            new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 16, input);
 
                                         dbg.recognitionException(nvae);
                                         throw nvae;
@@ -610,7 +612,7 @@ public class BlockParser extends DebugParser {
                                 }
                                 else {
                                     NoViableAltException nvae =
-                                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 14, input);
+                                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 14, input);
 
                                     dbg.recognitionException(nvae);
                                     throw nvae;
@@ -618,7 +620,7 @@ public class BlockParser extends DebugParser {
                             }
                             else {
                                 NoViableAltException nvae =
-                                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 12, input);
+                                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 12, input);
 
                                 dbg.recognitionException(nvae);
                                 throw nvae;
@@ -626,7 +628,7 @@ public class BlockParser extends DebugParser {
                         }
                         else {
                             NoViableAltException nvae =
-                                new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 10, input);
+                                new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 10, input);
 
                             dbg.recognitionException(nvae);
                             throw nvae;
@@ -634,7 +636,7 @@ public class BlockParser extends DebugParser {
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 8, input);
+                            new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 8, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -642,7 +644,7 @@ public class BlockParser extends DebugParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 4, input);
+                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 4, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -674,7 +676,7 @@ public class BlockParser extends DebugParser {
                                         if ( (LA4_19==NUMBER) ) {
                                             int LA4_21 = input.LA(9);
 
-                                            if ( (LA4_21==86) ) {
+                                            if ( (LA4_21==78) ) {
                                                 int LA4_23 = input.LA(10);
 
                                                 if ( (LA4_23==NUMBER) ) {
@@ -698,7 +700,7 @@ public class BlockParser extends DebugParser {
                                                                         if ( (LA4_35==NUMBER) ) {
                                                                             int LA4_37 = input.LA(17);
 
-                                                                            if ( (LA4_37==89) ) {
+                                                                            if ( (LA4_37==88) ) {
                                                                                 int LA4_38 = input.LA(18);
 
                                                                                 if ( (LA4_38==NUMBER) ) {
@@ -727,7 +729,7 @@ public class BlockParser extends DebugParser {
                                                                                                             }
                                                                                                             else {
                                                                                                                 NoViableAltException nvae =
-                                                                                                                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 45, input);
+                                                                                                                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 45, input);
 
                                                                                                                 dbg.recognitionException(nvae);
                                                                                                                 throw nvae;
@@ -735,7 +737,7 @@ public class BlockParser extends DebugParser {
                                                                                                         }
                                                                                                         else {
                                                                                                             NoViableAltException nvae =
-                                                                                                                new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 44, input);
+                                                                                                                new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 44, input);
 
                                                                                                             dbg.recognitionException(nvae);
                                                                                                             throw nvae;
@@ -743,7 +745,7 @@ public class BlockParser extends DebugParser {
                                                                                                     }
                                                                                                     else {
                                                                                                         NoViableAltException nvae =
-                                                                                                            new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 43, input);
+                                                                                                            new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 43, input);
 
                                                                                                         dbg.recognitionException(nvae);
                                                                                                         throw nvae;
@@ -751,7 +753,7 @@ public class BlockParser extends DebugParser {
                                                                                                 }
                                                                                                 else {
                                                                                                     NoViableAltException nvae =
-                                                                                                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 42, input);
+                                                                                                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 42, input);
 
                                                                                                     dbg.recognitionException(nvae);
                                                                                                     throw nvae;
@@ -759,7 +761,7 @@ public class BlockParser extends DebugParser {
                                                                                             }
                                                                                             else {
                                                                                                 NoViableAltException nvae =
-                                                                                                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 41, input);
+                                                                                                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 41, input);
 
                                                                                                 dbg.recognitionException(nvae);
                                                                                                 throw nvae;
@@ -767,7 +769,7 @@ public class BlockParser extends DebugParser {
                                                                                         }
                                                                                         else {
                                                                                             NoViableAltException nvae =
-                                                                                                new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 40, input);
+                                                                                                new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 40, input);
 
                                                                                             dbg.recognitionException(nvae);
                                                                                             throw nvae;
@@ -775,7 +777,7 @@ public class BlockParser extends DebugParser {
                                                                                     }
                                                                                     else {
                                                                                         NoViableAltException nvae =
-                                                                                            new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 39, input);
+                                                                                            new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 39, input);
 
                                                                                         dbg.recognitionException(nvae);
                                                                                         throw nvae;
@@ -783,7 +785,7 @@ public class BlockParser extends DebugParser {
                                                                                 }
                                                                                 else {
                                                                                     NoViableAltException nvae =
-                                                                                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 38, input);
+                                                                                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 38, input);
 
                                                                                     dbg.recognitionException(nvae);
                                                                                     throw nvae;
@@ -791,7 +793,7 @@ public class BlockParser extends DebugParser {
                                                                             }
                                                                             else {
                                                                                 NoViableAltException nvae =
-                                                                                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 37, input);
+                                                                                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 37, input);
 
                                                                                 dbg.recognitionException(nvae);
                                                                                 throw nvae;
@@ -799,7 +801,7 @@ public class BlockParser extends DebugParser {
                                                                         }
                                                                         else {
                                                                             NoViableAltException nvae =
-                                                                                new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 35, input);
+                                                                                new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 35, input);
 
                                                                             dbg.recognitionException(nvae);
                                                                             throw nvae;
@@ -807,7 +809,7 @@ public class BlockParser extends DebugParser {
                                                                     }
                                                                     else {
                                                                         NoViableAltException nvae =
-                                                                            new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 33, input);
+                                                                            new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 33, input);
 
                                                                         dbg.recognitionException(nvae);
                                                                         throw nvae;
@@ -815,7 +817,7 @@ public class BlockParser extends DebugParser {
                                                                 }
                                                                 else {
                                                                     NoViableAltException nvae =
-                                                                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 31, input);
+                                                                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 31, input);
 
                                                                     dbg.recognitionException(nvae);
                                                                     throw nvae;
@@ -823,7 +825,7 @@ public class BlockParser extends DebugParser {
                                                             }
                                                             else {
                                                                 NoViableAltException nvae =
-                                                                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 29, input);
+                                                                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 29, input);
 
                                                                 dbg.recognitionException(nvae);
                                                                 throw nvae;
@@ -831,7 +833,7 @@ public class BlockParser extends DebugParser {
                                                         }
                                                         else {
                                                             NoViableAltException nvae =
-                                                                new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 27, input);
+                                                                new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 27, input);
 
                                                             dbg.recognitionException(nvae);
                                                             throw nvae;
@@ -839,7 +841,7 @@ public class BlockParser extends DebugParser {
                                                     }
                                                     else {
                                                         NoViableAltException nvae =
-                                                            new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 25, input);
+                                                            new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 25, input);
 
                                                         dbg.recognitionException(nvae);
                                                         throw nvae;
@@ -847,7 +849,7 @@ public class BlockParser extends DebugParser {
                                                 }
                                                 else {
                                                     NoViableAltException nvae =
-                                                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 23, input);
+                                                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 23, input);
 
                                                     dbg.recognitionException(nvae);
                                                     throw nvae;
@@ -855,7 +857,7 @@ public class BlockParser extends DebugParser {
                                             }
                                             else {
                                                 NoViableAltException nvae =
-                                                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 21, input);
+                                                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 21, input);
 
                                                 dbg.recognitionException(nvae);
                                                 throw nvae;
@@ -863,7 +865,7 @@ public class BlockParser extends DebugParser {
                                         }
                                         else {
                                             NoViableAltException nvae =
-                                                new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 19, input);
+                                                new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 19, input);
 
                                             dbg.recognitionException(nvae);
                                             throw nvae;
@@ -871,7 +873,7 @@ public class BlockParser extends DebugParser {
                                     }
                                     else {
                                         NoViableAltException nvae =
-                                            new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 17, input);
+                                            new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 17, input);
 
                                         dbg.recognitionException(nvae);
                                         throw nvae;
@@ -879,7 +881,7 @@ public class BlockParser extends DebugParser {
                                 }
                                 else {
                                     NoViableAltException nvae =
-                                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 15, input);
+                                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 15, input);
 
                                     dbg.recognitionException(nvae);
                                     throw nvae;
@@ -887,7 +889,7 @@ public class BlockParser extends DebugParser {
                             }
                             else {
                                 NoViableAltException nvae =
-                                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 13, input);
+                                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 13, input);
 
                                 dbg.recognitionException(nvae);
                                 throw nvae;
@@ -895,7 +897,7 @@ public class BlockParser extends DebugParser {
                         }
                         else {
                             NoViableAltException nvae =
-                                new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 11, input);
+                                new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 11, input);
 
                             dbg.recognitionException(nvae);
                             throw nvae;
@@ -903,7 +905,7 @@ public class BlockParser extends DebugParser {
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 9, input);
+                            new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 9, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -911,7 +913,7 @@ public class BlockParser extends DebugParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 5, input);
+                        new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 5, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -931,7 +933,7 @@ public class BlockParser extends DebugParser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("63:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 0, input);
+                    new NoViableAltException("66:2: statement_expr : ( ';' | expression ';' | config_statement ';' );", 4, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
@@ -943,9 +945,9 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:64:5: ';'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:67:5: ';'
                     {
-                    dbg.location(64,5);
+                    dbg.location(67,5);
                     match(input,24,FOLLOW_24_in_statement_expr160); 
 
                     }
@@ -953,14 +955,14 @@ public class BlockParser extends DebugParser {
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:65:5: expression ';'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:68:5: expression ';'
                     {
-                    dbg.location(65,5);
+                    dbg.location(68,5);
                     pushFollow(FOLLOW_expression_in_statement_expr166);
                     expression();
                     _fsp--;
 
-                    dbg.location(65,16);
+                    dbg.location(68,16);
                     match(input,24,FOLLOW_24_in_statement_expr168); 
 
                     }
@@ -968,14 +970,14 @@ public class BlockParser extends DebugParser {
                 case 3 :
                     dbg.enterAlt(3);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:66:28: config_statement ';'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:69:28: config_statement ';'
                     {
-                    dbg.location(66,28);
+                    dbg.location(69,28);
                     pushFollow(FOLLOW_config_statement_in_statement_expr197);
                     config_statement();
                     _fsp--;
 
-                    dbg.location(66,45);
+                    dbg.location(69,45);
                     match(input,24,FOLLOW_24_in_statement_expr199); 
 
                     }
@@ -989,7 +991,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(67, 3);
+        dbg.location(70, 3);
 
         }
         finally {
@@ -1004,16 +1006,21 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start config_statement
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );
     public final void config_statement() throws RecognitionException {
+        object_name_return var = null;
+
+        Symbol p2 = null;
+
+
         try { dbg.enterRule("config_statement");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(69, 2);
+        dbg.location(72, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:70:3: ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display )
-            int alt9=18;
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:73:3: ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display )
+            int alt9=19;
             try { dbg.enterDecision(9);
 
             switch ( input.LA(1) ) {
@@ -1027,14 +1034,14 @@ public class BlockParser extends DebugParser {
                 switch ( input.LA(2) ) {
                 case 37:
                     {
-                    alt9=18;
+                    alt9=19;
                     }
                     break;
-                case 34:
+                case 33:
                     {
                     int LA9_10 = input.LA(3);
 
-                    if ( (LA9_10==88||LA9_10==90) ) {
+                    if ( ((LA9_10>=89 && LA9_10<=90)) ) {
                         alt9=2;
                     }
                     else if ( (LA9_10==ID) ) {
@@ -1042,26 +1049,26 @@ public class BlockParser extends DebugParser {
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 10, input);
+                            new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 10, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
                     }
                     }
                     break;
-                case 33:
+                case 34:
                     {
                     int LA9_11 = input.LA(3);
 
-                    if ( (LA9_11==88||LA9_11==90) ) {
-                        alt9=2;
-                    }
-                    else if ( (LA9_11==ID) ) {
+                    if ( (LA9_11==ID) ) {
                         alt9=1;
+                    }
+                    else if ( ((LA9_11>=89 && LA9_11<=90)) ) {
+                        alt9=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 11, input);
+                            new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 11, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1070,7 +1077,7 @@ public class BlockParser extends DebugParser {
                     break;
                 default:
                     NoViableAltException nvae =
-                        new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 2, input);
+                        new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 2, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -1078,7 +1085,7 @@ public class BlockParser extends DebugParser {
 
                 }
                 break;
-            case 88:
+            case 89:
             case 90:
                 {
                 alt9=2;
@@ -1086,44 +1093,39 @@ public class BlockParser extends DebugParser {
                 break;
             case 25:
                 {
-                alt9=3;
+                int LA9_4 = input.LA(2);
+
+                if ( (LA9_4==ID) ) {
+                    alt9=3;
+                }
+                else if ( (LA9_4==86) ) {
+                    alt9=4;
+                }
+                else {
+                    NoViableAltException nvae =
+                        new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 4, input);
+
+                    dbg.recognitionException(nvae);
+                    throw nvae;
+                }
                 }
                 break;
             case 26:
                 {
                 switch ( input.LA(2) ) {
-                case 30:
-                    {
-                    int LA9_12 = input.LA(3);
-
-                    if ( (LA9_12==ID) ) {
-                        alt9=13;
-                    }
-                    else if ( ((LA9_12>=78 && LA9_12<=79)) ) {
-                        alt9=14;
-                    }
-                    else {
-                        NoViableAltException nvae =
-                            new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 12, input);
-
-                        dbg.recognitionException(nvae);
-                        throw nvae;
-                    }
-                    }
-                    break;
                 case 27:
                     {
-                    int LA9_13 = input.LA(3);
+                    int LA9_14 = input.LA(3);
 
-                    if ( (LA9_13==ID) ) {
-                        alt9=4;
+                    if ( (LA9_14==31||LA9_14==91) ) {
+                        alt9=6;
                     }
-                    else if ( (LA9_13==31||LA9_13==91) ) {
+                    else if ( (LA9_14==ID) ) {
                         alt9=5;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 13, input);
+                            new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 14, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1132,17 +1134,36 @@ public class BlockParser extends DebugParser {
                     break;
                 case 29:
                     {
-                    int LA9_14 = input.LA(3);
+                    int LA9_15 = input.LA(3);
 
-                    if ( (LA9_14==ID) ) {
-                        alt9=9;
-                    }
-                    else if ( (LA9_14==29) ) {
+                    if ( (LA9_15==ID) ) {
                         alt9=10;
+                    }
+                    else if ( (LA9_15==29) ) {
+                        alt9=11;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 14, input);
+                            new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 15, input);
+
+                        dbg.recognitionException(nvae);
+                        throw nvae;
+                    }
+                    }
+                    break;
+                case 30:
+                    {
+                    int LA9_16 = input.LA(3);
+
+                    if ( ((LA9_16>=79 && LA9_16<=80)) ) {
+                        alt9=15;
+                    }
+                    else if ( (LA9_16==ID) ) {
+                        alt9=14;
+                    }
+                    else {
+                        NoViableAltException nvae =
+                            new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 16, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1151,7 +1172,7 @@ public class BlockParser extends DebugParser {
                     break;
                 default:
                     NoViableAltException nvae =
-                        new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 5, input);
+                        new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 5, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -1164,17 +1185,17 @@ public class BlockParser extends DebugParser {
                 switch ( input.LA(2) ) {
                 case 30:
                     {
-                    int LA9_15 = input.LA(3);
+                    int LA9_17 = input.LA(3);
 
-                    if ( ((LA9_15>=78 && LA9_15<=79)) ) {
-                        alt9=16;
+                    if ( ((LA9_17>=79 && LA9_17<=80)) ) {
+                        alt9=17;
                     }
-                    else if ( (LA9_15==ID) ) {
-                        alt9=15;
+                    else if ( (LA9_17==ID) ) {
+                        alt9=16;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 15, input);
+                            new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 17, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1183,17 +1204,17 @@ public class BlockParser extends DebugParser {
                     break;
                 case 27:
                     {
-                    int LA9_16 = input.LA(3);
+                    int LA9_18 = input.LA(3);
 
-                    if ( (LA9_16==ID) ) {
-                        alt9=6;
+                    if ( (LA9_18==31||LA9_18==91) ) {
+                        alt9=8;
                     }
-                    else if ( (LA9_16==31||LA9_16==91) ) {
+                    else if ( (LA9_18==ID) ) {
                         alt9=7;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 16, input);
+                            new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 18, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1202,17 +1223,17 @@ public class BlockParser extends DebugParser {
                     break;
                 case 29:
                     {
-                    int LA9_17 = input.LA(3);
+                    int LA9_19 = input.LA(3);
 
-                    if ( (LA9_17==ID) ) {
-                        alt9=11;
-                    }
-                    else if ( (LA9_17==29) ) {
+                    if ( (LA9_19==ID) ) {
                         alt9=12;
+                    }
+                    else if ( (LA9_19==29) ) {
+                        alt9=13;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 17, input);
+                            new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 19, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1221,7 +1242,7 @@ public class BlockParser extends DebugParser {
                     break;
                 default:
                     NoViableAltException nvae =
-                        new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 6, input);
+                        new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 6, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -1234,17 +1255,17 @@ public class BlockParser extends DebugParser {
                 int LA9_7 = input.LA(2);
 
                 if ( (LA9_7==35) ) {
-                    int LA9_18 = input.LA(3);
+                    int LA9_20 = input.LA(3);
 
-                    if ( (LA9_18==31) ) {
-                        alt9=17;
+                    if ( (LA9_20==29) ) {
+                        alt9=9;
                     }
-                    else if ( (LA9_18==29) ) {
-                        alt9=8;
+                    else if ( (LA9_20==31) ) {
+                        alt9=18;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 18, input);
+                            new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 20, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1252,7 +1273,7 @@ public class BlockParser extends DebugParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 7, input);
+                        new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 7, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -1264,17 +1285,17 @@ public class BlockParser extends DebugParser {
                 int LA9_8 = input.LA(2);
 
                 if ( (LA9_8==36) ) {
-                    int LA9_19 = input.LA(3);
+                    int LA9_21 = input.LA(3);
 
-                    if ( (LA9_19==31) ) {
-                        alt9=17;
+                    if ( (LA9_21==31) ) {
+                        alt9=18;
                     }
-                    else if ( (LA9_19==29) ) {
-                        alt9=8;
+                    else if ( (LA9_21==29) ) {
+                        alt9=9;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 19, input);
+                            new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 21, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1282,7 +1303,7 @@ public class BlockParser extends DebugParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 8, input);
+                        new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 8, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -1291,12 +1312,12 @@ public class BlockParser extends DebugParser {
                 break;
             case 39:
                 {
-                alt9=18;
+                alt9=19;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("69:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' object_name | 'apply' 'policy' policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 0, input);
+                    new NoViableAltException("72:2: config_statement : ( route_oper object_name | route_oper route | 'ifconfig' object_name | 'ifconfig' interf | 'apply' 'topology' object_name | 'apply' 'topology' topology | 'undo' 'topology' object_name | 'undo' 'topology' topology | set_oper 'role' ( object_name | role ) ( object_name | policy ) | 'apply' 'role' object_name | 'apply' 'role' role | 'undo' 'role' object_name | 'undo' 'role' role | 'apply' 'policy' var= object_name | 'apply' 'policy' p2= policy | 'undo' 'policy' object_name | 'undo' 'policy' policy | set_oper 'host_group' ( object_name | host_group ) ( object_name | host ) | config_display );", 9, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
@@ -1308,14 +1329,14 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:71:3: route_oper object_name
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:74:3: route_oper object_name
                     {
-                    dbg.location(71,3);
+                    dbg.location(74,3);
                     pushFollow(FOLLOW_route_oper_in_config_statement219);
                     route_oper();
                     _fsp--;
 
-                    dbg.location(71,14);
+                    dbg.location(74,14);
                     pushFollow(FOLLOW_object_name_in_config_statement221);
                     object_name();
                     _fsp--;
@@ -1326,14 +1347,14 @@ public class BlockParser extends DebugParser {
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:72:4: route_oper route
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:75:4: route_oper route
                     {
-                    dbg.location(72,4);
+                    dbg.location(75,4);
                     pushFollow(FOLLOW_route_oper_in_config_statement226);
                     route_oper();
                     _fsp--;
 
-                    dbg.location(72,15);
+                    dbg.location(75,15);
                     pushFollow(FOLLOW_route_in_config_statement228);
                     route();
                     _fsp--;
@@ -1344,11 +1365,11 @@ public class BlockParser extends DebugParser {
                 case 3 :
                     dbg.enterAlt(3);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:73:4: 'ifconfig' object_name
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:76:4: 'ifconfig' object_name
                     {
-                    dbg.location(73,4);
+                    dbg.location(76,4);
                     match(input,25,FOLLOW_25_in_config_statement233); 
-                    dbg.location(73,15);
+                    dbg.location(76,15);
                     pushFollow(FOLLOW_object_name_in_config_statement235);
                     object_name();
                     _fsp--;
@@ -1359,15 +1380,13 @@ public class BlockParser extends DebugParser {
                 case 4 :
                     dbg.enterAlt(4);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:76:3: 'apply' 'topology' object_name
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:77:3: 'ifconfig' interf
                     {
-                    dbg.location(76,3);
-                    match(input,26,FOLLOW_26_in_config_statement242); 
-                    dbg.location(76,11);
-                    match(input,27,FOLLOW_27_in_config_statement244); 
-                    dbg.location(76,22);
-                    pushFollow(FOLLOW_object_name_in_config_statement246);
-                    object_name();
+                    dbg.location(77,3);
+                    match(input,25,FOLLOW_25_in_config_statement239); 
+                    dbg.location(77,14);
+                    pushFollow(FOLLOW_interf_in_config_statement241);
+                    interf();
                     _fsp--;
 
 
@@ -1376,15 +1395,15 @@ public class BlockParser extends DebugParser {
                 case 5 :
                     dbg.enterAlt(5);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:77:5: 'apply' 'topology' topology
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:78:3: 'apply' 'topology' object_name
                     {
-                    dbg.location(77,5);
-                    match(input,26,FOLLOW_26_in_config_statement252); 
-                    dbg.location(77,13);
-                    match(input,27,FOLLOW_27_in_config_statement254); 
-                    dbg.location(77,24);
-                    pushFollow(FOLLOW_topology_in_config_statement256);
-                    topology();
+                    dbg.location(78,3);
+                    match(input,26,FOLLOW_26_in_config_statement245); 
+                    dbg.location(78,11);
+                    match(input,27,FOLLOW_27_in_config_statement247); 
+                    dbg.location(78,22);
+                    pushFollow(FOLLOW_object_name_in_config_statement249);
+                    object_name();
                     _fsp--;
 
 
@@ -1393,15 +1412,15 @@ public class BlockParser extends DebugParser {
                 case 6 :
                     dbg.enterAlt(6);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:78:5: 'undo' 'topology' object_name
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:79:5: 'apply' 'topology' topology
                     {
-                    dbg.location(78,5);
-                    match(input,28,FOLLOW_28_in_config_statement262); 
-                    dbg.location(78,12);
-                    match(input,27,FOLLOW_27_in_config_statement264); 
-                    dbg.location(78,23);
-                    pushFollow(FOLLOW_object_name_in_config_statement266);
-                    object_name();
+                    dbg.location(79,5);
+                    match(input,26,FOLLOW_26_in_config_statement255); 
+                    dbg.location(79,13);
+                    match(input,27,FOLLOW_27_in_config_statement257); 
+                    dbg.location(79,24);
+                    pushFollow(FOLLOW_topology_in_config_statement259);
+                    topology();
                     _fsp--;
 
 
@@ -1410,15 +1429,15 @@ public class BlockParser extends DebugParser {
                 case 7 :
                     dbg.enterAlt(7);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:79:5: 'undo' 'topology' topology
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:80:5: 'undo' 'topology' object_name
                     {
-                    dbg.location(79,5);
-                    match(input,28,FOLLOW_28_in_config_statement273); 
-                    dbg.location(79,12);
-                    match(input,27,FOLLOW_27_in_config_statement275); 
-                    dbg.location(79,23);
-                    pushFollow(FOLLOW_topology_in_config_statement277);
-                    topology();
+                    dbg.location(80,5);
+                    match(input,28,FOLLOW_28_in_config_statement265); 
+                    dbg.location(80,12);
+                    match(input,27,FOLLOW_27_in_config_statement267); 
+                    dbg.location(80,23);
+                    pushFollow(FOLLOW_object_name_in_config_statement269);
+                    object_name();
                     _fsp--;
 
 
@@ -1427,17 +1446,34 @@ public class BlockParser extends DebugParser {
                 case 8 :
                     dbg.enterAlt(8);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:80:6: set_oper 'role' ( object_name | role ) ( object_name | policy )
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:81:5: 'undo' 'topology' topology
                     {
-                    dbg.location(80,6);
-                    pushFollow(FOLLOW_set_oper_in_config_statement284);
+                    dbg.location(81,5);
+                    match(input,28,FOLLOW_28_in_config_statement276); 
+                    dbg.location(81,12);
+                    match(input,27,FOLLOW_27_in_config_statement278); 
+                    dbg.location(81,23);
+                    pushFollow(FOLLOW_topology_in_config_statement280);
+                    topology();
+                    _fsp--;
+
+
+                    }
+                    break;
+                case 9 :
+                    dbg.enterAlt(9);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:82:6: set_oper 'role' ( object_name | role ) ( object_name | policy )
+                    {
+                    dbg.location(82,6);
+                    pushFollow(FOLLOW_set_oper_in_config_statement287);
                     set_oper();
                     _fsp--;
 
-                    dbg.location(80,15);
-                    match(input,29,FOLLOW_29_in_config_statement286); 
-                    dbg.location(80,22);
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:80:22: ( object_name | role )
+                    dbg.location(82,15);
+                    match(input,29,FOLLOW_29_in_config_statement289); 
+                    dbg.location(82,22);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:82:22: ( object_name | role )
                     int alt5=2;
                     try { dbg.enterSubRule(5);
                     try { dbg.enterDecision(5);
@@ -1452,7 +1488,7 @@ public class BlockParser extends DebugParser {
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("80:22: ( object_name | role )", 5, 0, input);
+                            new NoViableAltException("82:22: ( object_name | role )", 5, 0, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1463,10 +1499,10 @@ public class BlockParser extends DebugParser {
                         case 1 :
                             dbg.enterAlt(1);
 
-                            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:80:23: object_name
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:82:23: object_name
                             {
-                            dbg.location(80,23);
-                            pushFollow(FOLLOW_object_name_in_config_statement289);
+                            dbg.location(82,23);
+                            pushFollow(FOLLOW_object_name_in_config_statement292);
                             object_name();
                             _fsp--;
 
@@ -1476,10 +1512,10 @@ public class BlockParser extends DebugParser {
                         case 2 :
                             dbg.enterAlt(2);
 
-                            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:80:35: role
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:82:35: role
                             {
-                            dbg.location(80,35);
-                            pushFollow(FOLLOW_role_in_config_statement291);
+                            dbg.location(82,35);
+                            pushFollow(FOLLOW_role_in_config_statement294);
                             role();
                             _fsp--;
 
@@ -1490,8 +1526,8 @@ public class BlockParser extends DebugParser {
                     }
                     } finally {dbg.exitSubRule(5);}
 
-                    dbg.location(80,41);
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:80:41: ( object_name | policy )
+                    dbg.location(82,41);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:82:41: ( object_name | policy )
                     int alt6=2;
                     try { dbg.enterSubRule(6);
                     try { dbg.enterDecision(6);
@@ -1501,12 +1537,12 @@ public class BlockParser extends DebugParser {
                     if ( (LA6_0==ID) ) {
                         alt6=1;
                     }
-                    else if ( ((LA6_0>=78 && LA6_0<=79)) ) {
+                    else if ( ((LA6_0>=79 && LA6_0<=80)) ) {
                         alt6=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("80:41: ( object_name | policy )", 6, 0, input);
+                            new NoViableAltException("82:41: ( object_name | policy )", 6, 0, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1517,10 +1553,10 @@ public class BlockParser extends DebugParser {
                         case 1 :
                             dbg.enterAlt(1);
 
-                            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:80:42: object_name
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:82:42: object_name
                             {
-                            dbg.location(80,42);
-                            pushFollow(FOLLOW_object_name_in_config_statement295);
+                            dbg.location(82,42);
+                            pushFollow(FOLLOW_object_name_in_config_statement298);
                             object_name();
                             _fsp--;
 
@@ -1530,10 +1566,10 @@ public class BlockParser extends DebugParser {
                         case 2 :
                             dbg.enterAlt(2);
 
-                            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:80:54: policy
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:82:54: policy
                             {
-                            dbg.location(80,54);
-                            pushFollow(FOLLOW_policy_in_config_statement297);
+                            dbg.location(82,54);
+                            pushFollow(FOLLOW_policy_in_config_statement300);
                             policy();
                             _fsp--;
 
@@ -1547,35 +1583,18 @@ public class BlockParser extends DebugParser {
 
                     }
                     break;
-                case 9 :
-                    dbg.enterAlt(9);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:81:6: 'apply' 'role' object_name
-                    {
-                    dbg.location(81,6);
-                    match(input,26,FOLLOW_26_in_config_statement305); 
-                    dbg.location(81,14);
-                    match(input,29,FOLLOW_29_in_config_statement307); 
-                    dbg.location(81,21);
-                    pushFollow(FOLLOW_object_name_in_config_statement309);
-                    object_name();
-                    _fsp--;
-
-
-                    }
-                    break;
                 case 10 :
                     dbg.enterAlt(10);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:82:6: 'apply' 'role' role
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:83:6: 'apply' 'role' object_name
                     {
-                    dbg.location(82,6);
-                    match(input,26,FOLLOW_26_in_config_statement316); 
-                    dbg.location(82,14);
-                    match(input,29,FOLLOW_29_in_config_statement318); 
-                    dbg.location(82,21);
-                    pushFollow(FOLLOW_role_in_config_statement320);
-                    role();
+                    dbg.location(83,6);
+                    match(input,26,FOLLOW_26_in_config_statement308); 
+                    dbg.location(83,14);
+                    match(input,29,FOLLOW_29_in_config_statement310); 
+                    dbg.location(83,21);
+                    pushFollow(FOLLOW_object_name_in_config_statement312);
+                    object_name();
                     _fsp--;
 
 
@@ -1584,15 +1603,15 @@ public class BlockParser extends DebugParser {
                 case 11 :
                     dbg.enterAlt(11);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:83:5: 'undo' 'role' object_name
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:84:6: 'apply' 'role' role
                     {
-                    dbg.location(83,5);
-                    match(input,28,FOLLOW_28_in_config_statement326); 
-                    dbg.location(83,12);
-                    match(input,29,FOLLOW_29_in_config_statement328); 
-                    dbg.location(83,19);
-                    pushFollow(FOLLOW_object_name_in_config_statement330);
-                    object_name();
+                    dbg.location(84,6);
+                    match(input,26,FOLLOW_26_in_config_statement319); 
+                    dbg.location(84,14);
+                    match(input,29,FOLLOW_29_in_config_statement321); 
+                    dbg.location(84,21);
+                    pushFollow(FOLLOW_role_in_config_statement323);
+                    role();
                     _fsp--;
 
 
@@ -1601,15 +1620,15 @@ public class BlockParser extends DebugParser {
                 case 12 :
                     dbg.enterAlt(12);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:84:5: 'undo' 'role' role
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:85:5: 'undo' 'role' object_name
                     {
-                    dbg.location(84,5);
-                    match(input,28,FOLLOW_28_in_config_statement336); 
-                    dbg.location(84,12);
-                    match(input,29,FOLLOW_29_in_config_statement338); 
-                    dbg.location(84,19);
-                    pushFollow(FOLLOW_role_in_config_statement340);
-                    role();
+                    dbg.location(85,5);
+                    match(input,28,FOLLOW_28_in_config_statement329); 
+                    dbg.location(85,12);
+                    match(input,29,FOLLOW_29_in_config_statement331); 
+                    dbg.location(85,19);
+                    pushFollow(FOLLOW_object_name_in_config_statement333);
+                    object_name();
                     _fsp--;
 
 
@@ -1618,15 +1637,15 @@ public class BlockParser extends DebugParser {
                 case 13 :
                     dbg.enterAlt(13);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:85:5: 'apply' 'policy' object_name
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:86:5: 'undo' 'role' role
                     {
-                    dbg.location(85,5);
-                    match(input,26,FOLLOW_26_in_config_statement346); 
-                    dbg.location(85,13);
-                    match(input,30,FOLLOW_30_in_config_statement348); 
-                    dbg.location(85,22);
-                    pushFollow(FOLLOW_object_name_in_config_statement350);
-                    object_name();
+                    dbg.location(86,5);
+                    match(input,28,FOLLOW_28_in_config_statement339); 
+                    dbg.location(86,12);
+                    match(input,29,FOLLOW_29_in_config_statement341); 
+                    dbg.location(86,19);
+                    pushFollow(FOLLOW_role_in_config_statement343);
+                    role();
                     _fsp--;
 
 
@@ -1635,49 +1654,98 @@ public class BlockParser extends DebugParser {
                 case 14 :
                     dbg.enterAlt(14);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:86:5: 'apply' 'policy' policy
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:87:5: 'apply' 'policy' var= object_name
                     {
-                    dbg.location(86,5);
-                    match(input,26,FOLLOW_26_in_config_statement356); 
-                    dbg.location(86,13);
-                    match(input,30,FOLLOW_30_in_config_statement358); 
-                    dbg.location(86,22);
-                    pushFollow(FOLLOW_policy_in_config_statement360);
-                    policy();
+                    dbg.location(87,5);
+                    match(input,26,FOLLOW_26_in_config_statement349); 
+                    dbg.location(87,13);
+                    match(input,30,FOLLOW_30_in_config_statement351); 
+                    dbg.location(87,25);
+                    pushFollow(FOLLOW_object_name_in_config_statement355);
+                    var=object_name();
                     _fsp--;
 
+                    dbg.location(88,3);
+                    
+                     	  Policy p = (Policy) currentScope.lookup(input.toString(var.start,var.stop));
+                     	 if(p!=null)
+                     	 {
+                     	  String command = "/sbin/iptables";
+                     	 String verd = null;
+                     	 if(p.verdict.equals("allow"))
+                     	  {
+                     	    verd = "ACCEPT";
+                     	    }
+                     	  if(p.verdict.equals(" deny "))
+                     	  {
+                     	    verd = "DROP";
+                     	    }  
+                     	   if( verd == null)
+                     	      { 
+                     	      System.out.println("verdict is null");
+                     	      }
+                     	 String arg = "  -I INPUT -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+                     	  System.out.println(command+arg);
+                     	  
+                     	 }
+                     	 else  { System.out.println(" p is null");}
+                     	
 
                     }
                     break;
                 case 15 :
                     dbg.enterAlt(15);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:87:5: 'undo' 'policy' object_name
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:112:5: 'apply' 'policy' p2= policy
                     {
-                    dbg.location(87,5);
-                    match(input,28,FOLLOW_28_in_config_statement366); 
-                    dbg.location(87,12);
-                    match(input,30,FOLLOW_30_in_config_statement368); 
-                    dbg.location(87,21);
-                    pushFollow(FOLLOW_object_name_in_config_statement370);
-                    object_name();
+                    dbg.location(112,5);
+                    match(input,26,FOLLOW_26_in_config_statement365); 
+                    dbg.location(112,13);
+                    match(input,30,FOLLOW_30_in_config_statement367); 
+                    dbg.location(112,24);
+                    pushFollow(FOLLOW_policy_in_config_statement371);
+                    p2=policy();
                     _fsp--;
 
+                    dbg.location(113,2);
+                    
+                    	Policy p=(Policy)p2.lookupValue();
+                    	//System.out.println(p.verdict);
+                    	 String command = "/sbin/iptables";
+                     	 String verd = null;
+                     	 if(p.verdict.equals("allow"))
+                     	  {
+                     	    verd = "ACCEPT";
+                     	    }
+                     	  if(p.verdict.equals(" deny "))
+                     	  {
+                     	    verd = "DROP";
+                     	    }  
+                     	   if( verd == null)
+                     	      { 
+                     	      System.out.println("verdict is null");
+                     	      }
+                     	 String arg = "  -I INPUT -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+                     	  System.out.println(command+arg);
+                     	  
+                     	 
+                    	
+                    	
 
                     }
                     break;
                 case 16 :
                     dbg.enterAlt(16);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:88:5: 'undo' 'policy' policy
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:136:5: 'undo' 'policy' object_name
                     {
-                    dbg.location(88,5);
-                    match(input,28,FOLLOW_28_in_config_statement376); 
-                    dbg.location(88,12);
-                    match(input,30,FOLLOW_30_in_config_statement378); 
-                    dbg.location(88,21);
-                    pushFollow(FOLLOW_policy_in_config_statement380);
-                    policy();
+                    dbg.location(136,5);
+                    match(input,28,FOLLOW_28_in_config_statement380); 
+                    dbg.location(136,12);
+                    match(input,30,FOLLOW_30_in_config_statement382); 
+                    dbg.location(136,21);
+                    pushFollow(FOLLOW_object_name_in_config_statement384);
+                    object_name();
                     _fsp--;
 
 
@@ -1686,17 +1754,34 @@ public class BlockParser extends DebugParser {
                 case 17 :
                     dbg.enterAlt(17);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:89:5: set_oper 'host_group' ( object_name | host_group ) ( object_name | host )
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:137:5: 'undo' 'policy' policy
                     {
-                    dbg.location(89,5);
-                    pushFollow(FOLLOW_set_oper_in_config_statement386);
+                    dbg.location(137,5);
+                    match(input,28,FOLLOW_28_in_config_statement390); 
+                    dbg.location(137,12);
+                    match(input,30,FOLLOW_30_in_config_statement392); 
+                    dbg.location(137,21);
+                    pushFollow(FOLLOW_policy_in_config_statement394);
+                    policy();
+                    _fsp--;
+
+
+                    }
+                    break;
+                case 18 :
+                    dbg.enterAlt(18);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:138:5: set_oper 'host_group' ( object_name | host_group ) ( object_name | host )
+                    {
+                    dbg.location(138,5);
+                    pushFollow(FOLLOW_set_oper_in_config_statement400);
                     set_oper();
                     _fsp--;
 
-                    dbg.location(89,14);
-                    match(input,31,FOLLOW_31_in_config_statement388); 
-                    dbg.location(89,27);
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:89:27: ( object_name | host_group )
+                    dbg.location(138,14);
+                    match(input,31,FOLLOW_31_in_config_statement402); 
+                    dbg.location(138,27);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:138:27: ( object_name | host_group )
                     int alt7=2;
                     try { dbg.enterSubRule(7);
                     try { dbg.enterDecision(7);
@@ -1711,7 +1796,7 @@ public class BlockParser extends DebugParser {
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("89:27: ( object_name | host_group )", 7, 0, input);
+                            new NoViableAltException("138:27: ( object_name | host_group )", 7, 0, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1722,10 +1807,10 @@ public class BlockParser extends DebugParser {
                         case 1 :
                             dbg.enterAlt(1);
 
-                            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:89:28: object_name
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:138:28: object_name
                             {
-                            dbg.location(89,28);
-                            pushFollow(FOLLOW_object_name_in_config_statement391);
+                            dbg.location(138,28);
+                            pushFollow(FOLLOW_object_name_in_config_statement405);
                             object_name();
                             _fsp--;
 
@@ -1735,10 +1820,10 @@ public class BlockParser extends DebugParser {
                         case 2 :
                             dbg.enterAlt(2);
 
-                            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:89:41: host_group
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:138:41: host_group
                             {
-                            dbg.location(89,41);
-                            pushFollow(FOLLOW_host_group_in_config_statement394);
+                            dbg.location(138,41);
+                            pushFollow(FOLLOW_host_group_in_config_statement408);
                             host_group();
                             _fsp--;
 
@@ -1749,8 +1834,8 @@ public class BlockParser extends DebugParser {
                     }
                     } finally {dbg.exitSubRule(7);}
 
-                    dbg.location(89,53);
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:89:53: ( object_name | host )
+                    dbg.location(138,53);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:138:53: ( object_name | host )
                     int alt8=2;
                     try { dbg.enterSubRule(8);
                     try { dbg.enterDecision(8);
@@ -1760,12 +1845,12 @@ public class BlockParser extends DebugParser {
                     if ( (LA8_0==ID) ) {
                         alt8=1;
                     }
-                    else if ( (LA8_0==87) ) {
+                    else if ( (LA8_0==85) ) {
                         alt8=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("89:53: ( object_name | host )", 8, 0, input);
+                            new NoViableAltException("138:53: ( object_name | host )", 8, 0, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -1776,10 +1861,10 @@ public class BlockParser extends DebugParser {
                         case 1 :
                             dbg.enterAlt(1);
 
-                            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:89:54: object_name
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:138:54: object_name
                             {
-                            dbg.location(89,54);
-                            pushFollow(FOLLOW_object_name_in_config_statement398);
+                            dbg.location(138,54);
+                            pushFollow(FOLLOW_object_name_in_config_statement412);
                             object_name();
                             _fsp--;
 
@@ -1789,10 +1874,10 @@ public class BlockParser extends DebugParser {
                         case 2 :
                             dbg.enterAlt(2);
 
-                            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:89:66: host
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:138:66: host
                             {
-                            dbg.location(89,66);
-                            pushFollow(FOLLOW_host_in_config_statement400);
+                            dbg.location(138,66);
+                            pushFollow(FOLLOW_host_in_config_statement414);
                             host();
                             _fsp--;
 
@@ -1806,13 +1891,13 @@ public class BlockParser extends DebugParser {
 
                     }
                     break;
-                case 18 :
-                    dbg.enterAlt(18);
+                case 19 :
+                    dbg.enterAlt(19);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:91:3: config_display
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:140:3: config_display
                     {
-                    dbg.location(91,3);
-                    pushFollow(FOLLOW_config_display_in_config_statement407);
+                    dbg.location(140,3);
+                    pushFollow(FOLLOW_config_display_in_config_statement421);
                     config_display();
                     _fsp--;
 
@@ -1828,7 +1913,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(92, 3);
+        dbg.location(141, 3);
 
         }
         finally {
@@ -1843,35 +1928,35 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start route_oper
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:94:2: route_oper : ( | 'route' 'add' | 'route' 'delete' );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:143:2: route_oper : ( | 'route' 'add' | 'route' 'delete' );
     public final void route_oper() throws RecognitionException {
         try { dbg.enterRule("route_oper");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(94, 2);
+        dbg.location(143, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:95:3: ( | 'route' 'add' | 'route' 'delete' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:144:3: ( | 'route' 'add' | 'route' 'delete' )
             int alt10=3;
             try { dbg.enterDecision(10);
 
             int LA10_0 = input.LA(1);
 
-            if ( (LA10_0==ID||LA10_0==88||LA10_0==90) ) {
+            if ( (LA10_0==ID||(LA10_0>=89 && LA10_0<=90)) ) {
                 alt10=1;
             }
             else if ( (LA10_0==32) ) {
                 int LA10_2 = input.LA(2);
 
-                if ( (LA10_2==33) ) {
-                    alt10=2;
-                }
-                else if ( (LA10_2==34) ) {
+                if ( (LA10_2==34) ) {
                     alt10=3;
+                }
+                else if ( (LA10_2==33) ) {
+                    alt10=2;
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("94:2: route_oper : ( | 'route' 'add' | 'route' 'delete' );", 10, 2, input);
+                        new NoViableAltException("143:2: route_oper : ( | 'route' 'add' | 'route' 'delete' );", 10, 2, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -1879,7 +1964,7 @@ public class BlockParser extends DebugParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("94:2: route_oper : ( | 'route' 'add' | 'route' 'delete' );", 10, 0, input);
+                    new NoViableAltException("143:2: route_oper : ( | 'route' 'add' | 'route' 'delete' );", 10, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
@@ -1890,31 +1975,31 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:96:2: 
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:145:2: 
                     {
                     }
                     break;
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:96:3: 'route' 'add'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:145:3: 'route' 'add'
                     {
-                    dbg.location(96,3);
-                    match(input,32,FOLLOW_32_in_route_oper427); 
-                    dbg.location(96,11);
-                    match(input,33,FOLLOW_33_in_route_oper429); 
+                    dbg.location(145,3);
+                    match(input,32,FOLLOW_32_in_route_oper441); 
+                    dbg.location(145,11);
+                    match(input,33,FOLLOW_33_in_route_oper443); 
 
                     }
                     break;
                 case 3 :
                     dbg.enterAlt(3);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:97:4: 'route' 'delete'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:146:4: 'route' 'delete'
                     {
-                    dbg.location(97,4);
-                    match(input,32,FOLLOW_32_in_route_oper434); 
-                    dbg.location(97,12);
-                    match(input,34,FOLLOW_34_in_route_oper436); 
+                    dbg.location(146,4);
+                    match(input,32,FOLLOW_32_in_route_oper448); 
+                    dbg.location(146,12);
+                    match(input,34,FOLLOW_34_in_route_oper450); 
 
                     }
                     break;
@@ -1927,7 +2012,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(98, 3);
+        dbg.location(147, 3);
 
         }
         finally {
@@ -1942,15 +2027,15 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start set_oper
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:100:1: set_oper : ( 'add' 'to' | 'delete' 'from' );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:149:1: set_oper : ( 'add' 'to' | 'delete' 'from' );
     public final void set_oper() throws RecognitionException {
         try { dbg.enterRule("set_oper");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(100, 1);
+        dbg.location(149, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:101:2: ( 'add' 'to' | 'delete' 'from' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:150:2: ( 'add' 'to' | 'delete' 'from' )
             int alt11=2;
             try { dbg.enterDecision(11);
 
@@ -1964,7 +2049,7 @@ public class BlockParser extends DebugParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("100:1: set_oper : ( 'add' 'to' | 'delete' 'from' );", 11, 0, input);
+                    new NoViableAltException("149:1: set_oper : ( 'add' 'to' | 'delete' 'from' );", 11, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
@@ -1975,24 +2060,24 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:102:2: 'add' 'to'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:151:2: 'add' 'to'
                     {
-                    dbg.location(102,2);
-                    match(input,33,FOLLOW_33_in_set_oper451); 
-                    dbg.location(102,8);
-                    match(input,35,FOLLOW_35_in_set_oper453); 
+                    dbg.location(151,2);
+                    match(input,33,FOLLOW_33_in_set_oper465); 
+                    dbg.location(151,8);
+                    match(input,35,FOLLOW_35_in_set_oper467); 
 
                     }
                     break;
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:103:4: 'delete' 'from'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:152:4: 'delete' 'from'
                     {
-                    dbg.location(103,4);
-                    match(input,34,FOLLOW_34_in_set_oper458); 
-                    dbg.location(103,13);
-                    match(input,36,FOLLOW_36_in_set_oper460); 
+                    dbg.location(152,4);
+                    match(input,34,FOLLOW_34_in_set_oper472); 
+                    dbg.location(152,13);
+                    match(input,36,FOLLOW_36_in_set_oper474); 
 
                     }
                     break;
@@ -2005,7 +2090,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(104, 2);
+        dbg.location(153, 2);
 
         }
         finally {
@@ -2020,15 +2105,15 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start config_display
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:106:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:155:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );
     public final void config_display() throws RecognitionException {
         try { dbg.enterRule("config_display");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(106, 2);
+        dbg.location(155, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:107:3: ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:156:3: ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' )
             int alt12=4;
             try { dbg.enterDecision(12);
 
@@ -2048,7 +2133,7 @@ public class BlockParser extends DebugParser {
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("106:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );", 12, 3, input);
+                            new NoViableAltException("155:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );", 12, 3, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -2056,7 +2141,7 @@ public class BlockParser extends DebugParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("106:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );", 12, 1, input);
+                        new NoViableAltException("155:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );", 12, 1, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -2076,7 +2161,7 @@ public class BlockParser extends DebugParser {
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("106:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );", 12, 4, input);
+                            new NoViableAltException("155:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );", 12, 4, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -2084,7 +2169,7 @@ public class BlockParser extends DebugParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("106:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );", 12, 2, input);
+                        new NoViableAltException("155:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );", 12, 2, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -2092,7 +2177,7 @@ public class BlockParser extends DebugParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("106:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );", 12, 0, input);
+                    new NoViableAltException("155:2: config_display : ( 'route' 'show' 'numeric' | 'route' 'show' | 'fw' 'show' 'numeric' | 'fw' 'show' );", 12, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
@@ -2103,52 +2188,52 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:108:4: 'route' 'show' 'numeric'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:157:4: 'route' 'show' 'numeric'
                     {
-                    dbg.location(108,4);
-                    match(input,32,FOLLOW_32_in_config_display479); 
-                    dbg.location(108,12);
-                    match(input,37,FOLLOW_37_in_config_display481); 
-                    dbg.location(108,19);
-                    match(input,38,FOLLOW_38_in_config_display483); 
+                    dbg.location(157,4);
+                    match(input,32,FOLLOW_32_in_config_display493); 
+                    dbg.location(157,12);
+                    match(input,37,FOLLOW_37_in_config_display495); 
+                    dbg.location(157,19);
+                    match(input,38,FOLLOW_38_in_config_display497); 
 
                     }
                     break;
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:109:4: 'route' 'show'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:158:4: 'route' 'show'
                     {
-                    dbg.location(109,4);
-                    match(input,32,FOLLOW_32_in_config_display488); 
-                    dbg.location(109,12);
-                    match(input,37,FOLLOW_37_in_config_display490); 
+                    dbg.location(158,4);
+                    match(input,32,FOLLOW_32_in_config_display502); 
+                    dbg.location(158,12);
+                    match(input,37,FOLLOW_37_in_config_display504); 
 
                     }
                     break;
                 case 3 :
                     dbg.enterAlt(3);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:110:4: 'fw' 'show' 'numeric'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:159:4: 'fw' 'show' 'numeric'
                     {
-                    dbg.location(110,4);
-                    match(input,39,FOLLOW_39_in_config_display496); 
-                    dbg.location(110,9);
-                    match(input,37,FOLLOW_37_in_config_display498); 
-                    dbg.location(110,16);
-                    match(input,38,FOLLOW_38_in_config_display500); 
+                    dbg.location(159,4);
+                    match(input,39,FOLLOW_39_in_config_display510); 
+                    dbg.location(159,9);
+                    match(input,37,FOLLOW_37_in_config_display512); 
+                    dbg.location(159,16);
+                    match(input,38,FOLLOW_38_in_config_display514); 
 
                     }
                     break;
                 case 4 :
                     dbg.enterAlt(4);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:111:3: 'fw' 'show'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:160:3: 'fw' 'show'
                     {
-                    dbg.location(111,3);
-                    match(input,39,FOLLOW_39_in_config_display504); 
-                    dbg.location(111,8);
-                    match(input,37,FOLLOW_37_in_config_display506); 
+                    dbg.location(160,3);
+                    match(input,39,FOLLOW_39_in_config_display518); 
+                    dbg.location(160,8);
+                    match(input,37,FOLLOW_37_in_config_display520); 
 
                     }
                     break;
@@ -2161,7 +2246,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(112, 2);
+        dbg.location(161, 2);
 
         }
         finally {
@@ -2176,37 +2261,37 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start condition_statement
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:116:2: condition_statement : 'if' '(' equality_expr ')' statement_list ( 'else' statement_list )? 'endif' ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:165:2: condition_statement : 'if' '(' equality_expr ')' statement_list ( 'else' statement_list )? 'endif' ;
     public final void condition_statement() throws RecognitionException {
         try { dbg.enterRule("condition_statement");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(116, 2);
+        dbg.location(165, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:117:3: ( 'if' '(' equality_expr ')' statement_list ( 'else' statement_list )? 'endif' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:166:3: ( 'if' '(' equality_expr ')' statement_list ( 'else' statement_list )? 'endif' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:117:5: 'if' '(' equality_expr ')' statement_list ( 'else' statement_list )? 'endif'
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:166:5: 'if' '(' equality_expr ')' statement_list ( 'else' statement_list )? 'endif'
             {
-            dbg.location(117,5);
-            match(input,40,FOLLOW_40_in_condition_statement528); 
-            dbg.location(117,10);
-            match(input,41,FOLLOW_41_in_condition_statement530); 
-            dbg.location(117,14);
-            pushFollow(FOLLOW_equality_expr_in_condition_statement532);
+            dbg.location(166,5);
+            match(input,40,FOLLOW_40_in_condition_statement542); 
+            dbg.location(166,10);
+            match(input,41,FOLLOW_41_in_condition_statement544); 
+            dbg.location(166,14);
+            pushFollow(FOLLOW_equality_expr_in_condition_statement546);
             equality_expr();
             _fsp--;
 
-            dbg.location(117,28);
-            match(input,42,FOLLOW_42_in_condition_statement534); 
-            dbg.location(117,32);
-            pushFollow(FOLLOW_statement_list_in_condition_statement536);
+            dbg.location(166,28);
+            match(input,42,FOLLOW_42_in_condition_statement548); 
+            dbg.location(166,32);
+            pushFollow(FOLLOW_statement_list_in_condition_statement550);
             statement_list();
             _fsp--;
 
-            dbg.location(117,47);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:117:47: ( 'else' statement_list )?
+            dbg.location(166,47);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:166:47: ( 'else' statement_list )?
             int alt13=2;
             try { dbg.enterSubRule(13);
             try { dbg.enterDecision(13);
@@ -2222,12 +2307,12 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:117:48: 'else' statement_list
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:166:48: 'else' statement_list
                     {
-                    dbg.location(117,48);
-                    match(input,43,FOLLOW_43_in_condition_statement539); 
-                    dbg.location(117,55);
-                    pushFollow(FOLLOW_statement_list_in_condition_statement541);
+                    dbg.location(166,48);
+                    match(input,43,FOLLOW_43_in_condition_statement553); 
+                    dbg.location(166,55);
+                    pushFollow(FOLLOW_statement_list_in_condition_statement555);
                     statement_list();
                     _fsp--;
 
@@ -2238,8 +2323,8 @@ public class BlockParser extends DebugParser {
             }
             } finally {dbg.exitSubRule(13);}
 
-            dbg.location(117,72);
-            match(input,44,FOLLOW_44_in_condition_statement545); 
+            dbg.location(166,72);
+            match(input,44,FOLLOW_44_in_condition_statement559); 
 
             }
 
@@ -2250,7 +2335,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(118, 3);
+        dbg.location(167, 3);
 
         }
         finally {
@@ -2265,37 +2350,37 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start iteration_statement
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:120:2: iteration_statement : 'while' '(' equality_expr ')' statement_list 'endwhile' ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:169:2: iteration_statement : 'while' '(' equality_expr ')' statement_list 'endwhile' ;
     public final void iteration_statement() throws RecognitionException {
         try { dbg.enterRule("iteration_statement");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(120, 2);
+        dbg.location(169, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:121:3: ( 'while' '(' equality_expr ')' statement_list 'endwhile' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:170:3: ( 'while' '(' equality_expr ')' statement_list 'endwhile' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:121:5: 'while' '(' equality_expr ')' statement_list 'endwhile'
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:170:5: 'while' '(' equality_expr ')' statement_list 'endwhile'
             {
-            dbg.location(121,5);
-            match(input,45,FOLLOW_45_in_iteration_statement561); 
-            dbg.location(121,13);
-            match(input,41,FOLLOW_41_in_iteration_statement563); 
-            dbg.location(121,17);
-            pushFollow(FOLLOW_equality_expr_in_iteration_statement565);
+            dbg.location(170,5);
+            match(input,45,FOLLOW_45_in_iteration_statement575); 
+            dbg.location(170,13);
+            match(input,41,FOLLOW_41_in_iteration_statement577); 
+            dbg.location(170,17);
+            pushFollow(FOLLOW_equality_expr_in_iteration_statement579);
             equality_expr();
             _fsp--;
 
-            dbg.location(121,31);
-            match(input,42,FOLLOW_42_in_iteration_statement567); 
-            dbg.location(121,35);
-            pushFollow(FOLLOW_statement_list_in_iteration_statement569);
+            dbg.location(170,31);
+            match(input,42,FOLLOW_42_in_iteration_statement581); 
+            dbg.location(170,35);
+            pushFollow(FOLLOW_statement_list_in_iteration_statement583);
             statement_list();
             _fsp--;
 
-            dbg.location(121,50);
-            match(input,46,FOLLOW_46_in_iteration_statement571); 
+            dbg.location(170,50);
+            match(input,46,FOLLOW_46_in_iteration_statement585); 
 
             }
 
@@ -2306,7 +2391,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(122, 3);
+        dbg.location(171, 3);
 
         }
         finally {
@@ -2321,30 +2406,30 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start print_statement
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:124:2: print_statement : 'echo' STRING ';' ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:173:2: print_statement : 'echo' STRING ';' ;
     public final void print_statement() throws RecognitionException {
         Token STRING1=null;
 
         try { dbg.enterRule("print_statement");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(124, 2);
+        dbg.location(173, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:125:3: ( 'echo' STRING ';' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:174:3: ( 'echo' STRING ';' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:125:5: 'echo' STRING ';'
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:174:5: 'echo' STRING ';'
             {
-            dbg.location(125,5);
-            match(input,47,FOLLOW_47_in_print_statement587); 
-            dbg.location(125,12);
+            dbg.location(174,5);
+            match(input,47,FOLLOW_47_in_print_statement601); 
+            dbg.location(174,12);
             STRING1=(Token)input.LT(1);
-            match(input,STRING,FOLLOW_STRING_in_print_statement589); 
-            dbg.location(125,20);
+            match(input,STRING,FOLLOW_STRING_in_print_statement603); 
+            dbg.location(174,20);
             System.out.println(STRING1);
-            dbg.location(125,50);
-            match(input,24,FOLLOW_24_in_print_statement593); 
+            dbg.location(174,50);
+            match(input,24,FOLLOW_24_in_print_statement607); 
 
             }
 
@@ -2355,7 +2440,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(126, 3);
+        dbg.location(175, 3);
 
         }
         finally {
@@ -2370,21 +2455,21 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start expression
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:128:2: expression : assignment_expr ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:177:2: expression : assignment_expr ;
     public final void expression() throws RecognitionException {
         try { dbg.enterRule("expression");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(128, 2);
+        dbg.location(177, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:129:3: ( assignment_expr )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:178:3: ( assignment_expr )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:129:5: assignment_expr
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:178:5: assignment_expr
             {
-            dbg.location(129,5);
-            pushFollow(FOLLOW_assignment_expr_in_expression609);
+            dbg.location(178,5);
+            pushFollow(FOLLOW_assignment_expr_in_expression623);
             assignment_expr();
             _fsp--;
 
@@ -2398,7 +2483,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(130, 3);
+        dbg.location(179, 3);
 
         }
         finally {
@@ -2413,7 +2498,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start assignment_expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:132:2: assignment_expr : (var= object_name op= assignment_operator assignment_expr | e= conditional_expr );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:181:2: assignment_expr : (var= object_name op= assignment_operator assignment_expr | e= conditional_expr );
     public final void assignment_expr() throws RecognitionException {
         object_name_return var = null;
 
@@ -2425,10 +2510,10 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("assignment_expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(132, 2);
+        dbg.location(181, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:133:4: (var= object_name op= assignment_operator assignment_expr | e= conditional_expr )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:182:4: (var= object_name op= assignment_operator assignment_expr | e= conditional_expr )
             int alt14=2;
             try { dbg.enterDecision(14);
 
@@ -2445,18 +2530,18 @@ public class BlockParser extends DebugParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("132:2: assignment_expr : (var= object_name op= assignment_operator assignment_expr | e= conditional_expr );", 14, 1, input);
+                        new NoViableAltException("181:2: assignment_expr : (var= object_name op= assignment_operator assignment_expr | e= conditional_expr );", 14, 1, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
                 }
             }
-            else if ( (LA14_0==NUMBER||LA14_0==STRING||LA14_0==CHAR||LA14_0==29||LA14_0==31||LA14_0==41||LA14_0==60||(LA14_0>=78 && LA14_0<=79)||LA14_0==84||(LA14_0>=87 && LA14_0<=88)||(LA14_0>=90 && LA14_0<=91)) ) {
+            else if ( (LA14_0==NUMBER||LA14_0==STRING||LA14_0==CHAR||LA14_0==29||LA14_0==31||LA14_0==41||LA14_0==60||(LA14_0>=79 && LA14_0<=80)||(LA14_0>=85 && LA14_0<=86)||(LA14_0>=89 && LA14_0<=91)) ) {
                 alt14=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("132:2: assignment_expr : (var= object_name op= assignment_operator assignment_expr | e= conditional_expr );", 14, 0, input);
+                    new NoViableAltException("181:2: assignment_expr : (var= object_name op= assignment_operator assignment_expr | e= conditional_expr );", 14, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
@@ -2467,28 +2552,28 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:133:7: var= object_name op= assignment_operator assignment_expr
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:182:7: var= object_name op= assignment_operator assignment_expr
                     {
-                    dbg.location(133,10);
-                    pushFollow(FOLLOW_object_name_in_assignment_expr630);
+                    dbg.location(182,10);
+                    pushFollow(FOLLOW_object_name_in_assignment_expr644);
                     var=object_name();
                     _fsp--;
 
-                    dbg.location(133,25);
-                    pushFollow(FOLLOW_assignment_operator_in_assignment_expr634);
+                    dbg.location(182,25);
+                    pushFollow(FOLLOW_assignment_operator_in_assignment_expr648);
                     op=assignment_operator();
                     _fsp--;
 
-                    dbg.location(134,4);
-
+                    dbg.location(183,4);
+                    
                     	 		Symbol s = currentScope.getSymbol(input.toString(var.start,var.stop));
                     			Assignment ans = new Assignment(s, input.toString(op.start,op.stop));
                     			map.put(input.toString(var.start,var.stop), ans);
                     			System.out.println("here");
-                    //			currentScope.printSymbols();
+                    		//	currentScope.printSymbols();
                     	 	
-                    dbg.location(141,4);
-                    pushFollow(FOLLOW_assignment_expr_in_assignment_expr645);
+                    dbg.location(190,4);
+                    pushFollow(FOLLOW_assignment_expr_in_assignment_expr659);
                     assignment_expr();
                     _fsp--;
 
@@ -2498,34 +2583,65 @@ public class BlockParser extends DebugParser {
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:143:6: e= conditional_expr
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:192:6: e= conditional_expr
                     {
-                    dbg.location(143,7);
-                    pushFollow(FOLLOW_conditional_expr_in_assignment_expr658);
+                    dbg.location(192,7);
+                    pushFollow(FOLLOW_conditional_expr_in_assignment_expr672);
                     e=conditional_expr();
                     _fsp--;
 
-                    dbg.location(144,4);
-
+                    dbg.location(193,4);
+                    
                      			//Put these values in assignment map
                      			//System.out.println("Cond expr: " + e);
                      			//Policy p;
                      			Set entries = map.entrySet();
                     			Iterator iter = entries.iterator();
                     			//p = (Policy)( e );
-                    			System.out.println(e.getString());
+                    			//System.out.println(e.getString());
                     			//System.out.println("Symbol Val: " + e.pol[0]);
                     			while(iter.hasNext() && e != null)
                     			{
                     				Map.Entry entry = (Map.Entry)iter.next();
                     				String key = (String)entry.getKey();
+                    				System.out.println(" going to search for symbol with name : "+key);
                     				Symbol s = new Symbol(key, e.getType(), e.lookupValue());
-                    				System.out.println(s.getString());
+                    				//System.out.println(s.getString());
                     				//-- COMMENT: Somehow this statement is not reflecting a change in the symbol value
-                    				currentScope.setSymbolValue(key, s);
-                    				System.out.println("Symbol table: " + s.getType() + " " + s.getString());
+                    				if (currentScope.setSymbolValue(key, s) == -1)	
+                    				    {
+                    				     System.out.println(" problem setting symbol : ");
+                    				    }
+                    				
+                    				System.out.println("Symbol table:  " + s.getName()+" "+ s.getType() + " " + s.getString());
+                    				
+                    				
+                    				//Interface t = (Interface)currentScope.lookup("i");
+                    			// 	Interface u = (Interface)currentScope.lookup("j");
+                    			 	//Interface v = (Interface)currentScope.lookup("k");
+                    			 	
+                    			 	//if( t == null){
+                    				// System.out.println("NULL");}
+                    				 
+                    			//	 if( u == null){
+                    			//	 System.out.println("NULL");}
+                    				 
+                    				// if( v == null){
+                    				// System.out.println("NULL");}
+                    				
+                    				//if(t != null){ 
+                    			//	System.out.println(" "+t.getString());
+                    			//	}
+                    			//	if(u != null){ 
+                    			//	System.out.println(" "+u.getString());
+                    			//	}
+                    			//	if(v != null){ 
+                    			//	System.out.println(" "+v.getString());
+                    			//	}
+                    				//System.out.println(" current symbol table");				
+                    			//	currentScope.printSymbols();
                     			}
-                    			currentScope.printSymbols();
+                    		//	currentScope.printSymbols();
                      		
 
                     }
@@ -2539,7 +2655,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(166, 3);
+        dbg.location(246, 3);
 
         }
         finally {
@@ -2554,7 +2670,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start conditional_expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:170:2: conditional_expr returns [Symbol sym] : e= logicalOR_expr ( '?' expression ':' conditional_expr )? ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:250:2: conditional_expr returns [Symbol sym] : e= logicalOR_expr ( '?' expression ':' conditional_expr )? ;
     public final Symbol conditional_expr() throws RecognitionException {
         Symbol sym = null;
 
@@ -2564,23 +2680,23 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("conditional_expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(170, 2);
+        dbg.location(250, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:171:3: (e= logicalOR_expr ( '?' expression ':' conditional_expr )? )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:251:3: (e= logicalOR_expr ( '?' expression ':' conditional_expr )? )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:171:5: e= logicalOR_expr ( '?' expression ':' conditional_expr )?
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:251:5: e= logicalOR_expr ( '?' expression ':' conditional_expr )?
             {
-            dbg.location(171,6);
-            pushFollow(FOLLOW_logicalOR_expr_in_conditional_expr692);
+            dbg.location(251,6);
+            pushFollow(FOLLOW_logicalOR_expr_in_conditional_expr706);
             e=logicalOR_expr();
             _fsp--;
 
-            dbg.location(171,22);
+            dbg.location(251,22);
              sym = e;
-            dbg.location(172,3);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:172:3: ( '?' expression ':' conditional_expr )?
+            dbg.location(252,3);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:252:3: ( '?' expression ':' conditional_expr )?
             int alt15=2;
             try { dbg.enterSubRule(15);
             try { dbg.enterDecision(15);
@@ -2596,19 +2712,19 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:172:5: '?' expression ':' conditional_expr
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:252:5: '?' expression ':' conditional_expr
                     {
-                    dbg.location(172,5);
-                    match(input,48,FOLLOW_48_in_conditional_expr700); 
-                    dbg.location(172,9);
-                    pushFollow(FOLLOW_expression_in_conditional_expr702);
+                    dbg.location(252,5);
+                    match(input,48,FOLLOW_48_in_conditional_expr714); 
+                    dbg.location(252,9);
+                    pushFollow(FOLLOW_expression_in_conditional_expr716);
                     expression();
                     _fsp--;
 
-                    dbg.location(172,20);
-                    match(input,49,FOLLOW_49_in_conditional_expr704); 
-                    dbg.location(172,24);
-                    pushFollow(FOLLOW_conditional_expr_in_conditional_expr706);
+                    dbg.location(252,20);
+                    match(input,49,FOLLOW_49_in_conditional_expr718); 
+                    dbg.location(252,24);
+                    pushFollow(FOLLOW_conditional_expr_in_conditional_expr720);
                     conditional_expr();
                     _fsp--;
 
@@ -2629,7 +2745,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(173, 3);
+        dbg.location(253, 3);
 
         }
         finally {
@@ -2644,7 +2760,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start logicalOR_expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:175:2: logicalOR_expr returns [Symbol sym] : e= logicalAND_expr ( '||' logicalAND_expr )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:255:2: logicalOR_expr returns [Symbol sym] : e= logicalAND_expr ( '||' logicalAND_expr )* ;
     public final Symbol logicalOR_expr() throws RecognitionException {
         Symbol sym = null;
 
@@ -2654,23 +2770,23 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("logicalOR_expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(175, 2);
+        dbg.location(255, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:176:3: (e= logicalAND_expr ( '||' logicalAND_expr )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:256:3: (e= logicalAND_expr ( '||' logicalAND_expr )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:176:5: e= logicalAND_expr ( '||' logicalAND_expr )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:256:5: e= logicalAND_expr ( '||' logicalAND_expr )*
             {
-            dbg.location(176,6);
-            pushFollow(FOLLOW_logicalAND_expr_in_logicalOR_expr730);
+            dbg.location(256,6);
+            pushFollow(FOLLOW_logicalAND_expr_in_logicalOR_expr744);
             e=logicalAND_expr();
             _fsp--;
 
-            dbg.location(176,24);
+            dbg.location(256,24);
              sym = e;
-            dbg.location(177,3);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:177:3: ( '||' logicalAND_expr )*
+            dbg.location(257,3);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:257:3: ( '||' logicalAND_expr )*
             try { dbg.enterSubRule(16);
 
             loop16:
@@ -2691,12 +2807,12 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:177:4: '||' logicalAND_expr
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:257:4: '||' logicalAND_expr
             	    {
-            	    dbg.location(177,4);
-            	    match(input,50,FOLLOW_50_in_logicalOR_expr738); 
-            	    dbg.location(177,9);
-            	    pushFollow(FOLLOW_logicalAND_expr_in_logicalOR_expr740);
+            	    dbg.location(257,4);
+            	    match(input,50,FOLLOW_50_in_logicalOR_expr752); 
+            	    dbg.location(257,9);
+            	    pushFollow(FOLLOW_logicalAND_expr_in_logicalOR_expr754);
             	    logicalAND_expr();
             	    _fsp--;
 
@@ -2720,7 +2836,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(178, 3);
+        dbg.location(258, 3);
 
         }
         finally {
@@ -2735,7 +2851,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start logicalAND_expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:180:2: logicalAND_expr returns [Symbol sym] : e= bitwiseOR_expr ( '&&' bitwiseOR_expr )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:260:2: logicalAND_expr returns [Symbol sym] : e= bitwiseOR_expr ( '&&' bitwiseOR_expr )* ;
     public final Symbol logicalAND_expr() throws RecognitionException {
         Symbol sym = null;
 
@@ -2745,23 +2861,23 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("logicalAND_expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(180, 2);
+        dbg.location(260, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:181:3: (e= bitwiseOR_expr ( '&&' bitwiseOR_expr )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:261:3: (e= bitwiseOR_expr ( '&&' bitwiseOR_expr )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:181:5: e= bitwiseOR_expr ( '&&' bitwiseOR_expr )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:261:5: e= bitwiseOR_expr ( '&&' bitwiseOR_expr )*
             {
-            dbg.location(181,6);
-            pushFollow(FOLLOW_bitwiseOR_expr_in_logicalAND_expr763);
+            dbg.location(261,6);
+            pushFollow(FOLLOW_bitwiseOR_expr_in_logicalAND_expr777);
             e=bitwiseOR_expr();
             _fsp--;
 
-            dbg.location(181,23);
+            dbg.location(261,23);
              sym = e;
-            dbg.location(182,3);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:182:3: ( '&&' bitwiseOR_expr )*
+            dbg.location(262,3);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:262:3: ( '&&' bitwiseOR_expr )*
             try { dbg.enterSubRule(17);
 
             loop17:
@@ -2782,12 +2898,12 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:182:4: '&&' bitwiseOR_expr
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:262:4: '&&' bitwiseOR_expr
             	    {
-            	    dbg.location(182,4);
-            	    match(input,51,FOLLOW_51_in_logicalAND_expr771); 
-            	    dbg.location(182,9);
-            	    pushFollow(FOLLOW_bitwiseOR_expr_in_logicalAND_expr773);
+            	    dbg.location(262,4);
+            	    match(input,51,FOLLOW_51_in_logicalAND_expr785); 
+            	    dbg.location(262,9);
+            	    pushFollow(FOLLOW_bitwiseOR_expr_in_logicalAND_expr787);
             	    bitwiseOR_expr();
             	    _fsp--;
 
@@ -2811,7 +2927,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(183, 3);
+        dbg.location(263, 3);
 
         }
         finally {
@@ -2826,7 +2942,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start bitwiseOR_expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:185:2: bitwiseOR_expr returns [Symbol sym] : e= bitwiseAND_expr ( '|' bitwiseAND_expr )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:265:2: bitwiseOR_expr returns [Symbol sym] : e= bitwiseAND_expr ( '|' bitwiseAND_expr )* ;
     public final Symbol bitwiseOR_expr() throws RecognitionException {
         Symbol sym = null;
 
@@ -2836,23 +2952,23 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("bitwiseOR_expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(185, 2);
+        dbg.location(265, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:186:3: (e= bitwiseAND_expr ( '|' bitwiseAND_expr )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:266:3: (e= bitwiseAND_expr ( '|' bitwiseAND_expr )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:186:5: e= bitwiseAND_expr ( '|' bitwiseAND_expr )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:266:5: e= bitwiseAND_expr ( '|' bitwiseAND_expr )*
             {
-            dbg.location(186,6);
-            pushFollow(FOLLOW_bitwiseAND_expr_in_bitwiseOR_expr797);
+            dbg.location(266,6);
+            pushFollow(FOLLOW_bitwiseAND_expr_in_bitwiseOR_expr811);
             e=bitwiseAND_expr();
             _fsp--;
 
-            dbg.location(186,24);
+            dbg.location(266,24);
              sym = e;
-            dbg.location(187,3);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:187:3: ( '|' bitwiseAND_expr )*
+            dbg.location(267,3);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:267:3: ( '|' bitwiseAND_expr )*
             try { dbg.enterSubRule(18);
 
             loop18:
@@ -2873,12 +2989,12 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:187:4: '|' bitwiseAND_expr
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:267:4: '|' bitwiseAND_expr
             	    {
-            	    dbg.location(187,4);
-            	    match(input,52,FOLLOW_52_in_bitwiseOR_expr805); 
-            	    dbg.location(187,8);
-            	    pushFollow(FOLLOW_bitwiseAND_expr_in_bitwiseOR_expr807);
+            	    dbg.location(267,4);
+            	    match(input,52,FOLLOW_52_in_bitwiseOR_expr819); 
+            	    dbg.location(267,8);
+            	    pushFollow(FOLLOW_bitwiseAND_expr_in_bitwiseOR_expr821);
             	    bitwiseAND_expr();
             	    _fsp--;
 
@@ -2902,7 +3018,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(188, 3);
+        dbg.location(268, 3);
 
         }
         finally {
@@ -2917,7 +3033,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start bitwiseAND_expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:190:2: bitwiseAND_expr returns [Symbol sym] : e= equality_expr ( '&' equality_expr )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:270:2: bitwiseAND_expr returns [Symbol sym] : e= equality_expr ( '&' equality_expr )* ;
     public final Symbol bitwiseAND_expr() throws RecognitionException {
         Symbol sym = null;
 
@@ -2927,23 +3043,23 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("bitwiseAND_expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(190, 2);
+        dbg.location(270, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:191:3: (e= equality_expr ( '&' equality_expr )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:271:3: (e= equality_expr ( '&' equality_expr )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:191:5: e= equality_expr ( '&' equality_expr )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:271:5: e= equality_expr ( '&' equality_expr )*
             {
-            dbg.location(191,6);
-            pushFollow(FOLLOW_equality_expr_in_bitwiseAND_expr830);
+            dbg.location(271,6);
+            pushFollow(FOLLOW_equality_expr_in_bitwiseAND_expr844);
             e=equality_expr();
             _fsp--;
 
-            dbg.location(191,22);
+            dbg.location(271,22);
              sym = e;
-            dbg.location(192,3);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:192:3: ( '&' equality_expr )*
+            dbg.location(272,3);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:272:3: ( '&' equality_expr )*
             try { dbg.enterSubRule(19);
 
             loop19:
@@ -2964,12 +3080,12 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:192:4: '&' equality_expr
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:272:4: '&' equality_expr
             	    {
-            	    dbg.location(192,4);
-            	    match(input,53,FOLLOW_53_in_bitwiseAND_expr838); 
-            	    dbg.location(192,8);
-            	    pushFollow(FOLLOW_equality_expr_in_bitwiseAND_expr840);
+            	    dbg.location(272,4);
+            	    match(input,53,FOLLOW_53_in_bitwiseAND_expr852); 
+            	    dbg.location(272,8);
+            	    pushFollow(FOLLOW_equality_expr_in_bitwiseAND_expr854);
             	    equality_expr();
             	    _fsp--;
 
@@ -2993,7 +3109,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(193, 3);
+        dbg.location(273, 3);
 
         }
         finally {
@@ -3008,7 +3124,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start equality_expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:195:2: equality_expr returns [Symbol sym] : e= relational_expr ( ( '==' | '!=' ) relational_expr )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:275:2: equality_expr returns [Symbol sym] : e= relational_expr ( ( '==' | '!=' ) relational_expr )* ;
     public final Symbol equality_expr() throws RecognitionException {
         Symbol sym = null;
 
@@ -3018,23 +3134,23 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("equality_expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(195, 2);
+        dbg.location(275, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:196:3: (e= relational_expr ( ( '==' | '!=' ) relational_expr )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:276:3: (e= relational_expr ( ( '==' | '!=' ) relational_expr )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:196:5: e= relational_expr ( ( '==' | '!=' ) relational_expr )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:276:5: e= relational_expr ( ( '==' | '!=' ) relational_expr )*
             {
-            dbg.location(196,6);
-            pushFollow(FOLLOW_relational_expr_in_equality_expr865);
+            dbg.location(276,6);
+            pushFollow(FOLLOW_relational_expr_in_equality_expr879);
             e=relational_expr();
             _fsp--;
 
-            dbg.location(196,24);
+            dbg.location(276,24);
              sym = e;
-            dbg.location(197,3);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:197:3: ( ( '==' | '!=' ) relational_expr )*
+            dbg.location(277,3);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:277:3: ( ( '==' | '!=' ) relational_expr )*
             try { dbg.enterSubRule(20);
 
             loop20:
@@ -3055,9 +3171,9 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:197:5: ( '==' | '!=' ) relational_expr
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:277:5: ( '==' | '!=' ) relational_expr
             	    {
-            	    dbg.location(197,5);
+            	    dbg.location(277,5);
             	    if ( (input.LA(1)>=54 && input.LA(1)<=55) ) {
             	        input.consume();
             	        errorRecovery=false;
@@ -3066,11 +3182,11 @@ public class BlockParser extends DebugParser {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        dbg.recognitionException(mse);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_equality_expr874);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_equality_expr888);    throw mse;
             	    }
 
-            	    dbg.location(197,19);
-            	    pushFollow(FOLLOW_relational_expr_in_equality_expr882);
+            	    dbg.location(277,19);
+            	    pushFollow(FOLLOW_relational_expr_in_equality_expr896);
             	    relational_expr();
             	    _fsp--;
 
@@ -3094,7 +3210,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(198, 3);
+        dbg.location(278, 3);
 
         }
         finally {
@@ -3109,7 +3225,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start relational_expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:200:2: relational_expr returns [Symbol sym] : e= expr ( ( '<' | '>' | '<=' | '>=' ) expr )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:280:2: relational_expr returns [Symbol sym] : e= expr ( ( '<' | '>' | '<=' | '>=' ) expr )* ;
     public final Symbol relational_expr() throws RecognitionException {
         Symbol sym = null;
 
@@ -3119,23 +3235,23 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("relational_expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(200, 2);
+        dbg.location(280, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:201:3: (e= expr ( ( '<' | '>' | '<=' | '>=' ) expr )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:281:3: (e= expr ( ( '<' | '>' | '<=' | '>=' ) expr )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:201:5: e= expr ( ( '<' | '>' | '<=' | '>=' ) expr )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:281:5: e= expr ( ( '<' | '>' | '<=' | '>=' ) expr )*
             {
-            dbg.location(201,6);
-            pushFollow(FOLLOW_expr_in_relational_expr906);
+            dbg.location(281,6);
+            pushFollow(FOLLOW_expr_in_relational_expr920);
             e=expr();
             _fsp--;
 
-            dbg.location(201,15);
+            dbg.location(281,15);
              sym = e;
-            dbg.location(202,3);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:202:3: ( ( '<' | '>' | '<=' | '>=' ) expr )*
+            dbg.location(282,3);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:282:3: ( ( '<' | '>' | '<=' | '>=' ) expr )*
             try { dbg.enterSubRule(21);
 
             loop21:
@@ -3156,9 +3272,9 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:202:5: ( '<' | '>' | '<=' | '>=' ) expr
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:282:5: ( '<' | '>' | '<=' | '>=' ) expr
             	    {
-            	    dbg.location(202,5);
+            	    dbg.location(282,5);
             	    if ( (input.LA(1)>=56 && input.LA(1)<=59) ) {
             	        input.consume();
             	        errorRecovery=false;
@@ -3167,11 +3283,11 @@ public class BlockParser extends DebugParser {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        dbg.recognitionException(mse);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_relational_expr917);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_relational_expr931);    throw mse;
             	    }
 
-            	    dbg.location(202,25);
-            	    pushFollow(FOLLOW_expr_in_relational_expr927);
+            	    dbg.location(282,25);
+            	    pushFollow(FOLLOW_expr_in_relational_expr941);
             	    expr();
             	    _fsp--;
 
@@ -3195,7 +3311,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(203, 3);
+        dbg.location(283, 3);
 
         }
         finally {
@@ -3210,7 +3326,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:206:2: expr returns [Symbol sym] : e= term ( ( PLUS | MINUS ) term )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:286:2: expr returns [Symbol sym] : e= term ( ( PLUS | MINUS ) term )* ;
     public final Symbol expr() throws RecognitionException {
         Symbol sym = null;
 
@@ -3220,23 +3336,23 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(206, 2);
+        dbg.location(286, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:207:3: (e= term ( ( PLUS | MINUS ) term )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:287:3: (e= term ( ( PLUS | MINUS ) term )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:207:5: e= term ( ( PLUS | MINUS ) term )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:287:5: e= term ( ( PLUS | MINUS ) term )*
             {
-            dbg.location(207,6);
-            pushFollow(FOLLOW_term_in_expr953);
+            dbg.location(287,6);
+            pushFollow(FOLLOW_term_in_expr967);
             e=term();
             _fsp--;
 
-            dbg.location(207,15);
+            dbg.location(287,15);
             sym = e;
-            dbg.location(208,3);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:208:3: ( ( PLUS | MINUS ) term )*
+            dbg.location(288,3);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:288:3: ( ( PLUS | MINUS ) term )*
             try { dbg.enterSubRule(22);
 
             loop22:
@@ -3257,9 +3373,9 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:208:5: ( PLUS | MINUS ) term
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:288:5: ( PLUS | MINUS ) term
             	    {
-            	    dbg.location(208,5);
+            	    dbg.location(288,5);
             	    if ( (input.LA(1)>=PLUS && input.LA(1)<=MINUS) ) {
             	        input.consume();
             	        errorRecovery=false;
@@ -3268,11 +3384,11 @@ public class BlockParser extends DebugParser {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        dbg.recognitionException(mse);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_expr964);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_expr978);    throw mse;
             	    }
 
-            	    dbg.location(208,23);
-            	    pushFollow(FOLLOW_term_in_expr975);
+            	    dbg.location(288,23);
+            	    pushFollow(FOLLOW_term_in_expr989);
             	    term();
             	    _fsp--;
 
@@ -3296,7 +3412,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(209, 3);
+        dbg.location(289, 3);
 
         }
         finally {
@@ -3311,7 +3427,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start term
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:211:2: term returns [Symbol sym] : e= unary_expr ( ( MULT | DIV ) unary_expr )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:291:2: term returns [Symbol sym] : e= unary_expr ( ( MULT | DIV ) unary_expr )* ;
     public final Symbol term() throws RecognitionException {
         Symbol sym = null;
 
@@ -3321,23 +3437,23 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("term");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(211, 2);
+        dbg.location(291, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:212:3: (e= unary_expr ( ( MULT | DIV ) unary_expr )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:292:3: (e= unary_expr ( ( MULT | DIV ) unary_expr )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:212:5: e= unary_expr ( ( MULT | DIV ) unary_expr )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:292:5: e= unary_expr ( ( MULT | DIV ) unary_expr )*
             {
-            dbg.location(212,6);
-            pushFollow(FOLLOW_unary_expr_in_term1001);
+            dbg.location(292,6);
+            pushFollow(FOLLOW_unary_expr_in_term1015);
             e=unary_expr();
             _fsp--;
 
-            dbg.location(212,21);
+            dbg.location(292,21);
             sym = e;
-            dbg.location(213,3);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:213:3: ( ( MULT | DIV ) unary_expr )*
+            dbg.location(293,3);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:293:3: ( ( MULT | DIV ) unary_expr )*
             try { dbg.enterSubRule(23);
 
             loop23:
@@ -3358,9 +3474,9 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:213:5: ( MULT | DIV ) unary_expr
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:293:5: ( MULT | DIV ) unary_expr
             	    {
-            	    dbg.location(213,5);
+            	    dbg.location(293,5);
             	    if ( (input.LA(1)>=MULT && input.LA(1)<=DIV) ) {
             	        input.consume();
             	        errorRecovery=false;
@@ -3369,11 +3485,11 @@ public class BlockParser extends DebugParser {
             	        MismatchedSetException mse =
             	            new MismatchedSetException(null,input);
             	        dbg.recognitionException(mse);
-            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_term1012);    throw mse;
+            	        recoverFromMismatchedSet(input,mse,FOLLOW_set_in_term1026);    throw mse;
             	    }
 
-            	    dbg.location(213,20);
-            	    pushFollow(FOLLOW_unary_expr_in_term1022);
+            	    dbg.location(293,20);
+            	    pushFollow(FOLLOW_unary_expr_in_term1036);
             	    unary_expr();
             	    _fsp--;
 
@@ -3397,7 +3513,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(214, 3);
+        dbg.location(294, 3);
 
         }
         finally {
@@ -3412,7 +3528,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start unary_expr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:216:2: unary_expr returns [Symbol sym] : (e= postfix_expression | '~' unary_expr );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:296:2: unary_expr returns [Symbol sym] : (e= postfix_expression | '~' unary_expr );
     public final Symbol unary_expr() throws RecognitionException {
         Symbol sym = null;
 
@@ -3422,16 +3538,16 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("unary_expr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(216, 2);
+        dbg.location(296, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:217:3: (e= postfix_expression | '~' unary_expr )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:297:3: (e= postfix_expression | '~' unary_expr )
             int alt24=2;
             try { dbg.enterDecision(24);
 
             int LA24_0 = input.LA(1);
 
-            if ( (LA24_0==NUMBER||(LA24_0>=STRING && LA24_0<=ID)||LA24_0==CHAR||LA24_0==29||LA24_0==31||LA24_0==41||(LA24_0>=78 && LA24_0<=79)||LA24_0==84||(LA24_0>=87 && LA24_0<=88)||(LA24_0>=90 && LA24_0<=91)) ) {
+            if ( (LA24_0==NUMBER||(LA24_0>=STRING && LA24_0<=ID)||LA24_0==CHAR||LA24_0==29||LA24_0==31||LA24_0==41||(LA24_0>=79 && LA24_0<=80)||(LA24_0>=85 && LA24_0<=86)||(LA24_0>=89 && LA24_0<=91)) ) {
                 alt24=1;
             }
             else if ( (LA24_0==60) ) {
@@ -3439,7 +3555,7 @@ public class BlockParser extends DebugParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("216:2: unary_expr returns [Symbol sym] : (e= postfix_expression | '~' unary_expr );", 24, 0, input);
+                    new NoViableAltException("296:2: unary_expr returns [Symbol sym] : (e= postfix_expression | '~' unary_expr );", 24, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
@@ -3450,14 +3566,14 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:217:5: e= postfix_expression
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:297:5: e= postfix_expression
                     {
-                    dbg.location(217,6);
-                    pushFollow(FOLLOW_postfix_expression_in_unary_expr1048);
+                    dbg.location(297,6);
+                    pushFollow(FOLLOW_postfix_expression_in_unary_expr1062);
                     e=postfix_expression();
                     _fsp--;
 
-                    dbg.location(217,26);
+                    dbg.location(297,26);
                     sym = e;
 
                     }
@@ -3465,12 +3581,12 @@ public class BlockParser extends DebugParser {
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:218:5: '~' unary_expr
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:298:5: '~' unary_expr
                     {
-                    dbg.location(218,5);
-                    match(input,60,FOLLOW_60_in_unary_expr1056); 
-                    dbg.location(218,9);
-                    pushFollow(FOLLOW_unary_expr_in_unary_expr1058);
+                    dbg.location(298,5);
+                    match(input,60,FOLLOW_60_in_unary_expr1070); 
+                    dbg.location(298,9);
+                    pushFollow(FOLLOW_unary_expr_in_unary_expr1072);
                     unary_expr();
                     _fsp--;
 
@@ -3486,7 +3602,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(221, 3);
+        dbg.location(301, 3);
 
         }
         finally {
@@ -3501,7 +3617,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start postfix_expression
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:223:2: postfix_expression returns [Symbol sym] : e= factor ( '.' ID )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:303:2: postfix_expression returns [Symbol sym] : e= factor ( '.' ID )* ;
     public final Symbol postfix_expression() throws RecognitionException {
         Symbol sym = null;
 
@@ -3511,21 +3627,21 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("postfix_expression");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(223, 2);
+        dbg.location(303, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:224:3: (e= factor ( '.' ID )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:304:3: (e= factor ( '.' ID )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:224:5: e= factor ( '.' ID )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:304:5: e= factor ( '.' ID )*
             {
-            dbg.location(224,6);
-            pushFollow(FOLLOW_factor_in_postfix_expression1085);
+            dbg.location(304,6);
+            pushFollow(FOLLOW_factor_in_postfix_expression1099);
             e=factor();
             _fsp--;
 
-            dbg.location(224,14);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:224:14: ( '.' ID )*
+            dbg.location(304,14);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:304:14: ( '.' ID )*
             try { dbg.enterSubRule(25);
 
             loop25:
@@ -3546,12 +3662,12 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:224:15: '.' ID
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:304:15: '.' ID
             	    {
-            	    dbg.location(224,15);
-            	    match(input,DOT,FOLLOW_DOT_in_postfix_expression1088); 
-            	    dbg.location(224,18);
-            	    match(input,ID,FOLLOW_ID_in_postfix_expression1089); 
+            	    dbg.location(304,15);
+            	    match(input,DOT,FOLLOW_DOT_in_postfix_expression1102); 
+            	    dbg.location(304,18);
+            	    match(input,ID,FOLLOW_ID_in_postfix_expression1103); 
 
             	    }
             	    break;
@@ -3562,7 +3678,7 @@ public class BlockParser extends DebugParser {
             } while (true);
             } finally {dbg.exitSubRule(25);}
 
-            dbg.location(224,24);
+            dbg.location(304,24);
             sym = e;
 
             }
@@ -3574,7 +3690,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(225, 3);
+        dbg.location(305, 3);
 
         }
         finally {
@@ -3591,7 +3707,7 @@ public class BlockParser extends DebugParser {
     };
 
     // $ANTLR start assignment_operator
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:227:2: assignment_operator : ( '=' | '*=' | '/=' | '+=' | '-=' );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:307:2: assignment_operator : ( '=' | '*=' | '/=' | '+=' | '-=' );
     public final assignment_operator_return assignment_operator() throws RecognitionException {
         assignment_operator_return retval = new assignment_operator_return();
         retval.start = input.LT(1);
@@ -3599,15 +3715,15 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("assignment_operator");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(227, 2);
+        dbg.location(307, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:228:3: ( '=' | '*=' | '/=' | '+=' | '-=' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:308:3: ( '=' | '*=' | '/=' | '+=' | '-=' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:
             {
-            dbg.location(228,3);
+            dbg.location(308,3);
             if ( input.LA(1)==EQUAL||(input.LA(1)>=61 && input.LA(1)<=64) ) {
                 input.consume();
                 errorRecovery=false;
@@ -3631,7 +3747,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(233, 3);
+        dbg.location(313, 3);
 
         }
         finally {
@@ -3646,7 +3762,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start factor
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:235:2: factor returns [Symbol sym] : ( ID | e= literal | '(' expression ')' );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:315:2: factor returns [Symbol sym] : ( ID | e= literal | '(' expression ')' );
     public final Symbol factor() throws RecognitionException {
         Symbol sym = null;
 
@@ -3656,10 +3772,10 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("factor");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(235, 2);
+        dbg.location(315, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:237:2: ( ID | e= literal | '(' expression ')' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:317:2: ( ID | e= literal | '(' expression ')' )
             int alt26=3;
             try { dbg.enterDecision(26);
 
@@ -3674,11 +3790,11 @@ public class BlockParser extends DebugParser {
             case CHAR:
             case 29:
             case 31:
-            case 78:
             case 79:
-            case 84:
-            case 87:
-            case 88:
+            case 80:
+            case 85:
+            case 86:
+            case 89:
             case 90:
             case 91:
                 {
@@ -3692,7 +3808,7 @@ public class BlockParser extends DebugParser {
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("235:2: factor returns [Symbol sym] : ( ID | e= literal | '(' expression ')' );", 26, 0, input);
+                    new NoViableAltException("315:2: factor returns [Symbol sym] : ( ID | e= literal | '(' expression ')' );", 26, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
@@ -3704,24 +3820,24 @@ public class BlockParser extends DebugParser {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:237:4: ID
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:317:4: ID
                     {
-                    dbg.location(237,4);
-                    match(input,ID,FOLLOW_ID_in_factor1152); 
+                    dbg.location(317,4);
+                    match(input,ID,FOLLOW_ID_in_factor1166); 
 
                     }
                     break;
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:238:5: e= literal
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:318:5: e= literal
                     {
-                    dbg.location(238,6);
-                    pushFollow(FOLLOW_literal_in_factor1160);
+                    dbg.location(318,6);
+                    pushFollow(FOLLOW_literal_in_factor1174);
                     e=literal();
                     _fsp--;
 
-                    dbg.location(238,16);
+                    dbg.location(318,16);
                     sym = e;
 
                     }
@@ -3729,17 +3845,17 @@ public class BlockParser extends DebugParser {
                 case 3 :
                     dbg.enterAlt(3);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:239:5: '(' expression ')'
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:319:5: '(' expression ')'
                     {
-                    dbg.location(239,5);
-                    match(input,41,FOLLOW_41_in_factor1169); 
-                    dbg.location(239,9);
-                    pushFollow(FOLLOW_expression_in_factor1171);
+                    dbg.location(319,5);
+                    match(input,41,FOLLOW_41_in_factor1183); 
+                    dbg.location(319,9);
+                    pushFollow(FOLLOW_expression_in_factor1185);
                     expression();
                     _fsp--;
 
-                    dbg.location(239,20);
-                    match(input,42,FOLLOW_42_in_factor1173); 
+                    dbg.location(319,20);
+                    match(input,42,FOLLOW_42_in_factor1187); 
 
                     }
                     break;
@@ -3752,7 +3868,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(240, 3);
+        dbg.location(320, 3);
 
         }
         finally {
@@ -3767,7 +3883,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start literal
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:242:2: literal returns [Symbol sym] : e= object_values ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:322:2: literal returns [Symbol sym] : e= object_values ;
     public final Symbol literal() throws RecognitionException {
         Symbol sym = null;
 
@@ -3777,20 +3893,20 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("literal");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(242, 2);
+        dbg.location(322, 2);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:243:3: (e= object_values )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:323:3: (e= object_values )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:243:5: e= object_values
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:323:5: e= object_values
             {
-            dbg.location(243,6);
-            pushFollow(FOLLOW_object_values_in_literal1195);
+            dbg.location(323,6);
+            pushFollow(FOLLOW_object_values_in_literal1209);
             e=object_values();
             _fsp--;
 
-            dbg.location(243,21);
+            dbg.location(323,21);
             sym = e;
 
             }
@@ -3802,7 +3918,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(244, 3);
+        dbg.location(324, 3);
 
         }
         finally {
@@ -3817,7 +3933,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start declr_stmt
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:246:1: declr_stmt : type_name var_name= object_name ( COMMA next_var= object_name )* ';' ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:326:1: declr_stmt : type_name var_name= object_name ( COMMA next_var= object_name )* ';' ;
     public final void declr_stmt() throws RecognitionException {
         object_name_return var_name = null;
 
@@ -3829,33 +3945,33 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("declr_stmt");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(246, 1);
+        dbg.location(326, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:247:2: ( type_name var_name= object_name ( COMMA next_var= object_name )* ';' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:327:2: ( type_name var_name= object_name ( COMMA next_var= object_name )* ';' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:248:2: type_name var_name= object_name ( COMMA next_var= object_name )* ';'
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:328:2: type_name var_name= object_name ( COMMA next_var= object_name )* ';'
             {
-            dbg.location(248,2);
+            dbg.location(328,2);
             int count_com = 0;
-            dbg.location(249,2);
-            pushFollow(FOLLOW_type_name_in_declr_stmt1213);
+            dbg.location(329,2);
+            pushFollow(FOLLOW_type_name_in_declr_stmt1227);
             type_name2=type_name();
             _fsp--;
 
-            dbg.location(249,20);
-            pushFollow(FOLLOW_object_name_in_declr_stmt1217);
+            dbg.location(329,20);
+            pushFollow(FOLLOW_object_name_in_declr_stmt1231);
             var_name=object_name();
             _fsp--;
 
-            dbg.location(250,2);
-
+            dbg.location(330,2);
+            
             		System.out.println(" type : " + input.toString(type_name2.start,type_name2.stop) +" var : "+ input.toString(var_name.start,var_name.stop));
             		currentScope.defineSymbol(input.toString(var_name.start,var_name.stop), input.toString(type_name2.start,type_name2.stop));
             	
-            dbg.location(254,2);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:254:2: ( COMMA next_var= object_name )*
+            dbg.location(334,2);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:334:2: ( COMMA next_var= object_name )*
             try { dbg.enterSubRule(27);
 
             loop27:
@@ -3876,14 +3992,14 @@ public class BlockParser extends DebugParser {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:254:3: COMMA next_var= object_name
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:334:3: COMMA next_var= object_name
             	    {
-            	    dbg.location(254,3);
-            	    match(input,COMMA,FOLLOW_COMMA_in_declr_stmt1224); 
-            	    dbg.location(254,9);
+            	    dbg.location(334,3);
+            	    match(input,COMMA,FOLLOW_COMMA_in_declr_stmt1238); 
+            	    dbg.location(334,9);
             	    count_com++;
-            	    dbg.location(254,32);
-            	    pushFollow(FOLLOW_object_name_in_declr_stmt1230);
+            	    dbg.location(334,32);
+            	    pushFollow(FOLLOW_object_name_in_declr_stmt1244);
             	    next_var=object_name();
             	    _fsp--;
 
@@ -3897,25 +4013,15 @@ public class BlockParser extends DebugParser {
             } while (true);
             } finally {dbg.exitSubRule(27);}
 
-            dbg.location(255,2);
-
-            		System.out.println(" commas : "+ count_com);
+            dbg.location(335,2);
+            
+            	//	System.out.println(" commas : "+ count_com);
             		
-            				
-            	//	currentScope.defineSymbol(input.toString(next_var.start,next_var.stop), input.toString(type_name2.start,type_name2.stop));
+            		if(count_com > 0)			
+                          		 currentScope.defineSymbol(input.toString(next_var.start,next_var.stop), input.toString(type_name2.start,type_name2.stop));
             	
-            dbg.location(261,2);
-            match(input,24,FOLLOW_24_in_declr_stmt1240); 
-            dbg.location(261,6);
-            int [] n = new int [count_com];
-            		n[0] = 20;
-            		n[1] = 20;
-            		System.out.println("  n[0] : "+ n[0] +"n[1]:"+n[1]);
-            		
-            dbg.location(266,2);
-
-            		currentScope.printSymbols();
-            	
+            dbg.location(341,2);
+            match(input,24,FOLLOW_24_in_declr_stmt1254); 
 
             }
 
@@ -3926,7 +4032,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(269, 2);
+        dbg.location(342, 3);
 
         }
         finally {
@@ -3939,224 +4045,11 @@ public class BlockParser extends DebugParser {
     }
     // $ANTLR end declr_stmt
 
-
-    // $ANTLR start object_values
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:273:1: object_values returns [Symbol sym] : ( char_value | int_value | STRING | ip_addr | policy | host | role | host_group | topology | serv_group | interf | route );
-    public final Symbol object_values() throws RecognitionException {
-        Symbol sym = null;
-
-        Symbol int_value3 = null;
-
-        Symbol policy4 = null;
-
-
-        try { dbg.enterRule("object_values");
-        if ( ruleLevel==0 ) {dbg.commence();}
-        ruleLevel++;
-        dbg.location(273, 1);
-
-        try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:274:2: ( char_value | int_value | STRING | ip_addr | policy | host | role | host_group | topology | serv_group | interf | route )
-            int alt28=12;
-            try { dbg.enterDecision(28);
-
-            try {
-                isCyclicDecision = true;
-                alt28 = dfa28.predict(input);
-            }
-            catch (NoViableAltException nvae) {
-                dbg.recognitionException(nvae);
-                throw nvae;
-            }
-            } finally {dbg.exitDecision(28);}
-
-            switch (alt28) {
-                case 1 :
-                    dbg.enterAlt(1);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:274:4: char_value
-                    {
-                    dbg.location(274,4);
-                    pushFollow(FOLLOW_char_value_in_object_values1275);
-                    char_value();
-                    _fsp--;
-
-
-                    }
-                    break;
-                case 2 :
-                    dbg.enterAlt(2);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:275:4: int_value
-                    {
-                    dbg.location(275,4);
-                    pushFollow(FOLLOW_int_value_in_object_values1280);
-                    int_value3=int_value();
-                    _fsp--;
-
-                    dbg.location(276,2);
-                     
-                    		sym = int_value3;
-                    	
-
-                    }
-                    break;
-                case 3 :
-                    dbg.enterAlt(3);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:279:4: STRING
-                    {
-                    dbg.location(279,4);
-                    match(input,STRING,FOLLOW_STRING_in_object_values1289); 
-
-                    }
-                    break;
-                case 4 :
-                    dbg.enterAlt(4);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:280:4: ip_addr
-                    {
-                    dbg.location(280,4);
-                    pushFollow(FOLLOW_ip_addr_in_object_values1294);
-                    ip_addr();
-                    _fsp--;
-
-
-                    }
-                    break;
-                case 5 :
-                    dbg.enterAlt(5);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:284:4: policy
-                    {
-                    dbg.location(284,4);
-                    pushFollow(FOLLOW_policy_in_object_values1301);
-                    policy4=policy();
-                    _fsp--;
-
-                    dbg.location(284,11);
-                     sym = policy4;
-
-                    }
-                    break;
-                case 6 :
-                    dbg.enterAlt(6);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:285:4: host
-                    {
-                    dbg.location(285,4);
-                    pushFollow(FOLLOW_host_in_object_values1308);
-                    host();
-                    _fsp--;
-
-
-                    }
-                    break;
-                case 7 :
-                    dbg.enterAlt(7);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:286:4: role
-                    {
-                    dbg.location(286,4);
-                    pushFollow(FOLLOW_role_in_object_values1315);
-                    role();
-                    _fsp--;
-
-
-                    }
-                    break;
-                case 8 :
-                    dbg.enterAlt(8);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:287:4: host_group
-                    {
-                    dbg.location(287,4);
-                    pushFollow(FOLLOW_host_group_in_object_values1322);
-                    host_group();
-                    _fsp--;
-
-
-                    }
-                    break;
-                case 9 :
-                    dbg.enterAlt(9);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:288:4: topology
-                    {
-                    dbg.location(288,4);
-                    pushFollow(FOLLOW_topology_in_object_values1327);
-                    topology();
-                    _fsp--;
-
-
-                    }
-                    break;
-                case 10 :
-                    dbg.enterAlt(10);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:289:4: serv_group
-                    {
-                    dbg.location(289,4);
-                    pushFollow(FOLLOW_serv_group_in_object_values1332);
-                    serv_group();
-                    _fsp--;
-
-
-                    }
-                    break;
-                case 11 :
-                    dbg.enterAlt(11);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:290:4: interf
-                    {
-                    dbg.location(290,4);
-                    pushFollow(FOLLOW_interf_in_object_values1337);
-                    interf();
-                    _fsp--;
-
-
-                    }
-                    break;
-                case 12 :
-                    dbg.enterAlt(12);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:291:4: route
-                    {
-                    dbg.location(291,4);
-                    pushFollow(FOLLOW_route_in_object_values1342);
-                    route();
-                    _fsp--;
-
-
-                    }
-                    break;
-
-            }
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-        }
-        finally {
-        }
-        dbg.location(293, 2);
-
-        }
-        finally {
-            dbg.exitRule("object_values");
-            ruleLevel--;
-            if ( ruleLevel==0 ) {dbg.terminate();}
-        }
-
-        return sym;
-    }
-    // $ANTLR end object_values
-
     public static class type_name_return extends ParserRuleReturnScope {
     };
 
     // $ANTLR start type_name
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:295:1: type_name : ( 'topology_type_t' | 'host_type_t' | 'host_group_type_t' | 'serv_group_type_t' | 'role_type_t' | 'policy_type_t' | 'route_type_t' | 'interface_type_t' | 'ipaddr_t' | 'int_type_t' | 'char_type_t' );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:347:1: type_name : ( 'topology_type_t' | 'host_type_t' | 'host_group_type_t' | 'serv_group_type_t' | 'role_type_t' | 'policy_type_t' | 'route_type_t' | 'interface_type_t' | 'ipaddr_t' | 'int_type_t' | 'char_type_t' );
     public final type_name_return type_name() throws RecognitionException {
         type_name_return retval = new type_name_return();
         retval.start = input.LT(1);
@@ -4164,15 +4057,15 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("type_name");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(295, 1);
+        dbg.location(347, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:296:2: ( 'topology_type_t' | 'host_type_t' | 'host_group_type_t' | 'serv_group_type_t' | 'role_type_t' | 'policy_type_t' | 'route_type_t' | 'interface_type_t' | 'ipaddr_t' | 'int_type_t' | 'char_type_t' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:348:2: ( 'topology_type_t' | 'host_type_t' | 'host_group_type_t' | 'serv_group_type_t' | 'role_type_t' | 'policy_type_t' | 'route_type_t' | 'interface_type_t' | 'ipaddr_t' | 'int_type_t' | 'char_type_t' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:
             {
-            dbg.location(296,2);
+            dbg.location(348,2);
             if ( (input.LA(1)>=65 && input.LA(1)<=75) ) {
                 input.consume();
                 errorRecovery=false;
@@ -4196,7 +4089,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(307, 2);
+        dbg.location(359, 2);
 
         }
         finally {
@@ -4210,72 +4103,506 @@ public class BlockParser extends DebugParser {
     // $ANTLR end type_name
 
 
+    // $ANTLR start object_values
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:361:1: object_values returns [Symbol sym] : ( char_value | int_value | STRING | ip_addr | policy | host | role | host_group | topology | serv_group | interf | route );
+    public final Symbol object_values() throws RecognitionException {
+        Symbol sym = null;
+
+        Symbol int_value3 = null;
+
+        ip_addr_return ip_addr4 = null;
+
+        Symbol policy5 = null;
+
+        Symbol host6 = null;
+
+        Symbol role7 = null;
+
+        Symbol host_group8 = null;
+
+        Symbol interf9 = null;
+
+        Symbol route10 = null;
+
+
+        try { dbg.enterRule("object_values");
+        if ( ruleLevel==0 ) {dbg.commence();}
+        ruleLevel++;
+        dbg.location(361, 1);
+
+        try {
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:362:2: ( char_value | int_value | STRING | ip_addr | policy | host | role | host_group | topology | serv_group | interf | route )
+            int alt28=12;
+            try { dbg.enterDecision(28);
+
+            try {
+                isCyclicDecision = true;
+                alt28 = dfa28.predict(input);
+            }
+            catch (NoViableAltException nvae) {
+                dbg.recognitionException(nvae);
+                throw nvae;
+            }
+            } finally {dbg.exitDecision(28);}
+
+            switch (alt28) {
+                case 1 :
+                    dbg.enterAlt(1);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:362:4: char_value
+                    {
+                    dbg.location(362,4);
+                    pushFollow(FOLLOW_char_value_in_object_values1350);
+                    char_value();
+                    _fsp--;
+
+
+                    }
+                    break;
+                case 2 :
+                    dbg.enterAlt(2);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:363:4: int_value
+                    {
+                    dbg.location(363,4);
+                    pushFollow(FOLLOW_int_value_in_object_values1355);
+                    int_value3=int_value();
+                    _fsp--;
+
+                    dbg.location(364,2);
+                     
+                    		sym = int_value3;
+                    	
+
+                    }
+                    break;
+                case 3 :
+                    dbg.enterAlt(3);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:367:4: STRING
+                    {
+                    dbg.location(367,4);
+                    match(input,STRING,FOLLOW_STRING_in_object_values1364); 
+
+                    }
+                    break;
+                case 4 :
+                    dbg.enterAlt(4);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:368:4: ip_addr
+                    {
+                    dbg.location(368,4);
+                    pushFollow(FOLLOW_ip_addr_in_object_values1369);
+                    ip_addr4=ip_addr();
+                    _fsp--;
+
+                    dbg.location(369,2);
+                    
+                    	  sym = ip_addr4.sym;
+
+
+                    }
+                    break;
+                case 5 :
+                    dbg.enterAlt(5);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:372:4: policy
+                    {
+                    dbg.location(372,4);
+                    pushFollow(FOLLOW_policy_in_object_values1377);
+                    policy5=policy();
+                    _fsp--;
+
+                    dbg.location(372,13);
+                     sym = policy5;
+
+                    }
+                    break;
+                case 6 :
+                    dbg.enterAlt(6);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:373:4: host
+                    {
+                    dbg.location(373,4);
+                    pushFollow(FOLLOW_host_in_object_values1386);
+                    host6=host();
+                    _fsp--;
+
+                    dbg.location(373,11);
+                    
+                    	sym = host6 ; 
+                    	
+
+                    }
+                    break;
+                case 7 :
+                    dbg.enterAlt(7);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:376:4: role
+                    {
+                    dbg.location(376,4);
+                    pushFollow(FOLLOW_role_in_object_values1395);
+                    role7=role();
+                    _fsp--;
+
+                    dbg.location(376,9);
+                    sym =role7;
+
+                    }
+                    break;
+                case 8 :
+                    dbg.enterAlt(8);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:377:4: host_group
+                    {
+                    dbg.location(377,4);
+                    pushFollow(FOLLOW_host_group_in_object_values1403);
+                    host_group8=host_group();
+                    _fsp--;
+
+                    dbg.location(377,15);
+                     sym = host_group8;
+
+                    }
+                    break;
+                case 9 :
+                    dbg.enterAlt(9);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:378:4: topology
+                    {
+                    dbg.location(378,4);
+                    pushFollow(FOLLOW_topology_in_object_values1411);
+                    topology();
+                    _fsp--;
+
+
+                    }
+                    break;
+                case 10 :
+                    dbg.enterAlt(10);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:379:4: serv_group
+                    {
+                    dbg.location(379,4);
+                    pushFollow(FOLLOW_serv_group_in_object_values1416);
+                    serv_group();
+                    _fsp--;
+
+
+                    }
+                    break;
+                case 11 :
+                    dbg.enterAlt(11);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:380:4: interf
+                    {
+                    dbg.location(380,4);
+                    pushFollow(FOLLOW_interf_in_object_values1421);
+                    interf9=interf();
+                    _fsp--;
+
+                    dbg.location(380,11);
+                     sym = interf9;
+
+                    }
+                    break;
+                case 12 :
+                    dbg.enterAlt(12);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:381:4: route
+                    {
+                    dbg.location(381,4);
+                    pushFollow(FOLLOW_route_in_object_values1428);
+                    route10=route();
+                    _fsp--;
+
+                    dbg.location(381,10);
+                    sym = route10;
+
+                    }
+                    break;
+
+            }
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+        }
+        dbg.location(383, 2);
+
+        }
+        finally {
+            dbg.exitRule("object_values");
+            ruleLevel--;
+            if ( ruleLevel==0 ) {dbg.terminate();}
+        }
+
+        return sym;
+    }
+    // $ANTLR end object_values
+
+
     // $ANTLR start role
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:309:1: role : 'role' '{' policy ( COMMA policy )* '}' ;
-    public final void role() throws RecognitionException {
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:387:1: role returns [Symbol sym] : 'role' '{' ( (p_i= policy ) | (var= object_name ) ) ( COMMA ( (p_j= policy ) | (var2= object_name ) ) )* '}' ;
+    public final Symbol role() throws RecognitionException {
+        Symbol sym = null;
+
+        Symbol p_i = null;
+
+        object_name_return var = null;
+
+        Symbol p_j = null;
+
+        object_name_return var2 = null;
+
+
         try { dbg.enterRule("role");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(309, 1);
+        dbg.location(387, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:309:7: ( 'role' '{' policy ( COMMA policy )* '}' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:387:27: ( 'role' '{' ( (p_i= policy ) | (var= object_name ) ) ( COMMA ( (p_j= policy ) | (var2= object_name ) ) )* '}' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:309:9: 'role' '{' policy ( COMMA policy )* '}'
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:388:2: 'role' '{' ( (p_i= policy ) | (var= object_name ) ) ( COMMA ( (p_j= policy ) | (var2= object_name ) ) )* '}'
             {
-            dbg.location(309,9);
-            match(input,29,FOLLOW_29_in_role1417); 
-            dbg.location(309,16);
-            match(input,76,FOLLOW_76_in_role1419); 
-            dbg.location(309,20);
-            pushFollow(FOLLOW_policy_in_role1421);
-            policy();
-            _fsp--;
-
-            dbg.location(309,27);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:309:27: ( COMMA policy )*
+            dbg.location(388,2);
+             
+            	      Vector <Policy> policies;
+            	      policies = new Vector <Policy>() ;	     
+            	 
+            dbg.location(392,2);
+            match(input,29,FOLLOW_29_in_role1453); 
+            dbg.location(392,9);
+            match(input,76,FOLLOW_76_in_role1455); 
+            dbg.location(392,13);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:392:13: ( (p_i= policy ) | (var= object_name ) )
+            int alt29=2;
             try { dbg.enterSubRule(29);
+            try { dbg.enterDecision(29);
 
-            loop29:
+            int LA29_0 = input.LA(1);
+
+            if ( ((LA29_0>=79 && LA29_0<=80)) ) {
+                alt29=1;
+            }
+            else if ( (LA29_0==ID) ) {
+                alt29=2;
+            }
+            else {
+                NoViableAltException nvae =
+                    new NoViableAltException("392:13: ( (p_i= policy ) | (var= object_name ) )", 29, 0, input);
+
+                dbg.recognitionException(nvae);
+                throw nvae;
+            }
+            } finally {dbg.exitDecision(29);}
+
+            switch (alt29) {
+                case 1 :
+                    dbg.enterAlt(1);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:392:14: (p_i= policy )
+                    {
+                    dbg.location(392,14);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:392:14: (p_i= policy )
+                    dbg.enterAlt(1);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:392:15: p_i= policy
+                    {
+                    dbg.location(392,18);
+                    pushFollow(FOLLOW_policy_in_role1461);
+                    p_i=policy();
+                    _fsp--;
+
+                    dbg.location(392,26);
+                    policies.add((Policy)p_i.lookupValue());
+
+                    }
+
+
+                    }
+                    break;
+                case 2 :
+                    dbg.enterAlt(2);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:392:70: (var= object_name )
+                    {
+                    dbg.location(392,70);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:392:70: (var= object_name )
+                    dbg.enterAlt(1);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:392:71: var= object_name
+                    {
+                    dbg.location(392,74);
+                    pushFollow(FOLLOW_object_name_in_role1469);
+                    var=object_name();
+                    _fsp--;
+
+                    dbg.location(392,86);
+                    
+                    		  Symbol s2 = currentScope.getSymbol(input.toString(var.start,var.stop));
+                    		  String st=s2.getType();
+                    		  try{
+                    		  if((st.equals("policy_type_t")!=true)){
+                    		  throw(new DataFormatException("rule:role"));
+                    	//	  System.out.println("added"+p3.verdict);
+                    		  }}catch(DataFormatException dfe)
+                    		  {
+                    		  System.out.println(dfe);
+                    		  }
+                    		  Policy p3=(Policy)s2.lookupValue();
+                    		  policies.add(p3);
+                    		  System.out.println("Daaldiya");
+                    		  
+
+                    }
+
+
+                    }
+                    break;
+
+            }
+            } finally {dbg.exitSubRule(29);}
+
+            dbg.location(409,6);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:409:6: ( COMMA ( (p_j= policy ) | (var2= object_name ) ) )*
+            try { dbg.enterSubRule(31);
+
+            loop31:
             do {
-                int alt29=2;
-                try { dbg.enterDecision(29);
+                int alt31=2;
+                try { dbg.enterDecision(31);
 
-                int LA29_0 = input.LA(1);
+                int LA31_0 = input.LA(1);
 
-                if ( (LA29_0==COMMA) ) {
-                    alt29=1;
+                if ( (LA31_0==COMMA) ) {
+                    alt31=1;
                 }
 
 
-                } finally {dbg.exitDecision(29);}
+                } finally {dbg.exitDecision(31);}
 
-                switch (alt29) {
+                switch (alt31) {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:309:28: COMMA policy
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:409:7: COMMA ( (p_j= policy ) | (var2= object_name ) )
             	    {
-            	    dbg.location(309,28);
-            	    match(input,COMMA,FOLLOW_COMMA_in_role1424); 
-            	    dbg.location(309,34);
-            	    pushFollow(FOLLOW_policy_in_role1426);
-            	    policy();
-            	    _fsp--;
+            	    dbg.location(409,7);
+            	    match(input,COMMA,FOLLOW_COMMA_in_role1488); 
+            	    dbg.location(409,13);
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:409:13: ( (p_j= policy ) | (var2= object_name ) )
+            	    int alt30=2;
+            	    try { dbg.enterSubRule(30);
+            	    try { dbg.enterDecision(30);
+
+            	    int LA30_0 = input.LA(1);
+
+            	    if ( ((LA30_0>=79 && LA30_0<=80)) ) {
+            	        alt30=1;
+            	    }
+            	    else if ( (LA30_0==ID) ) {
+            	        alt30=2;
+            	    }
+            	    else {
+            	        NoViableAltException nvae =
+            	            new NoViableAltException("409:13: ( (p_j= policy ) | (var2= object_name ) )", 30, 0, input);
+
+            	        dbg.recognitionException(nvae);
+            	        throw nvae;
+            	    }
+            	    } finally {dbg.exitDecision(30);}
+
+            	    switch (alt30) {
+            	        case 1 :
+            	            dbg.enterAlt(1);
+
+            	            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:409:14: (p_j= policy )
+            	            {
+            	            dbg.location(409,14);
+            	            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:409:14: (p_j= policy )
+            	            dbg.enterAlt(1);
+
+            	            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:409:15: p_j= policy
+            	            {
+            	            dbg.location(409,18);
+            	            pushFollow(FOLLOW_policy_in_role1494);
+            	            p_j=policy();
+            	            _fsp--;
+
+            	            dbg.location(409,26);
+            	            policies.add((Policy)p_j.lookupValue());
+
+            	            }
+
+
+            	            }
+            	            break;
+            	        case 2 :
+            	            dbg.enterAlt(2);
+
+            	            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:409:70: (var2= object_name )
+            	            {
+            	            dbg.location(409,70);
+            	            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:409:70: (var2= object_name )
+            	            dbg.enterAlt(1);
+
+            	            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:409:71: var2= object_name
+            	            {
+            	            dbg.location(409,75);
+            	            pushFollow(FOLLOW_object_name_in_role1502);
+            	            var2=object_name();
+            	            _fsp--;
+
+            	            dbg.location(410,6);
+            	            
+            	            		   Symbol s3 = currentScope.getSymbol(input.toString(var2.start,var2.stop));
+            	            		  String st=s3.getType();
+            	            		  try{
+            	            		  if((st.equals("policy_type_t")!=true)){
+            	            		  throw(new DataFormatException("rule:role"));
+            	            	//	  System.out.println("added"+p3.verdict);
+            	            		  }}catch(DataFormatException dfe)
+            	            		  {
+            	            		  System.out.println(dfe);
+            	            		  }
+            	            		  Policy p4=(Policy)s3.lookupValue();
+            	            		  policies.add(p4);
+            	            		  System.out.println("Daaldiya");
+            	            		   
+            	            		   
+
+            	            }
+
+
+            	            }
+            	            break;
+
+            	    }
+            	    } finally {dbg.exitSubRule(30);}
 
 
             	    }
             	    break;
 
             	default :
-            	    break loop29;
+            	    break loop31;
                 }
             } while (true);
-            } finally {dbg.exitSubRule(29);}
+            } finally {dbg.exitSubRule(31);}
 
-            dbg.location(309,43);
-            match(input,77,FOLLOW_77_in_role1430); 
+            dbg.location(425,13);
+            match(input,77,FOLLOW_77_in_role1516); 
+            dbg.location(426,2);
+            
+            	Role role = new Role (policies);
+            	Symbol s = new Symbol ("role_group_type_t","role_group_type_t",role);
+            	sym = s;  		
+            	
 
             }
 
@@ -4286,7 +4613,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(310, 2);
+        dbg.location(432, 2);
 
         }
         finally {
@@ -4295,13 +4622,13 @@ public class BlockParser extends DebugParser {
             if ( ruleLevel==0 ) {dbg.terminate();}
         }
 
-        return ;
+        return sym;
     }
     // $ANTLR end role
 
 
     // $ANTLR start policy
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:312:1: policy returns [Symbol sym] : (dir= direction verd= verdict protocol= proto (sport= port )? | dir= direction verd= verdict icmp_mesg= icmp_cntrl_message );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:435:1: policy returns [Symbol sym] : (dir= direction verd= verdict protocol= proto (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (netmask_ip= ip_addr | (netmask_ip_obj= object_name ) ) (sport= port )? | dir= direction verd= verdict icmp_mesg= icmp_cntrl_message (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (src_netmask= ip_addr | (netmask_ip_obj= object_name ) ) );
     public final Symbol policy() throws RecognitionException {
         Symbol sym = null;
 
@@ -4311,38 +4638,48 @@ public class BlockParser extends DebugParser {
 
         proto_return protocol = null;
 
+        ip_addr_return src_ip = null;
+
+        object_name_return ip_obj = null;
+
+        ip_addr_return netmask_ip = null;
+
+        object_name_return netmask_ip_obj = null;
+
         port_return sport = null;
 
         icmp_cntrl_message_return icmp_mesg = null;
+
+        ip_addr_return src_netmask = null;
 
 
         try { dbg.enterRule("policy");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(312, 1);
+        dbg.location(435, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:312:29: (dir= direction verd= verdict protocol= proto (sport= port )? | dir= direction verd= verdict icmp_mesg= icmp_cntrl_message )
-            int alt31=2;
-            try { dbg.enterDecision(31);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:435:29: (dir= direction verd= verdict protocol= proto (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (netmask_ip= ip_addr | (netmask_ip_obj= object_name ) ) (sport= port )? | dir= direction verd= verdict icmp_mesg= icmp_cntrl_message (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (src_netmask= ip_addr | (netmask_ip_obj= object_name ) ) )
+            int alt37=2;
+            try { dbg.enterDecision(37);
 
-            int LA31_0 = input.LA(1);
+            int LA37_0 = input.LA(1);
 
-            if ( ((LA31_0>=78 && LA31_0<=79)) ) {
-                int LA31_1 = input.LA(2);
+            if ( ((LA37_0>=79 && LA37_0<=80)) ) {
+                int LA37_1 = input.LA(2);
 
-                if ( ((LA31_1>=80 && LA31_1<=81)) ) {
-                    int LA31_2 = input.LA(3);
+                if ( ((LA37_1>=81 && LA37_1<=82)) ) {
+                    int LA37_2 = input.LA(3);
 
-                    if ( ((LA31_2>=82 && LA31_2<=83)) ) {
-                        alt31=1;
+                    if ( ((LA37_2>=83 && LA37_2<=84)) ) {
+                        alt37=1;
                     }
-                    else if ( (LA31_2==ICMP_MESSAGE_TYPE) ) {
-                        alt31=2;
+                    else if ( (LA37_2==ICMP_MESSAGE_TYPE) ) {
+                        alt37=2;
                     }
                     else {
                         NoViableAltException nvae =
-                            new NoViableAltException("312:1: policy returns [Symbol sym] : (dir= direction verd= verdict protocol= proto (sport= port )? | dir= direction verd= verdict icmp_mesg= icmp_cntrl_message );", 31, 2, input);
+                            new NoViableAltException("435:1: policy returns [Symbol sym] : (dir= direction verd= verdict protocol= proto (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (netmask_ip= ip_addr | (netmask_ip_obj= object_name ) ) (sport= port )? | dir= direction verd= verdict icmp_mesg= icmp_cntrl_message (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (src_netmask= ip_addr | (netmask_ip_obj= object_name ) ) );", 37, 2, input);
 
                         dbg.recognitionException(nvae);
                         throw nvae;
@@ -4350,7 +4687,7 @@ public class BlockParser extends DebugParser {
                 }
                 else {
                     NoViableAltException nvae =
-                        new NoViableAltException("312:1: policy returns [Symbol sym] : (dir= direction verd= verdict protocol= proto (sport= port )? | dir= direction verd= verdict icmp_mesg= icmp_cntrl_message );", 31, 1, input);
+                        new NoViableAltException("435:1: policy returns [Symbol sym] : (dir= direction verd= verdict protocol= proto (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (netmask_ip= ip_addr | (netmask_ip_obj= object_name ) ) (sport= port )? | dir= direction verd= verdict icmp_mesg= icmp_cntrl_message (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (src_netmask= ip_addr | (netmask_ip_obj= object_name ) ) );", 37, 1, input);
 
                     dbg.recognitionException(nvae);
                     throw nvae;
@@ -4358,72 +4695,256 @@ public class BlockParser extends DebugParser {
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("312:1: policy returns [Symbol sym] : (dir= direction verd= verdict protocol= proto (sport= port )? | dir= direction verd= verdict icmp_mesg= icmp_cntrl_message );", 31, 0, input);
+                    new NoViableAltException("435:1: policy returns [Symbol sym] : (dir= direction verd= verdict protocol= proto (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (netmask_ip= ip_addr | (netmask_ip_obj= object_name ) ) (sport= port )? | dir= direction verd= verdict icmp_mesg= icmp_cntrl_message (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (src_netmask= ip_addr | (netmask_ip_obj= object_name ) ) );", 37, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
             }
-            } finally {dbg.exitDecision(31);}
+            } finally {dbg.exitDecision(37);}
 
-            switch (alt31) {
+            switch (alt37) {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:312:31: dir= direction verd= verdict protocol= proto (sport= port )?
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:436:4: dir= direction verd= verdict protocol= proto (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (netmask_ip= ip_addr | (netmask_ip_obj= object_name ) ) (sport= port )?
                     {
-                    dbg.location(312,34);
-                    pushFollow(FOLLOW_direction_in_policy1446);
+                    dbg.location(436,4);
+                    int src_port = 0;
+                      	 boolean ip_object_used , netmask_object_used ;
+                      	 ip_object_used = false;
+                      	 netmask_object_used = false;
+                      	
+                    dbg.location(441,7);
+                    pushFollow(FOLLOW_direction_in_policy1547);
                     dir=direction();
                     _fsp--;
 
-                    dbg.location(312,49);
-                    pushFollow(FOLLOW_verdict_in_policy1450);
+                    dbg.location(441,22);
+                    pushFollow(FOLLOW_verdict_in_policy1551);
                     verd=verdict();
                     _fsp--;
 
-                    dbg.location(312,66);
-                    pushFollow(FOLLOW_proto_in_policy1454);
+                    dbg.location(441,39);
+                    pushFollow(FOLLOW_proto_in_policy1555);
                     protocol=proto();
                     _fsp--;
 
-                    dbg.location(312,73);
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:312:73: (sport= port )?
-                    int alt30=2;
-                    try { dbg.enterSubRule(30);
-                    try { dbg.enterDecision(30);
+                    dbg.location(441,46);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:441:46: (src_ip= ip_addr | (ip_obj= object_name ) )
+                    int alt32=2;
+                    try { dbg.enterSubRule(32);
+                    try { dbg.enterDecision(32);
 
-                    int LA30_0 = input.LA(1);
+                    int LA32_0 = input.LA(1);
 
-                    if ( (LA30_0==NUMBER) ) {
-                        alt30=1;
+                    if ( (LA32_0==NUMBER) ) {
+                        alt32=1;
                     }
-                    } finally {dbg.exitDecision(30);}
+                    else if ( (LA32_0==ID) ) {
+                        alt32=2;
+                    }
+                    else {
+                        NoViableAltException nvae =
+                            new NoViableAltException("441:46: (src_ip= ip_addr | (ip_obj= object_name ) )", 32, 0, input);
 
-                    switch (alt30) {
+                        dbg.recognitionException(nvae);
+                        throw nvae;
+                    }
+                    } finally {dbg.exitDecision(32);}
+
+                    switch (alt32) {
                         case 1 :
                             dbg.enterAlt(1);
 
-                            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:312:74: sport= port
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:441:47: src_ip= ip_addr
                             {
-                            dbg.location(312,79);
-                            pushFollow(FOLLOW_port_in_policy1459);
-                            sport=port();
+                            dbg.location(441,53);
+                            pushFollow(FOLLOW_ip_addr_in_policy1560);
+                            src_ip=ip_addr();
                             _fsp--;
+
+
+                            }
+                            break;
+                        case 2 :
+                            dbg.enterAlt(2);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:441:62: (ip_obj= object_name )
+                            {
+                            dbg.location(441,62);
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:441:62: (ip_obj= object_name )
+                            dbg.enterAlt(1);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:441:63: ip_obj= object_name
+                            {
+                            dbg.location(441,69);
+                            pushFollow(FOLLOW_object_name_in_policy1565);
+                            ip_obj=object_name();
+                            _fsp--;
+
+                            dbg.location(441,82);
+                            System.out.println(" object name:"+input.toString(ip_obj.start,ip_obj.stop));ip_object_used = true;
+
+                            }
 
 
                             }
                             break;
 
                     }
-                    } finally {dbg.exitSubRule(30);}
+                    } finally {dbg.exitSubRule(32);}
 
-                    dbg.location(313,1);
+                    dbg.location(442,5);
+                    match(input,78,FOLLOW_78_in_policy1575); 
+                    dbg.location(442,15);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:442:15: (netmask_ip= ip_addr | (netmask_ip_obj= object_name ) )
+                    int alt33=2;
+                    try { dbg.enterSubRule(33);
+                    try { dbg.enterDecision(33);
 
-                    	/* for filtering TCP /UDP messages */
-                    //	Policy pl;
-                                             
-                    	Policy pl = new Policy(input.toString(dir.start,dir.stop),input.toString(verd.start,verd.stop), input.toString(protocol.start,protocol.stop), input.toString(sport.start,sport.stop));
-                    	
+                    int LA33_0 = input.LA(1);
+
+                    if ( (LA33_0==NUMBER) ) {
+                        alt33=1;
+                    }
+                    else if ( (LA33_0==ID) ) {
+                        alt33=2;
+                    }
+                    else {
+                        NoViableAltException nvae =
+                            new NoViableAltException("442:15: (netmask_ip= ip_addr | (netmask_ip_obj= object_name ) )", 33, 0, input);
+
+                        dbg.recognitionException(nvae);
+                        throw nvae;
+                    }
+                    } finally {dbg.exitDecision(33);}
+
+                    switch (alt33) {
+                        case 1 :
+                            dbg.enterAlt(1);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:442:16: netmask_ip= ip_addr
+                            {
+                            dbg.location(442,26);
+                            pushFollow(FOLLOW_ip_addr_in_policy1580);
+                            netmask_ip=ip_addr();
+                            _fsp--;
+
+
+                            }
+                            break;
+                        case 2 :
+                            dbg.enterAlt(2);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:442:35: (netmask_ip_obj= object_name )
+                            {
+                            dbg.location(442,35);
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:442:35: (netmask_ip_obj= object_name )
+                            dbg.enterAlt(1);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:442:36: netmask_ip_obj= object_name
+                            {
+                            dbg.location(442,51);
+                            pushFollow(FOLLOW_object_name_in_policy1587);
+                            netmask_ip_obj=object_name();
+                            _fsp--;
+
+                            dbg.location(442,65);
+                            netmask_object_used = true;
+
+                            }
+
+
+                            }
+                            break;
+
+                    }
+                    } finally {dbg.exitSubRule(33);}
+
+                    dbg.location(442,97);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:442:97: (sport= port )?
+                    int alt34=2;
+                    try { dbg.enterSubRule(34);
+                    try { dbg.enterDecision(34);
+
+                    int LA34_0 = input.LA(1);
+
+                    if ( (LA34_0==NUMBER) ) {
+                        alt34=1;
+                    }
+                    } finally {dbg.exitDecision(34);}
+
+                    switch (alt34) {
+                        case 1 :
+                            dbg.enterAlt(1);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:442:98: sport= port
+                            {
+                            dbg.location(442,103);
+                            pushFollow(FOLLOW_port_in_policy1596);
+                            sport=port();
+                            _fsp--;
+
+                            dbg.location(442,110);
+                            src_port++;
+
+                            }
+                            break;
+
+                    }
+                    } finally {dbg.exitSubRule(34);}
+
+                    dbg.location(443,1);
+                    
+                    	Ipaddress sip =null, snetmask=null;
+                    	if(ip_object_used == true && netmask_object_used ==false)
+                    	{
+                    	  Symbol s = currentScope.getSymbol(input.toString(ip_obj.start,ip_obj.stop));
+                    	   sip = (Ipaddress) s.lookupValue();
+                    	   snetmask = new Ipaddress(input.toString(netmask_ip.start,netmask_ip.stop));
+                    	  }
+                    	else if (ip_object_used == false  && netmask_object_used ==true)
+                    	{
+                          	  Symbol s = currentScope.getSymbol(input.toString(netmask_ip_obj.start,netmask_ip_obj.stop));
+                          	   sip = new Ipaddress (input.toString(src_ip.start,src_ip.stop));
+                    	   snetmask = (Ipaddress) s.lookupValue();
+                    	}
+                    	else if(ip_object_used ==true && netmask_object_used ==true)
+                    	{
+                    	  Symbol s_ip =  currentScope.getSymbol(input.toString(ip_obj.start,ip_obj.stop));
+                    	   sip = (Ipaddress) s_ip.lookupValue();
+                      	  Symbol s_nmask = currentScope.getSymbol(input.toString(netmask_ip_obj.start,netmask_ip_obj.stop));
+                    	   snetmask = (Ipaddress) s_nmask.lookupValue();
+                    	}
+                    	else{
+                    	sip = new Ipaddress(input.toString(src_ip.start,src_ip.stop));
+                    	snetmask = new Ipaddress(input.toString(netmask_ip.start,netmask_ip.stop));
+                    	}
+                    
+                    
+                    	if(sip != null)
+                    	 {
+                    	   System.out.println( " source ip for policy :  "+ sip.getString());
+                    	   }
+                    	 if(snetmask == null)
+                    	  {
+                    	   System.out.println("XXX");
+                    	   }  
+                    	 if(snetmask != null)
+                    	 {
+                    	  System.out.println(" source netmask for policy :"+snetmask.getString());
+                    	 }  
+                    
+                    
+                    	Policy pl;
+                                              if(src_port>0){
+                    	 pl = new Policy(input.toString(dir.start,dir.stop),input.toString(verd.start,verd.stop), input.toString(protocol.start,protocol.stop), sip.getString(),snetmask.getString(),input.toString(sport.start,sport.stop));
+                    	}
+                    	 else{
+                     	  pl = new Policy(input.toString(dir.start,dir.stop),input.toString(verd.start,verd.stop), input.toString(protocol.start,protocol.stop), sip.getString(),snetmask.getString(),"0");		
+                     	  }
+                     	  
+                     	   	  
                                               Symbol s = new Symbol("policy_tcp_udp","policy_type_t",pl);
                     	sym = s;
                     //	currentScope.printSymbols();
@@ -4434,28 +4955,199 @@ public class BlockParser extends DebugParser {
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:323:5: dir= direction verd= verdict icmp_mesg= icmp_cntrl_message
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:499:2: dir= direction verd= verdict icmp_mesg= icmp_cntrl_message (src_ip= ip_addr | (ip_obj= object_name ) ) 'netmask' (src_netmask= ip_addr | (netmask_ip_obj= object_name ) )
                     {
-                    dbg.location(323,8);
-                    pushFollow(FOLLOW_direction_in_policy1473);
+                    dbg.location(499,2);
+                    int src_port = 0;
+                      	 boolean ip_object_used , netmask_object_used ;
+                      	 ip_object_used = false;
+                      	 netmask_object_used = false;
+                      	
+                    dbg.location(505,5);
+                    pushFollow(FOLLOW_direction_in_policy1623);
                     dir=direction();
                     _fsp--;
 
-                    dbg.location(323,23);
-                    pushFollow(FOLLOW_verdict_in_policy1477);
+                    dbg.location(505,20);
+                    pushFollow(FOLLOW_verdict_in_policy1627);
                     verd=verdict();
                     _fsp--;
 
-                    dbg.location(323,41);
-                    pushFollow(FOLLOW_icmp_cntrl_message_in_policy1481);
+                    dbg.location(505,38);
+                    pushFollow(FOLLOW_icmp_cntrl_message_in_policy1631);
                     icmp_mesg=icmp_cntrl_message();
                     _fsp--;
 
-                    dbg.location(324,2);
+                    dbg.location(505,59);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:505:59: (src_ip= ip_addr | (ip_obj= object_name ) )
+                    int alt35=2;
+                    try { dbg.enterSubRule(35);
+                    try { dbg.enterDecision(35);
 
-                    	/* for ICMP message types */
+                    int LA35_0 = input.LA(1);
+
+                    if ( (LA35_0==NUMBER) ) {
+                        alt35=1;
+                    }
+                    else if ( (LA35_0==ID) ) {
+                        alt35=2;
+                    }
+                    else {
+                        NoViableAltException nvae =
+                            new NoViableAltException("505:59: (src_ip= ip_addr | (ip_obj= object_name ) )", 35, 0, input);
+
+                        dbg.recognitionException(nvae);
+                        throw nvae;
+                    }
+                    } finally {dbg.exitDecision(35);}
+
+                    switch (alt35) {
+                        case 1 :
+                            dbg.enterAlt(1);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:505:60: src_ip= ip_addr
+                            {
+                            dbg.location(505,66);
+                            pushFollow(FOLLOW_ip_addr_in_policy1637);
+                            src_ip=ip_addr();
+                            _fsp--;
+
+
+                            }
+                            break;
+                        case 2 :
+                            dbg.enterAlt(2);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:505:77: (ip_obj= object_name )
+                            {
+                            dbg.location(505,77);
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:505:77: (ip_obj= object_name )
+                            dbg.enterAlt(1);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:505:78: ip_obj= object_name
+                            {
+                            dbg.location(505,84);
+                            pushFollow(FOLLOW_object_name_in_policy1644);
+                            ip_obj=object_name();
+                            _fsp--;
+
+                            dbg.location(505,97);
+                            ip_object_used = true;
+
+                            }
+
+
+                            }
+                            break;
+
+                    }
+                    } finally {dbg.exitSubRule(35);}
+
+                    dbg.location(506,6);
+                    match(input,78,FOLLOW_78_in_policy1656); 
+                    dbg.location(506,16);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:506:16: (src_netmask= ip_addr | (netmask_ip_obj= object_name ) )
+                    int alt36=2;
+                    try { dbg.enterSubRule(36);
+                    try { dbg.enterDecision(36);
+
+                    int LA36_0 = input.LA(1);
+
+                    if ( (LA36_0==NUMBER) ) {
+                        alt36=1;
+                    }
+                    else if ( (LA36_0==ID) ) {
+                        alt36=2;
+                    }
+                    else {
+                        NoViableAltException nvae =
+                            new NoViableAltException("506:16: (src_netmask= ip_addr | (netmask_ip_obj= object_name ) )", 36, 0, input);
+
+                        dbg.recognitionException(nvae);
+                        throw nvae;
+                    }
+                    } finally {dbg.exitDecision(36);}
+
+                    switch (alt36) {
+                        case 1 :
+                            dbg.enterAlt(1);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:506:17: src_netmask= ip_addr
+                            {
+                            dbg.location(506,28);
+                            pushFollow(FOLLOW_ip_addr_in_policy1661);
+                            src_netmask=ip_addr();
+                            _fsp--;
+
+
+                            }
+                            break;
+                        case 2 :
+                            dbg.enterAlt(2);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:506:39: (netmask_ip_obj= object_name )
+                            {
+                            dbg.location(506,39);
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:506:39: (netmask_ip_obj= object_name )
+                            dbg.enterAlt(1);
+
+                            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:506:40: netmask_ip_obj= object_name
+                            {
+                            dbg.location(506,56);
+                            pushFollow(FOLLOW_object_name_in_policy1671);
+                            netmask_ip_obj=object_name();
+                            _fsp--;
+
+                            dbg.location(506,70);
+                            netmask_object_used = true;
+
+                            }
+
+
+                            }
+                            break;
+
+                    }
+                    } finally {dbg.exitSubRule(36);}
+
+                    dbg.location(507,2);
+                    
+                    	
                     //	Policy pl;
-                    	Policy p2 = new Policy(input.toString(dir.start,dir.stop),input.toString(verd.start,verd.stop), input.toString(icmp_mesg.start,icmp_mesg.stop), "0");
+                    
+                    	Ipaddress sip =null , snetmask=null;
+                    	if(ip_object_used == true && netmask_object_used ==false)
+                    	{
+                    	  Symbol s = currentScope.getSymbol(input.toString(ip_obj.start,ip_obj.stop));
+                    	   sip = (Ipaddress) s.lookupValue();
+                    	  }
+                    	else if (ip_object_used == false  && netmask_object_used ==true)
+                    	{
+                          	  Symbol s = currentScope.getSymbol(input.toString(netmask_ip_obj.start,netmask_ip_obj.stop));
+                    	   snetmask = (Ipaddress) s.lookupValue();
+                    	}
+                    	else if(ip_object_used ==true && netmask_object_used ==true)
+                    	{
+                    	  Symbol s_ip =  currentScope.getSymbol(input.toString(ip_obj.start,ip_obj.stop));
+                    	   sip = (Ipaddress) s_ip.lookupValue();
+                      	  Symbol s_nmask = currentScope.getSymbol(input.toString(netmask_ip_obj.start,netmask_ip_obj.stop));
+                    	   snetmask = (Ipaddress) s_nmask.lookupValue();
+                    	}
+                    	else{
+                    	sip = new Ipaddress(input.toString(src_ip.start,src_ip.stop));
+                    	snetmask = new Ipaddress(input.toString(netmask_ip.start,netmask_ip.stop));
+                    	}
+                    
+                    	if(sip != null)
+                    	 {
+                    	   System.out.println( " source ip for policy :  "+ sip.getString());
+                    	   }
+                    	 if(snetmask != null)
+                    	 {
+                    	  System.out.println(" source netmask for policy :"+snetmask.getString());
+                    	 }  
+                    	   
+                    	Policy p2 = new Policy(input.toString(dir.start,dir.stop),input.toString(verd.start,verd.stop), input.toString(icmp_mesg.start,icmp_mesg.stop), sip.getString(),snetmask.getString());
                     	
                                               Symbol s = new Symbol("policy_icmp","policy_type_t",p2);
                     	sym = s;
@@ -4473,7 +5165,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(334, 2);
+        dbg.location(565, 2);
 
         }
         finally {
@@ -4488,68 +5180,68 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start topology
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:336:1: topology : ( ( host_group )+ role | ( serv_group )+ role );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:568:1: topology : ( ( host_group )+ role | ( serv_group )+ role );
     public final void topology() throws RecognitionException {
         try { dbg.enterRule("topology");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(336, 1);
+        dbg.location(568, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:336:9: ( ( host_group )+ role | ( serv_group )+ role )
-            int alt34=2;
-            try { dbg.enterDecision(34);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:568:9: ( ( host_group )+ role | ( serv_group )+ role )
+            int alt40=2;
+            try { dbg.enterDecision(40);
 
-            int LA34_0 = input.LA(1);
+            int LA40_0 = input.LA(1);
 
-            if ( (LA34_0==31) ) {
-                alt34=1;
+            if ( (LA40_0==31) ) {
+                alt40=1;
             }
-            else if ( (LA34_0==91) ) {
-                alt34=2;
+            else if ( (LA40_0==91) ) {
+                alt40=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("336:1: topology : ( ( host_group )+ role | ( serv_group )+ role );", 34, 0, input);
+                    new NoViableAltException("568:1: topology : ( ( host_group )+ role | ( serv_group )+ role );", 40, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
             }
-            } finally {dbg.exitDecision(34);}
+            } finally {dbg.exitDecision(40);}
 
-            switch (alt34) {
+            switch (alt40) {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:336:11: ( host_group )+ role
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:568:11: ( host_group )+ role
                     {
-                    dbg.location(336,11);
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:336:11: ( host_group )+
-                    int cnt32=0;
-                    try { dbg.enterSubRule(32);
+                    dbg.location(568,11);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:568:11: ( host_group )+
+                    int cnt38=0;
+                    try { dbg.enterSubRule(38);
 
-                    loop32:
+                    loop38:
                     do {
-                        int alt32=2;
-                        try { dbg.enterDecision(32);
+                        int alt38=2;
+                        try { dbg.enterDecision(38);
 
-                        int LA32_0 = input.LA(1);
+                        int LA38_0 = input.LA(1);
 
-                        if ( (LA32_0==31) ) {
-                            alt32=1;
+                        if ( (LA38_0==31) ) {
+                            alt38=1;
                         }
 
 
-                        } finally {dbg.exitDecision(32);}
+                        } finally {dbg.exitDecision(38);}
 
-                        switch (alt32) {
+                        switch (alt38) {
                     	case 1 :
                     	    dbg.enterAlt(1);
 
-                    	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:336:12: host_group
+                    	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:568:12: host_group
                     	    {
-                    	    dbg.location(336,12);
-                    	    pushFollow(FOLLOW_host_group_in_topology1497);
+                    	    dbg.location(568,12);
+                    	    pushFollow(FOLLOW_host_group_in_topology1693);
                     	    host_group();
                     	    _fsp--;
 
@@ -4558,19 +5250,19 @@ public class BlockParser extends DebugParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt32 >= 1 ) break loop32;
+                    	    if ( cnt38 >= 1 ) break loop38;
                                 EarlyExitException eee =
-                                    new EarlyExitException(32, input);
+                                    new EarlyExitException(38, input);
                                 dbg.recognitionException(eee);
 
                                 throw eee;
                         }
-                        cnt32++;
+                        cnt38++;
                     } while (true);
-                    } finally {dbg.exitSubRule(32);}
+                    } finally {dbg.exitSubRule(38);}
 
-                    dbg.location(336,25);
-                    pushFollow(FOLLOW_role_in_topology1501);
+                    dbg.location(568,25);
+                    pushFollow(FOLLOW_role_in_topology1697);
                     role();
                     _fsp--;
 
@@ -4580,35 +5272,35 @@ public class BlockParser extends DebugParser {
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:337:4: ( serv_group )+ role
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:569:4: ( serv_group )+ role
                     {
-                    dbg.location(337,4);
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:337:4: ( serv_group )+
-                    int cnt33=0;
-                    try { dbg.enterSubRule(33);
+                    dbg.location(569,4);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:569:4: ( serv_group )+
+                    int cnt39=0;
+                    try { dbg.enterSubRule(39);
 
-                    loop33:
+                    loop39:
                     do {
-                        int alt33=2;
-                        try { dbg.enterDecision(33);
+                        int alt39=2;
+                        try { dbg.enterDecision(39);
 
-                        int LA33_0 = input.LA(1);
+                        int LA39_0 = input.LA(1);
 
-                        if ( (LA33_0==91) ) {
-                            alt33=1;
+                        if ( (LA39_0==91) ) {
+                            alt39=1;
                         }
 
 
-                        } finally {dbg.exitDecision(33);}
+                        } finally {dbg.exitDecision(39);}
 
-                        switch (alt33) {
+                        switch (alt39) {
                     	case 1 :
                     	    dbg.enterAlt(1);
 
-                    	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:337:5: serv_group
+                    	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:569:5: serv_group
                     	    {
-                    	    dbg.location(337,5);
-                    	    pushFollow(FOLLOW_serv_group_in_topology1507);
+                    	    dbg.location(569,5);
+                    	    pushFollow(FOLLOW_serv_group_in_topology1703);
                     	    serv_group();
                     	    _fsp--;
 
@@ -4617,19 +5309,19 @@ public class BlockParser extends DebugParser {
                     	    break;
 
                     	default :
-                    	    if ( cnt33 >= 1 ) break loop33;
+                    	    if ( cnt39 >= 1 ) break loop39;
                                 EarlyExitException eee =
-                                    new EarlyExitException(33, input);
+                                    new EarlyExitException(39, input);
                                 dbg.recognitionException(eee);
 
                                 throw eee;
                         }
-                        cnt33++;
+                        cnt39++;
                     } while (true);
-                    } finally {dbg.exitSubRule(33);}
+                    } finally {dbg.exitSubRule(39);}
 
-                    dbg.location(337,18);
-                    pushFollow(FOLLOW_role_in_topology1511);
+                    dbg.location(569,18);
+                    pushFollow(FOLLOW_role_in_topology1707);
                     role();
                     _fsp--;
 
@@ -4645,7 +5337,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(338, 2);
+        dbg.location(570, 2);
 
         }
         finally {
@@ -4660,7 +5352,7 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start int_value
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:341:1: int_value returns [Symbol sym] : e= NUMBER ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:573:1: int_value returns [Symbol sym] : e= NUMBER ;
     public final Symbol int_value() throws RecognitionException {
         Symbol sym = null;
 
@@ -4669,24 +5361,24 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("int_value");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(341, 1);
+        dbg.location(573, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:342:2: (e= NUMBER )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:574:2: (e= NUMBER )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:342:4: e= NUMBER
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:574:4: e= NUMBER
             {
-            dbg.location(342,5);
+            dbg.location(574,5);
             e=(Token)input.LT(1);
-            match(input,NUMBER,FOLLOW_NUMBER_in_int_value1531); 
-            dbg.location(343,3);
-
+            match(input,NUMBER,FOLLOW_NUMBER_in_int_value1727); 
+            dbg.location(575,3);
+            
             			Integer v = Integer.parseInt(e.getText());
             			IntType temp = new IntType(v);
             			Symbol s = new Symbol("literal", "int_type_t", temp);
             			sym = s;
-            			return sym;
+            		//	return sym;
             		
 
             }
@@ -4698,7 +5390,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(351, 2);
+        dbg.location(599, 2);
 
         }
         finally {
@@ -4713,21 +5405,21 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start char_value
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:353:1: char_value : CHAR ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:601:1: char_value : CHAR ;
     public final void char_value() throws RecognitionException {
         try { dbg.enterRule("char_value");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(353, 1);
+        dbg.location(601, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:354:2: ( CHAR )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:602:2: ( CHAR )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:354:11: CHAR
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:602:11: CHAR
             {
-            dbg.location(354,11);
-            match(input,CHAR,FOLLOW_CHAR_in_char_value1553); 
+            dbg.location(602,11);
+            match(input,CHAR,FOLLOW_CHAR_in_char_value1752); 
 
             }
 
@@ -4738,7 +5430,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(363, 2);
+        dbg.location(611, 2);
 
         }
         finally {
@@ -4755,7 +5447,7 @@ public class BlockParser extends DebugParser {
     };
 
     // $ANTLR start direction
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:366:1: direction : ( 'inbound' | 'outbound' );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:614:1: direction : ( 'inbound' | 'outbound' );
     public final direction_return direction() throws RecognitionException {
         direction_return retval = new direction_return();
         retval.start = input.LT(1);
@@ -4763,16 +5455,16 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("direction");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(366, 1);
+        dbg.location(614, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:367:2: ( 'inbound' | 'outbound' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:615:2: ( 'inbound' | 'outbound' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:
             {
-            dbg.location(367,2);
-            if ( (input.LA(1)>=78 && input.LA(1)<=79) ) {
+            dbg.location(615,2);
+            if ( (input.LA(1)>=79 && input.LA(1)<=80) ) {
                 input.consume();
                 errorRecovery=false;
             }
@@ -4795,7 +5487,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(369, 2);
+        dbg.location(617, 2);
 
         }
         finally {
@@ -4812,7 +5504,7 @@ public class BlockParser extends DebugParser {
     };
 
     // $ANTLR start verdict
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:371:1: verdict : ( 'allow' | 'deny' );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:619:1: verdict : ( 'allow' | 'deny' );
     public final verdict_return verdict() throws RecognitionException {
         verdict_return retval = new verdict_return();
         retval.start = input.LT(1);
@@ -4820,16 +5512,16 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("verdict");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(371, 1);
+        dbg.location(619, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:371:9: ( 'allow' | 'deny' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:619:9: ( 'allow' | 'deny' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:
             {
-            dbg.location(371,9);
-            if ( (input.LA(1)>=80 && input.LA(1)<=81) ) {
+            dbg.location(619,9);
+            if ( (input.LA(1)>=81 && input.LA(1)<=82) ) {
                 input.consume();
                 errorRecovery=false;
             }
@@ -4852,7 +5544,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(373, 2);
+        dbg.location(621, 2);
 
         }
         finally {
@@ -4869,7 +5561,7 @@ public class BlockParser extends DebugParser {
     };
 
     // $ANTLR start proto
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:375:1: proto : ( 'udp' | 'tcp' );
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:623:1: proto : ( 'udp' | 'tcp' );
     public final proto_return proto() throws RecognitionException {
         proto_return retval = new proto_return();
         retval.start = input.LT(1);
@@ -4877,16 +5569,16 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("proto");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(375, 1);
+        dbg.location(623, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:375:9: ( 'udp' | 'tcp' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:623:9: ( 'udp' | 'tcp' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:
             {
-            dbg.location(375,9);
-            if ( (input.LA(1)>=82 && input.LA(1)<=83) ) {
+            dbg.location(623,9);
+            if ( (input.LA(1)>=83 && input.LA(1)<=84) ) {
                 input.consume();
                 errorRecovery=false;
             }
@@ -4909,7 +5601,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(376, 10);
+        dbg.location(624, 10);
 
         }
         finally {
@@ -4926,7 +5618,7 @@ public class BlockParser extends DebugParser {
     };
 
     // $ANTLR start icmp_cntrl_message
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:378:1: icmp_cntrl_message : ICMP_MESSAGE_TYPE ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:626:1: icmp_cntrl_message : ICMP_MESSAGE_TYPE ;
     public final icmp_cntrl_message_return icmp_cntrl_message() throws RecognitionException {
         icmp_cntrl_message_return retval = new icmp_cntrl_message_return();
         retval.start = input.LT(1);
@@ -4934,16 +5626,16 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("icmp_cntrl_message");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(378, 1);
+        dbg.location(626, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:379:2: ( ICMP_MESSAGE_TYPE )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:627:2: ( ICMP_MESSAGE_TYPE )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:379:4: ICMP_MESSAGE_TYPE
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:627:4: ICMP_MESSAGE_TYPE
             {
-            dbg.location(379,4);
-            match(input,ICMP_MESSAGE_TYPE,FOLLOW_ICMP_MESSAGE_TYPE_in_icmp_cntrl_message1634); 
+            dbg.location(627,4);
+            match(input,ICMP_MESSAGE_TYPE,FOLLOW_ICMP_MESSAGE_TYPE_in_icmp_cntrl_message1833); 
 
             }
 
@@ -4956,7 +5648,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(380, 2);
+        dbg.location(628, 2);
 
         }
         finally {
@@ -4973,7 +5665,7 @@ public class BlockParser extends DebugParser {
     };
 
     // $ANTLR start port
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:382:1: port : NUMBER ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:630:1: port : NUMBER ;
     public final port_return port() throws RecognitionException {
         port_return retval = new port_return();
         retval.start = input.LT(1);
@@ -4981,16 +5673,16 @@ public class BlockParser extends DebugParser {
         try { dbg.enterRule("port");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(382, 1);
+        dbg.location(630, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:382:6: ( NUMBER )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:630:6: ( NUMBER )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:382:8: NUMBER
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:630:8: NUMBER
             {
-            dbg.location(382,8);
-            match(input,NUMBER,FOLLOW_NUMBER_in_port1644); 
+            dbg.location(630,8);
+            match(input,NUMBER,FOLLOW_NUMBER_in_port1843); 
 
             }
 
@@ -5003,7 +5695,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(382, 14);
+        dbg.location(630, 14);
 
         }
         finally {
@@ -5017,27 +5709,35 @@ public class BlockParser extends DebugParser {
     // $ANTLR end port
 
     public static class object_name_return extends ParserRuleReturnScope {
+        public String obj_name;
     };
 
     // $ANTLR start object_name
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:385:1: object_name : ID ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:633:1: object_name returns [String obj_name] : ID ;
     public final object_name_return object_name() throws RecognitionException {
         object_name_return retval = new object_name_return();
         retval.start = input.LT(1);
 
+        Token ID11=null;
+
         try { dbg.enterRule("object_name");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(385, 1);
+        dbg.location(633, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:386:2: ( ID )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:634:2: ( ID )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:386:4: ID
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:634:5: ID
             {
-            dbg.location(386,4);
-            match(input,ID,FOLLOW_ID_in_object_name1654); 
+            dbg.location(634,5);
+            ID11=(Token)input.LT(1);
+            match(input,ID,FOLLOW_ID_in_object_name1858); 
+            dbg.location(635,2);
+             retval.obj_name = new String (ID11.getText());
+            	   
+            	
 
             }
 
@@ -5050,7 +5750,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(386, 6);
+        dbg.location(638, 2);
 
         }
         finally {
@@ -5063,158 +5763,100 @@ public class BlockParser extends DebugParser {
     }
     // $ANTLR end object_name
 
-
-    // $ANTLR start interface_name
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:392:1: interface_name : 'ifname' ( ID ) 'card_id' NUMBER ( '/' NUMBER )? ;
-    public final void interface_name() throws RecognitionException {
-        try { dbg.enterRule("interface_name");
-        if ( ruleLevel==0 ) {dbg.commence();}
-        ruleLevel++;
-        dbg.location(392, 1);
-
-        try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:393:1: ( 'ifname' ( ID ) 'card_id' NUMBER ( '/' NUMBER )? )
-            dbg.enterAlt(1);
-
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:393:5: 'ifname' ( ID ) 'card_id' NUMBER ( '/' NUMBER )?
-            {
-            dbg.location(393,5);
-            match(input,84,FOLLOW_84_in_interface_name1668); 
-            dbg.location(393,14);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:393:14: ( ID )
-            dbg.enterAlt(1);
-
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:393:15: ID
-            {
-            dbg.location(393,15);
-            match(input,ID,FOLLOW_ID_in_interface_name1671); 
-
-            }
-
-            dbg.location(393,19);
-            match(input,85,FOLLOW_85_in_interface_name1674); 
-            dbg.location(393,30);
-            match(input,NUMBER,FOLLOW_NUMBER_in_interface_name1677); 
-            dbg.location(393,37);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:393:37: ( '/' NUMBER )?
-            int alt35=2;
-            try { dbg.enterSubRule(35);
-            try { dbg.enterDecision(35);
-
-            int LA35_0 = input.LA(1);
-
-            if ( (LA35_0==DIV) ) {
-                alt35=1;
-            }
-            } finally {dbg.exitDecision(35);}
-
-            switch (alt35) {
-                case 1 :
-                    dbg.enterAlt(1);
-
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:393:38: '/' NUMBER
-                    {
-                    dbg.location(393,38);
-                    match(input,DIV,FOLLOW_DIV_in_interface_name1680); 
-                    dbg.location(393,42);
-                    match(input,NUMBER,FOLLOW_NUMBER_in_interface_name1682); 
-
-                    }
-                    break;
-
-            }
-            } finally {dbg.exitSubRule(35);}
-
-
-            }
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-        }
-        finally {
-        }
-        dbg.location(393, 52);
-
-        }
-        finally {
-            dbg.exitRule("interface_name");
-            ruleLevel--;
-            if ( ruleLevel==0 ) {dbg.terminate();}
-        }
-
-        return ;
-    }
-    // $ANTLR end interface_name
-
+    public static class ip_addr_return extends ParserRuleReturnScope {
+        public Symbol sym;
+    };
 
     // $ANTLR start ip_addr
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:1: ip_addr : ( NUMBER ) DOT ( NUMBER ) DOT ( NUMBER ) DOT ( NUMBER ) ;
-    public final void ip_addr() throws RecognitionException {
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:1: ip_addr returns [Symbol sym] : (a= NUMBER ) DOT (b= NUMBER ) DOT (c= NUMBER ) DOT (d= NUMBER ) ;
+    public final ip_addr_return ip_addr() throws RecognitionException {
+        ip_addr_return retval = new ip_addr_return();
+        retval.start = input.LT(1);
+
+        Token a=null;
+        Token b=null;
+        Token c=null;
+        Token d=null;
+
         try { dbg.enterRule("ip_addr");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(410, 1);
+        dbg.location(662, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:36: ( ( NUMBER ) DOT ( NUMBER ) DOT ( NUMBER ) DOT ( NUMBER ) )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:32: ( (a= NUMBER ) DOT (b= NUMBER ) DOT (c= NUMBER ) DOT (d= NUMBER ) )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:39: ( NUMBER ) DOT ( NUMBER ) DOT ( NUMBER ) DOT ( NUMBER )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:35: (a= NUMBER ) DOT (b= NUMBER ) DOT (c= NUMBER ) DOT (d= NUMBER )
             {
-            dbg.location(410,39);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:39: ( NUMBER )
+            dbg.location(662,35);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:35: (a= NUMBER )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:40: NUMBER
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:36: a= NUMBER
             {
-            dbg.location(410,40);
-            match(input,NUMBER,FOLLOW_NUMBER_in_ip_addr1706); 
+            dbg.location(662,37);
+            a=(Token)input.LT(1);
+            match(input,NUMBER,FOLLOW_NUMBER_in_ip_addr1895); 
 
             }
 
-            dbg.location(410,47);
-            match(input,DOT,FOLLOW_DOT_in_ip_addr1708); 
-            dbg.location(410,50);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:50: ( NUMBER )
+            dbg.location(662,45);
+            match(input,DOT,FOLLOW_DOT_in_ip_addr1897); 
+            dbg.location(662,48);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:48: (b= NUMBER )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:51: NUMBER
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:49: b= NUMBER
             {
-            dbg.location(410,51);
-            match(input,NUMBER,FOLLOW_NUMBER_in_ip_addr1710); 
+            dbg.location(662,50);
+            b=(Token)input.LT(1);
+            match(input,NUMBER,FOLLOW_NUMBER_in_ip_addr1901); 
 
             }
 
-            dbg.location(410,58);
-            match(input,DOT,FOLLOW_DOT_in_ip_addr1712); 
-            dbg.location(410,61);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:61: ( NUMBER )
+            dbg.location(662,58);
+            match(input,DOT,FOLLOW_DOT_in_ip_addr1903); 
+            dbg.location(662,61);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:61: (c= NUMBER )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:62: NUMBER
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:62: c= NUMBER
             {
-            dbg.location(410,62);
-            match(input,NUMBER,FOLLOW_NUMBER_in_ip_addr1714); 
+            dbg.location(662,63);
+            c=(Token)input.LT(1);
+            match(input,NUMBER,FOLLOW_NUMBER_in_ip_addr1907); 
 
             }
 
-            dbg.location(410,69);
-            match(input,DOT,FOLLOW_DOT_in_ip_addr1716); 
-            dbg.location(410,72);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:72: ( NUMBER )
+            dbg.location(662,71);
+            match(input,DOT,FOLLOW_DOT_in_ip_addr1909); 
+            dbg.location(662,74);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:74: (d= NUMBER )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:410:73: NUMBER
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:662:75: d= NUMBER
             {
-            dbg.location(410,73);
-            match(input,NUMBER,FOLLOW_NUMBER_in_ip_addr1718); 
+            dbg.location(662,76);
+            d=(Token)input.LT(1);
+            match(input,NUMBER,FOLLOW_NUMBER_in_ip_addr1913); 
 
             }
 
+            dbg.location(663,2);
+            
+            			
+            		Ipaddress ip = new Ipaddress(a.getText()+"."+b.getText()+"."+c.getText()+"."+d.getText());
+            	//	System.out.println (" ip address being sent : "+ip.getString());
+            		Symbol s = new Symbol("ip_addr_string", "ipaddr_t", ip);
+            		retval.sym = s;
+            //		return retval.sym;
+            	
+            	
 
             }
+
+            retval.stop = input.LT(-1);
 
         }
         catch (RecognitionException re) {
@@ -5223,7 +5865,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(420, 2);
+        dbg.location(673, 2);
 
         }
         finally {
@@ -5232,29 +5874,29 @@ public class BlockParser extends DebugParser {
             if ( ruleLevel==0 ) {dbg.terminate();}
         }
 
-        return ;
+        return retval;
     }
     // $ANTLR end ip_addr
 
 
     // $ANTLR start nmask
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:425:1: nmask : 'netmask' ip_addr ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:678:1: nmask : 'netmask' ip_addr ;
     public final void nmask() throws RecognitionException {
         try { dbg.enterRule("nmask");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(425, 1);
+        dbg.location(678, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:425:7: ( 'netmask' ip_addr )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:678:7: ( 'netmask' ip_addr )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:425:9: 'netmask' ip_addr
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:678:9: 'netmask' ip_addr
             {
-            dbg.location(425,9);
-            match(input,86,FOLLOW_86_in_nmask1737); 
-            dbg.location(425,19);
-            pushFollow(FOLLOW_ip_addr_in_nmask1739);
+            dbg.location(678,9);
+            match(input,78,FOLLOW_78_in_nmask1933); 
+            dbg.location(678,19);
+            pushFollow(FOLLOW_ip_addr_in_nmask1935);
             ip_addr();
             _fsp--;
 
@@ -5268,7 +5910,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(425, 26);
+        dbg.location(678, 26);
 
         }
         finally {
@@ -5283,32 +5925,206 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start host
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:438:1: host : 'ip_addr' ip_addr 'netmask' ip_addr ;
-    public final void host() throws RecognitionException {
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:691:1: host returns [Symbol sym] : 'ip_addr' (ip_string= ip_addr | (ip_obj= object_name ) ) 'netmask' (netmask_string= ip_addr | (netmask_ip_obj= object_name ) ) ;
+    public final Symbol host() throws RecognitionException {
+        Symbol sym = null;
+
+        ip_addr_return ip_string = null;
+
+        object_name_return ip_obj = null;
+
+        ip_addr_return netmask_string = null;
+
+        object_name_return netmask_ip_obj = null;
+
+
         try { dbg.enterRule("host");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(438, 1);
+        dbg.location(691, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:438:30: ( 'ip_addr' ip_addr 'netmask' ip_addr )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:691:26: ( 'ip_addr' (ip_string= ip_addr | (ip_obj= object_name ) ) 'netmask' (netmask_string= ip_addr | (netmask_ip_obj= object_name ) ) )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:438:32: 'ip_addr' ip_addr 'netmask' ip_addr
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:692:2: 'ip_addr' (ip_string= ip_addr | (ip_obj= object_name ) ) 'netmask' (netmask_string= ip_addr | (netmask_ip_obj= object_name ) )
             {
-            dbg.location(438,32);
-            match(input,87,FOLLOW_87_in_host1752); 
-            dbg.location(438,42);
-            pushFollow(FOLLOW_ip_addr_in_host1754);
-            ip_addr();
-            _fsp--;
+            dbg.location(692,2);
+            boolean ip_object_used =false, netmask_object_used = false;
+            dbg.location(693,3);
+            match(input,85,FOLLOW_85_in_host1956); 
+            dbg.location(693,13);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:693:13: (ip_string= ip_addr | (ip_obj= object_name ) )
+            int alt41=2;
+            try { dbg.enterSubRule(41);
+            try { dbg.enterDecision(41);
 
-            dbg.location(438,50);
-            match(input,86,FOLLOW_86_in_host1756); 
-            dbg.location(438,60);
-            pushFollow(FOLLOW_ip_addr_in_host1758);
-            ip_addr();
-            _fsp--;
+            int LA41_0 = input.LA(1);
+
+            if ( (LA41_0==NUMBER) ) {
+                alt41=1;
+            }
+            else if ( (LA41_0==ID) ) {
+                alt41=2;
+            }
+            else {
+                NoViableAltException nvae =
+                    new NoViableAltException("693:13: (ip_string= ip_addr | (ip_obj= object_name ) )", 41, 0, input);
+
+                dbg.recognitionException(nvae);
+                throw nvae;
+            }
+            } finally {dbg.exitDecision(41);}
+
+            switch (alt41) {
+                case 1 :
+                    dbg.enterAlt(1);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:693:14: ip_string= ip_addr
+                    {
+                    dbg.location(693,23);
+                    pushFollow(FOLLOW_ip_addr_in_host1961);
+                    ip_string=ip_addr();
+                    _fsp--;
+
+
+                    }
+                    break;
+                case 2 :
+                    dbg.enterAlt(2);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:693:32: (ip_obj= object_name )
+                    {
+                    dbg.location(693,32);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:693:32: (ip_obj= object_name )
+                    dbg.enterAlt(1);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:693:33: ip_obj= object_name
+                    {
+                    dbg.location(693,39);
+                    pushFollow(FOLLOW_object_name_in_host1966);
+                    ip_obj=object_name();
+                    _fsp--;
+
+                    dbg.location(693,52);
+                    ip_object_used=true; System.out.println (" found object name :"+input.toString(ip_obj.start,ip_obj.stop));
+
+                    }
+
+
+                    }
+                    break;
+
+            }
+            } finally {dbg.exitSubRule(41);}
+
+            dbg.location(693,136);
+            match(input,78,FOLLOW_78_in_host1973); 
+            dbg.location(693,146);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:693:146: (netmask_string= ip_addr | (netmask_ip_obj= object_name ) )
+            int alt42=2;
+            try { dbg.enterSubRule(42);
+            try { dbg.enterDecision(42);
+
+            int LA42_0 = input.LA(1);
+
+            if ( (LA42_0==NUMBER) ) {
+                alt42=1;
+            }
+            else if ( (LA42_0==ID) ) {
+                alt42=2;
+            }
+            else {
+                NoViableAltException nvae =
+                    new NoViableAltException("693:146: (netmask_string= ip_addr | (netmask_ip_obj= object_name ) )", 42, 0, input);
+
+                dbg.recognitionException(nvae);
+                throw nvae;
+            }
+            } finally {dbg.exitDecision(42);}
+
+            switch (alt42) {
+                case 1 :
+                    dbg.enterAlt(1);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:693:147: netmask_string= ip_addr
+                    {
+                    dbg.location(693,161);
+                    pushFollow(FOLLOW_ip_addr_in_host1978);
+                    netmask_string=ip_addr();
+                    _fsp--;
+
+
+                    }
+                    break;
+                case 2 :
+                    dbg.enterAlt(2);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:694:21: (netmask_ip_obj= object_name )
+                    {
+                    dbg.location(694,21);
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:694:21: (netmask_ip_obj= object_name )
+                    dbg.enterAlt(1);
+
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:694:22: netmask_ip_obj= object_name
+                    {
+                    dbg.location(694,37);
+                    pushFollow(FOLLOW_object_name_in_host2008);
+                    netmask_ip_obj=object_name();
+                    _fsp--;
+
+                    dbg.location(694,51);
+                    netmask_object_used = true;
+
+                    }
+
+
+                    }
+                    break;
+
+            }
+            } finally {dbg.exitSubRule(42);}
+
+            dbg.location(695,1);
+            
+            	Host h;
+            	if(ip_object_used == true && netmask_object_used ==false)
+            	{
+            	  Symbol s = currentScope.getSymbol(input.toString(ip_obj.start,ip_obj.stop));
+            	  Ipaddress ip = (Ipaddress) s.lookupValue();
+            	  System.out.println(" >> "+ip.getString());
+            	  h = new Host	( ip.getString(),input.toString(netmask_string.start,netmask_string.stop));
+            	  Symbol s_ret = new Symbol("host_descr_string", "host_type_t", h);
+            	 sym = s_ret;
+            	}
+            	else if (ip_object_used == false  && netmask_object_used ==true)
+            	{
+                  	  Symbol s = currentScope.getSymbol(input.toString(netmask_ip_obj.start,netmask_ip_obj.stop));
+            	  Ipaddress ip = (Ipaddress) s.lookupValue();
+            	  h = new Host	( input.toString(ip_string.start,ip_string.stop),ip.getString());
+            	  Symbol s_ret = new Symbol("host_descr_string", "host_type_t", h);
+            	  sym = s_ret;
+            	}
+            	else if(ip_object_used ==true && netmask_object_used ==true)
+            	{
+            	  Symbol s_ip =  currentScope.getSymbol(input.toString(ip_obj.start,ip_obj.stop));
+            	  Ipaddress ip = (Ipaddress) s_ip.lookupValue();
+            	 
+              	  Symbol s_nmask = currentScope.getSymbol(input.toString(netmask_ip_obj.start,netmask_ip_obj.stop));
+            	  Ipaddress nmask = (Ipaddress) s_nmask.lookupValue();
+            	 
+            	  h = new Host	( ip.getString(),nmask.getString());
+            	  Symbol s_ret = new Symbol("host_descr_string", "host_type_t", h);
+            	 sym = s_ret;
+            	
+            	}
+            	else{
+            	h = new Host (input.toString(ip_string.start,ip_string.stop),input.toString(netmask_string.start,netmask_string.stop)); //usure about the text error
+            	Symbol s_ret = new Symbol("host_descr_string", "host_type_t", h);
+            	sym = s_ret;
+            	}
+            //	return sym;
+            
 
 
             }
@@ -5320,7 +6136,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(450, 2);
+        dbg.location(738, 2);
 
         }
         finally {
@@ -5329,58 +6145,58 @@ public class BlockParser extends DebugParser {
             if ( ruleLevel==0 ) {dbg.terminate();}
         }
 
-        return ;
+        return sym;
     }
     // $ANTLR end host
 
 
     // $ANTLR start dns_set
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:456:1: dns_set : ip_addr ( ',' ip_addr )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:744:1: dns_set : ip_addr ( ',' ip_addr )* ;
     public final void dns_set() throws RecognitionException {
         try { dbg.enterRule("dns_set");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(456, 1);
+        dbg.location(744, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:456:9: ( ip_addr ( ',' ip_addr )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:744:9: ( ip_addr ( ',' ip_addr )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:456:11: ip_addr ( ',' ip_addr )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:744:11: ip_addr ( ',' ip_addr )*
             {
-            dbg.location(456,11);
-            pushFollow(FOLLOW_ip_addr_in_dns_set1778);
+            dbg.location(744,11);
+            pushFollow(FOLLOW_ip_addr_in_dns_set2031);
             ip_addr();
             _fsp--;
 
-            dbg.location(456,19);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:456:19: ( ',' ip_addr )*
-            try { dbg.enterSubRule(36);
+            dbg.location(744,19);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:744:19: ( ',' ip_addr )*
+            try { dbg.enterSubRule(43);
 
-            loop36:
+            loop43:
             do {
-                int alt36=2;
-                try { dbg.enterDecision(36);
+                int alt43=2;
+                try { dbg.enterDecision(43);
 
-                int LA36_0 = input.LA(1);
+                int LA43_0 = input.LA(1);
 
-                if ( (LA36_0==COMMA) ) {
-                    alt36=1;
+                if ( (LA43_0==COMMA) ) {
+                    alt43=1;
                 }
 
 
-                } finally {dbg.exitDecision(36);}
+                } finally {dbg.exitDecision(43);}
 
-                switch (alt36) {
+                switch (alt43) {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:456:20: ',' ip_addr
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:744:20: ',' ip_addr
             	    {
-            	    dbg.location(456,20);
-            	    match(input,COMMA,FOLLOW_COMMA_in_dns_set1781); 
-            	    dbg.location(456,25);
-            	    pushFollow(FOLLOW_ip_addr_in_dns_set1784);
+            	    dbg.location(744,20);
+            	    match(input,COMMA,FOLLOW_COMMA_in_dns_set2034); 
+            	    dbg.location(744,25);
+            	    pushFollow(FOLLOW_ip_addr_in_dns_set2037);
             	    ip_addr();
             	    _fsp--;
 
@@ -5389,10 +6205,10 @@ public class BlockParser extends DebugParser {
             	    break;
 
             	default :
-            	    break loop36;
+            	    break loop43;
                 }
             } while (true);
-            } finally {dbg.exitSubRule(36);}
+            } finally {dbg.exitSubRule(43);}
 
 
             }
@@ -5404,7 +6220,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(456, 34);
+        dbg.location(744, 34);
 
         }
         finally {
@@ -5419,52 +6235,52 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start gateway
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:458:1: gateway : ip_addr ( ',' ip_addr )* ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:746:1: gateway : ip_addr ( ',' ip_addr )* ;
     public final void gateway() throws RecognitionException {
         try { dbg.enterRule("gateway");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(458, 1);
+        dbg.location(746, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:458:9: ( ip_addr ( ',' ip_addr )* )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:746:9: ( ip_addr ( ',' ip_addr )* )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:458:11: ip_addr ( ',' ip_addr )*
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:746:11: ip_addr ( ',' ip_addr )*
             {
-            dbg.location(458,11);
-            pushFollow(FOLLOW_ip_addr_in_gateway1794);
+            dbg.location(746,11);
+            pushFollow(FOLLOW_ip_addr_in_gateway2047);
             ip_addr();
             _fsp--;
 
-            dbg.location(458,19);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:458:19: ( ',' ip_addr )*
-            try { dbg.enterSubRule(37);
+            dbg.location(746,19);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:746:19: ( ',' ip_addr )*
+            try { dbg.enterSubRule(44);
 
-            loop37:
+            loop44:
             do {
-                int alt37=2;
-                try { dbg.enterDecision(37);
+                int alt44=2;
+                try { dbg.enterDecision(44);
 
-                int LA37_0 = input.LA(1);
+                int LA44_0 = input.LA(1);
 
-                if ( (LA37_0==COMMA) ) {
-                    alt37=1;
+                if ( (LA44_0==COMMA) ) {
+                    alt44=1;
                 }
 
 
-                } finally {dbg.exitDecision(37);}
+                } finally {dbg.exitDecision(44);}
 
-                switch (alt37) {
+                switch (alt44) {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:458:20: ',' ip_addr
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:746:20: ',' ip_addr
             	    {
-            	    dbg.location(458,20);
-            	    match(input,COMMA,FOLLOW_COMMA_in_gateway1797); 
-            	    dbg.location(458,24);
-            	    pushFollow(FOLLOW_ip_addr_in_gateway1799);
+            	    dbg.location(746,20);
+            	    match(input,COMMA,FOLLOW_COMMA_in_gateway2050); 
+            	    dbg.location(746,24);
+            	    pushFollow(FOLLOW_ip_addr_in_gateway2052);
             	    ip_addr();
             	    _fsp--;
 
@@ -5473,10 +6289,10 @@ public class BlockParser extends DebugParser {
             	    break;
 
             	default :
-            	    break loop37;
+            	    break loop44;
                 }
             } while (true);
-            } finally {dbg.exitSubRule(37);}
+            } finally {dbg.exitSubRule(44);}
 
 
             }
@@ -5488,7 +6304,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(458, 33);
+        dbg.location(746, 33);
 
         }
         finally {
@@ -5503,71 +6319,93 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start host_group
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:462:1: host_group : 'host_group' '{' host ( ',' host )* '}' ;
-    public final void host_group() throws RecognitionException {
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:750:1: host_group returns [Symbol sym] : 'host_group' '{' i= host ( ',' j= host )* '}' ;
+    public final Symbol host_group() throws RecognitionException {
+        Symbol sym = null;
+
+        Symbol i = null;
+
+        Symbol j = null;
+
+
         try { dbg.enterRule("host_group");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(462, 1);
+        dbg.location(750, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:463:2: ( 'host_group' '{' host ( ',' host )* '}' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:751:2: ( 'host_group' '{' i= host ( ',' j= host )* '}' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:463:4: 'host_group' '{' host ( ',' host )* '}'
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:752:2: 'host_group' '{' i= host ( ',' j= host )* '}'
             {
-            dbg.location(463,4);
-            match(input,31,FOLLOW_31_in_host_group1812); 
-            dbg.location(463,18);
-            match(input,76,FOLLOW_76_in_host_group1815); 
-            dbg.location(463,22);
-            pushFollow(FOLLOW_host_in_host_group1817);
-            host();
+            dbg.location(752,2);
+            
+            	Vector <Host> hosts;
+            	hosts = new Vector <Host> ();
+            	
+            dbg.location(756,2);
+            match(input,31,FOLLOW_31_in_host_group2074); 
+            dbg.location(756,16);
+            match(input,76,FOLLOW_76_in_host_group2077); 
+            dbg.location(756,21);
+            pushFollow(FOLLOW_host_in_host_group2081);
+            i=host();
             _fsp--;
 
-            dbg.location(463,27);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:463:27: ( ',' host )*
-            try { dbg.enterSubRule(38);
+            dbg.location(756,28);
+            hosts.add((Host)i.lookupValue()); 
+            dbg.location(756,66);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:756:66: ( ',' j= host )*
+            try { dbg.enterSubRule(45);
 
-            loop38:
+            loop45:
             do {
-                int alt38=2;
-                try { dbg.enterDecision(38);
+                int alt45=2;
+                try { dbg.enterDecision(45);
 
-                int LA38_0 = input.LA(1);
+                int LA45_0 = input.LA(1);
 
-                if ( (LA38_0==COMMA) ) {
-                    alt38=1;
+                if ( (LA45_0==COMMA) ) {
+                    alt45=1;
                 }
 
 
-                } finally {dbg.exitDecision(38);}
+                } finally {dbg.exitDecision(45);}
 
-                switch (alt38) {
+                switch (alt45) {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:463:28: ',' host
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:756:67: ',' j= host
             	    {
-            	    dbg.location(463,28);
-            	    match(input,COMMA,FOLLOW_COMMA_in_host_group1820); 
-            	    dbg.location(463,32);
-            	    pushFollow(FOLLOW_host_in_host_group1822);
-            	    host();
+            	    dbg.location(756,67);
+            	    match(input,COMMA,FOLLOW_COMMA_in_host_group2088); 
+            	    dbg.location(756,72);
+            	    pushFollow(FOLLOW_host_in_host_group2092);
+            	    j=host();
             	    _fsp--;
 
+            	    dbg.location(756,78);
+            	    hosts.add((Host)j.lookupValue());
 
             	    }
             	    break;
 
             	default :
-            	    break loop38;
+            	    break loop45;
                 }
             } while (true);
-            } finally {dbg.exitSubRule(38);}
+            } finally {dbg.exitSubRule(45);}
 
-            dbg.location(463,39);
-            match(input,77,FOLLOW_77_in_host_group1826); 
+            dbg.location(756,117);
+            match(input,77,FOLLOW_77_in_host_group2099); 
+            dbg.location(757,2);
+            
+            	Hostgroup hgroup = new Hostgroup (hosts);
+            	Symbol s = new Symbol ("host_group_type_t","host_group_type_t",hgroup);
+            	sym = s;  		
+            	
 
             }
 
@@ -5578,7 +6416,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(464, 2);
+        dbg.location(762, 2);
 
         }
         finally {
@@ -5587,42 +6425,139 @@ public class BlockParser extends DebugParser {
             if ( ruleLevel==0 ) {dbg.terminate();}
         }
 
-        return ;
+        return sym;
     }
     // $ANTLR end host_group
 
 
     // $ANTLR start interf
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:466:1: interf : interface_name ip_addr 'netmask' ip_addr ;
-    public final void interf() throws RecognitionException {
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:764:1: interf returns [Symbol sym] : 'ifname' (interface_name= ID ) interface_ip= ip_addr 'netmask' interface_netmask= ip_addr 'dns' '{' i= ip_addr ( ',' j= ip_addr )* '}' 'gw' gw_ip= ip_addr ;
+    public final Symbol interf() throws RecognitionException {
+        Symbol sym = null;
+
+        Token interface_name=null;
+        ip_addr_return interface_ip = null;
+
+        ip_addr_return interface_netmask = null;
+
+        ip_addr_return i = null;
+
+        ip_addr_return j = null;
+
+        ip_addr_return gw_ip = null;
+
+
         try { dbg.enterRule("interf");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(466, 1);
+        dbg.location(764, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:467:2: ( interface_name ip_addr 'netmask' ip_addr )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:765:2: ( 'ifname' (interface_name= ID ) interface_ip= ip_addr 'netmask' interface_netmask= ip_addr 'dns' '{' i= ip_addr ( ',' j= ip_addr )* '}' 'gw' gw_ip= ip_addr )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:467:6: interface_name ip_addr 'netmask' ip_addr
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:765:4: 'ifname' (interface_name= ID ) interface_ip= ip_addr 'netmask' interface_netmask= ip_addr 'dns' '{' i= ip_addr ( ',' j= ip_addr )* '}' 'gw' gw_ip= ip_addr
             {
-            dbg.location(467,6);
-            pushFollow(FOLLOW_interface_name_in_interf1848);
-            interface_name();
+            dbg.location(765,4);
+             
+            	     Vector <Ipaddress> dns_ip;
+            	       dns_ip = new Vector <Ipaddress>() ;	     
+            	         
+            dbg.location(769,3);
+            match(input,86,FOLLOW_86_in_interf2130); 
+            dbg.location(769,12);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:769:12: (interface_name= ID )
+            dbg.enterAlt(1);
+
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:769:13: interface_name= ID
+            {
+            dbg.location(769,27);
+            interface_name=(Token)input.LT(1);
+            match(input,ID,FOLLOW_ID_in_interf2135); 
+
+            }
+
+            dbg.location(769,44);
+            pushFollow(FOLLOW_ip_addr_in_interf2141);
+            interface_ip=ip_addr();
             _fsp--;
 
-            dbg.location(467,21);
-            pushFollow(FOLLOW_ip_addr_in_interf1850);
-            ip_addr();
+            dbg.location(769,54);
+            match(input,78,FOLLOW_78_in_interf2143); 
+            dbg.location(769,81);
+            pushFollow(FOLLOW_ip_addr_in_interf2148);
+            interface_netmask=ip_addr();
             _fsp--;
 
-            dbg.location(467,29);
-            match(input,86,FOLLOW_86_in_interf1852); 
-            dbg.location(467,39);
-            pushFollow(FOLLOW_ip_addr_in_interf1854);
-            ip_addr();
+            dbg.location(770,3);
+            match(input,87,FOLLOW_87_in_interf2153); 
+            dbg.location(770,10);
+            match(input,76,FOLLOW_76_in_interf2156); 
+            dbg.location(770,15);
+            pushFollow(FOLLOW_ip_addr_in_interf2160);
+            i=ip_addr();
             _fsp--;
 
+            dbg.location(770,24);
+            dns_ip.add(new Ipaddress(input.toString(i.start,i.stop)));
+            dbg.location(770,63);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:770:63: ( ',' j= ip_addr )*
+            try { dbg.enterSubRule(46);
+
+            loop46:
+            do {
+                int alt46=2;
+                try { dbg.enterDecision(46);
+
+                int LA46_0 = input.LA(1);
+
+                if ( (LA46_0==COMMA) ) {
+                    alt46=1;
+                }
+
+
+                } finally {dbg.exitDecision(46);}
+
+                switch (alt46) {
+            	case 1 :
+            	    dbg.enterAlt(1);
+
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:770:65: ',' j= ip_addr
+            	    {
+            	    dbg.location(770,65);
+            	    match(input,COMMA,FOLLOW_COMMA_in_interf2167); 
+            	    dbg.location(770,71);
+            	    pushFollow(FOLLOW_ip_addr_in_interf2172);
+            	    j=ip_addr();
+            	    _fsp--;
+
+            	    dbg.location(770,79);
+            	    dns_ip.add(new Ipaddress(input.toString(j.start,j.stop)));
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop46;
+                }
+            } while (true);
+            } finally {dbg.exitSubRule(46);}
+
+            dbg.location(770,120);
+            match(input,77,FOLLOW_77_in_interf2178); 
+            dbg.location(771,4);
+            match(input,88,FOLLOW_88_in_interf2186); 
+            dbg.location(771,15);
+            pushFollow(FOLLOW_ip_addr_in_interf2191);
+            gw_ip=ip_addr();
+            _fsp--;
+
+            dbg.location(772,2);
+            
+            	Interface iface = new Interface (interface_name.getText(),input.toString(interface_ip.start,interface_ip.stop),input.toString(interface_netmask.start,interface_netmask.stop),input.toString(gw_ip.start,gw_ip.stop), dns_ip);
+            	Symbol s = new Symbol("interface_descriptor", "interface_type_t", iface);
+            	sym = s;  
+            	
 
             }
 
@@ -5633,7 +6568,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(467, 47);
+        dbg.location(776, 4);
 
         }
         finally {
@@ -5642,90 +6577,113 @@ public class BlockParser extends DebugParser {
             if ( ruleLevel==0 ) {dbg.terminate();}
         }
 
-        return ;
+        return sym;
     }
     // $ANTLR end interf
 
 
     // $ANTLR start route
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:488:1: route : ( 'host' ip_addr 'gw' ip_addr | 'net' ip_addr 'netmask' ip_addr 'gw' ip_addr );
-    public final void route() throws RecognitionException {
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:778:1: route returns [Symbol sym] : ( 'host' dst= ip_addr 'gw' gw= ip_addr | 'net' dst= ip_addr 'netmask' netmask_ip= ip_addr 'gw' gw= ip_addr );
+    public final Symbol route() throws RecognitionException {
+        Symbol sym = null;
+
+        ip_addr_return dst = null;
+
+        ip_addr_return gw = null;
+
+        ip_addr_return netmask_ip = null;
+
+
         try { dbg.enterRule("route");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(488, 1);
+        dbg.location(778, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:488:7: ( 'host' ip_addr 'gw' ip_addr | 'net' ip_addr 'netmask' ip_addr 'gw' ip_addr )
-            int alt39=2;
-            try { dbg.enterDecision(39);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:778:28: ( 'host' dst= ip_addr 'gw' gw= ip_addr | 'net' dst= ip_addr 'netmask' netmask_ip= ip_addr 'gw' gw= ip_addr )
+            int alt47=2;
+            try { dbg.enterDecision(47);
 
-            int LA39_0 = input.LA(1);
+            int LA47_0 = input.LA(1);
 
-            if ( (LA39_0==88) ) {
-                alt39=1;
+            if ( (LA47_0==89) ) {
+                alt47=1;
             }
-            else if ( (LA39_0==90) ) {
-                alt39=2;
+            else if ( (LA47_0==90) ) {
+                alt47=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("488:1: route : ( 'host' ip_addr 'gw' ip_addr | 'net' ip_addr 'netmask' ip_addr 'gw' ip_addr );", 39, 0, input);
+                    new NoViableAltException("778:1: route returns [Symbol sym] : ( 'host' dst= ip_addr 'gw' gw= ip_addr | 'net' dst= ip_addr 'netmask' netmask_ip= ip_addr 'gw' gw= ip_addr );", 47, 0, input);
 
                 dbg.recognitionException(nvae);
                 throw nvae;
             }
-            } finally {dbg.exitDecision(39);}
+            } finally {dbg.exitDecision(47);}
 
-            switch (alt39) {
+            switch (alt47) {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:488:9: 'host' ip_addr 'gw' ip_addr
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:778:30: 'host' dst= ip_addr 'gw' gw= ip_addr
                     {
-                    dbg.location(488,9);
-                    match(input,88,FOLLOW_88_in_route1870); 
-                    dbg.location(488,16);
-                    pushFollow(FOLLOW_ip_addr_in_route1872);
-                    ip_addr();
+                    dbg.location(778,30);
+                    match(input,89,FOLLOW_89_in_route2212); 
+                    dbg.location(778,40);
+                    pushFollow(FOLLOW_ip_addr_in_route2216);
+                    dst=ip_addr();
                     _fsp--;
 
-                    dbg.location(488,24);
-                    match(input,89,FOLLOW_89_in_route1874); 
-                    dbg.location(488,29);
-                    pushFollow(FOLLOW_ip_addr_in_route1876);
-                    ip_addr();
+                    dbg.location(778,49);
+                    match(input,88,FOLLOW_88_in_route2218); 
+                    dbg.location(778,56);
+                    pushFollow(FOLLOW_ip_addr_in_route2222);
+                    gw=ip_addr();
                     _fsp--;
 
+                    dbg.location(779,2);
+                    
+                    	  Route rh = new Route (input.toString(dst.start,dst.stop), input.toString(gw.start,gw.stop));
+                    	  Symbol s = new Symbol("host_route_string", "route_type_t", rh);
+                    	  sym = s;
+                    	  
+                    	
 
                     }
                     break;
                 case 2 :
                     dbg.enterAlt(2);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:489:3: 'net' ip_addr 'netmask' ip_addr 'gw' ip_addr
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:786:4: 'net' dst= ip_addr 'netmask' netmask_ip= ip_addr 'gw' gw= ip_addr
                     {
-                    dbg.location(489,3);
-                    match(input,90,FOLLOW_90_in_route1880); 
-                    dbg.location(489,9);
-                    pushFollow(FOLLOW_ip_addr_in_route1882);
-                    ip_addr();
+                    dbg.location(786,4);
+                    match(input,90,FOLLOW_90_in_route2234); 
+                    dbg.location(786,13);
+                    pushFollow(FOLLOW_ip_addr_in_route2238);
+                    dst=ip_addr();
                     _fsp--;
 
-                    dbg.location(489,17);
-                    match(input,86,FOLLOW_86_in_route1884); 
-                    dbg.location(489,27);
-                    pushFollow(FOLLOW_ip_addr_in_route1886);
-                    ip_addr();
+                    dbg.location(786,22);
+                    match(input,78,FOLLOW_78_in_route2240); 
+                    dbg.location(786,42);
+                    pushFollow(FOLLOW_ip_addr_in_route2244);
+                    netmask_ip=ip_addr();
                     _fsp--;
 
-                    dbg.location(489,35);
-                    match(input,89,FOLLOW_89_in_route1888); 
-                    dbg.location(489,40);
-                    pushFollow(FOLLOW_ip_addr_in_route1890);
-                    ip_addr();
+                    dbg.location(786,51);
+                    match(input,88,FOLLOW_88_in_route2246); 
+                    dbg.location(786,58);
+                    pushFollow(FOLLOW_ip_addr_in_route2251);
+                    gw=ip_addr();
                     _fsp--;
 
+                    dbg.location(787,2);
+                    
+                    	 Route rn = new Route (input.toString(dst.start,dst.stop),input.toString(netmask_ip.start,netmask_ip.stop),input.toString(gw.start,gw.stop));
+                       	  Symbol s = new Symbol("net_route_string", "route_type_t", rn);
+                    	  sym = s;
+                    	  
+                    	
 
                     }
                     break;
@@ -5738,7 +6696,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(490, 1);
+        dbg.location(793, 2);
 
         }
         finally {
@@ -5747,57 +6705,57 @@ public class BlockParser extends DebugParser {
             if ( ruleLevel==0 ) {dbg.terminate();}
         }
 
-        return ;
+        return sym;
     }
     // $ANTLR end route
 
 
     // $ANTLR start serv_group
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:499:1: serv_group : 'service_set' '{' ip_addr ( 'netmask' ip_addr )? serv_listen_port ( ',' ip_addr ( nmask )? serv_listen_port )* '}' ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:807:1: serv_group : 'service_set' '{' ip_addr ( 'netmask' ip_addr )? serv_listen_port ( ',' ip_addr ( nmask )? serv_listen_port )* '}' ;
     public final void serv_group() throws RecognitionException {
         try { dbg.enterRule("serv_group");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(499, 1);
+        dbg.location(807, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:500:2: ( 'service_set' '{' ip_addr ( 'netmask' ip_addr )? serv_listen_port ( ',' ip_addr ( nmask )? serv_listen_port )* '}' )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:808:2: ( 'service_set' '{' ip_addr ( 'netmask' ip_addr )? serv_listen_port ( ',' ip_addr ( nmask )? serv_listen_port )* '}' )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:500:4: 'service_set' '{' ip_addr ( 'netmask' ip_addr )? serv_listen_port ( ',' ip_addr ( nmask )? serv_listen_port )* '}'
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:808:4: 'service_set' '{' ip_addr ( 'netmask' ip_addr )? serv_listen_port ( ',' ip_addr ( nmask )? serv_listen_port )* '}'
             {
-            dbg.location(500,4);
-            match(input,91,FOLLOW_91_in_serv_group1907); 
-            dbg.location(500,18);
-            match(input,76,FOLLOW_76_in_serv_group1909); 
-            dbg.location(500,22);
-            pushFollow(FOLLOW_ip_addr_in_serv_group1911);
+            dbg.location(808,4);
+            match(input,91,FOLLOW_91_in_serv_group2277); 
+            dbg.location(808,18);
+            match(input,76,FOLLOW_76_in_serv_group2279); 
+            dbg.location(808,22);
+            pushFollow(FOLLOW_ip_addr_in_serv_group2281);
             ip_addr();
             _fsp--;
 
-            dbg.location(500,30);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:500:30: ( 'netmask' ip_addr )?
-            int alt40=2;
-            try { dbg.enterSubRule(40);
-            try { dbg.enterDecision(40);
+            dbg.location(808,30);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:808:30: ( 'netmask' ip_addr )?
+            int alt48=2;
+            try { dbg.enterSubRule(48);
+            try { dbg.enterDecision(48);
 
-            int LA40_0 = input.LA(1);
+            int LA48_0 = input.LA(1);
 
-            if ( (LA40_0==86) ) {
-                alt40=1;
+            if ( (LA48_0==78) ) {
+                alt48=1;
             }
-            } finally {dbg.exitDecision(40);}
+            } finally {dbg.exitDecision(48);}
 
-            switch (alt40) {
+            switch (alt48) {
                 case 1 :
                     dbg.enterAlt(1);
 
-                    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:500:31: 'netmask' ip_addr
+                    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:808:31: 'netmask' ip_addr
                     {
-                    dbg.location(500,31);
-                    match(input,86,FOLLOW_86_in_serv_group1914); 
-                    dbg.location(500,41);
-                    pushFollow(FOLLOW_ip_addr_in_serv_group1916);
+                    dbg.location(808,31);
+                    match(input,78,FOLLOW_78_in_serv_group2284); 
+                    dbg.location(808,41);
+                    pushFollow(FOLLOW_ip_addr_in_serv_group2286);
                     ip_addr();
                     _fsp--;
 
@@ -5806,65 +6764,65 @@ public class BlockParser extends DebugParser {
                     break;
 
             }
-            } finally {dbg.exitSubRule(40);}
+            } finally {dbg.exitSubRule(48);}
 
-            dbg.location(500,51);
-            pushFollow(FOLLOW_serv_listen_port_in_serv_group1920);
+            dbg.location(808,51);
+            pushFollow(FOLLOW_serv_listen_port_in_serv_group2290);
             serv_listen_port();
             _fsp--;
 
-            dbg.location(500,69);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:500:69: ( ',' ip_addr ( nmask )? serv_listen_port )*
-            try { dbg.enterSubRule(42);
+            dbg.location(808,69);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:808:69: ( ',' ip_addr ( nmask )? serv_listen_port )*
+            try { dbg.enterSubRule(50);
 
-            loop42:
+            loop50:
             do {
-                int alt42=2;
-                try { dbg.enterDecision(42);
+                int alt50=2;
+                try { dbg.enterDecision(50);
 
-                int LA42_0 = input.LA(1);
+                int LA50_0 = input.LA(1);
 
-                if ( (LA42_0==COMMA) ) {
-                    alt42=1;
+                if ( (LA50_0==COMMA) ) {
+                    alt50=1;
                 }
 
 
-                } finally {dbg.exitDecision(42);}
+                } finally {dbg.exitDecision(50);}
 
-                switch (alt42) {
+                switch (alt50) {
             	case 1 :
             	    dbg.enterAlt(1);
 
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:500:70: ',' ip_addr ( nmask )? serv_listen_port
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:808:70: ',' ip_addr ( nmask )? serv_listen_port
             	    {
-            	    dbg.location(500,70);
-            	    match(input,COMMA,FOLLOW_COMMA_in_serv_group1924); 
-            	    dbg.location(500,74);
-            	    pushFollow(FOLLOW_ip_addr_in_serv_group1926);
+            	    dbg.location(808,70);
+            	    match(input,COMMA,FOLLOW_COMMA_in_serv_group2294); 
+            	    dbg.location(808,74);
+            	    pushFollow(FOLLOW_ip_addr_in_serv_group2296);
             	    ip_addr();
             	    _fsp--;
 
-            	    dbg.location(500,82);
-            	    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:500:82: ( nmask )?
-            	    int alt41=2;
-            	    try { dbg.enterSubRule(41);
-            	    try { dbg.enterDecision(41);
+            	    dbg.location(808,82);
+            	    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:808:82: ( nmask )?
+            	    int alt49=2;
+            	    try { dbg.enterSubRule(49);
+            	    try { dbg.enterDecision(49);
 
-            	    int LA41_0 = input.LA(1);
+            	    int LA49_0 = input.LA(1);
 
-            	    if ( (LA41_0==86) ) {
-            	        alt41=1;
+            	    if ( (LA49_0==78) ) {
+            	        alt49=1;
             	    }
-            	    } finally {dbg.exitDecision(41);}
+            	    } finally {dbg.exitDecision(49);}
 
-            	    switch (alt41) {
+            	    switch (alt49) {
             	        case 1 :
             	            dbg.enterAlt(1);
 
-            	            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:500:83: nmask
+            	            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:808:83: nmask
             	            {
-            	            dbg.location(500,83);
-            	            pushFollow(FOLLOW_nmask_in_serv_group1929);
+            	            dbg.location(808,83);
+            	            pushFollow(FOLLOW_nmask_in_serv_group2299);
             	            nmask();
             	            _fsp--;
 
@@ -5873,10 +6831,10 @@ public class BlockParser extends DebugParser {
             	            break;
 
             	    }
-            	    } finally {dbg.exitSubRule(41);}
+            	    } finally {dbg.exitSubRule(49);}
 
-            	    dbg.location(500,91);
-            	    pushFollow(FOLLOW_serv_listen_port_in_serv_group1933);
+            	    dbg.location(808,91);
+            	    pushFollow(FOLLOW_serv_listen_port_in_serv_group2303);
             	    serv_listen_port();
             	    _fsp--;
 
@@ -5885,13 +6843,13 @@ public class BlockParser extends DebugParser {
             	    break;
 
             	default :
-            	    break loop42;
+            	    break loop50;
                 }
             } while (true);
-            } finally {dbg.exitSubRule(42);}
+            } finally {dbg.exitSubRule(50);}
 
-            dbg.location(500,111);
-            match(input,77,FOLLOW_77_in_serv_group1938); 
+            dbg.location(808,111);
+            match(input,77,FOLLOW_77_in_serv_group2308); 
 
             }
 
@@ -5902,7 +6860,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(505, 2);
+        dbg.location(813, 2);
 
         }
         finally {
@@ -5917,27 +6875,27 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start serv_listen_port
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:507:1: serv_listen_port : ( NUMBER ) ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:815:1: serv_listen_port : ( NUMBER ) ;
     public final void serv_listen_port() throws RecognitionException {
         try { dbg.enterRule("serv_listen_port");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(507, 1);
+        dbg.location(815, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:508:2: ( ( NUMBER ) )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:816:2: ( ( NUMBER ) )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:508:4: ( NUMBER )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:816:4: ( NUMBER )
             {
-            dbg.location(508,4);
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:508:4: ( NUMBER )
+            dbg.location(816,4);
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:816:4: ( NUMBER )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:508:5: NUMBER
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:816:5: NUMBER
             {
-            dbg.location(508,5);
-            match(input,NUMBER,FOLLOW_NUMBER_in_serv_listen_port1958); 
+            dbg.location(816,5);
+            match(input,NUMBER,FOLLOW_NUMBER_in_serv_listen_port2328); 
 
             }
 
@@ -5951,7 +6909,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(508, 12);
+        dbg.location(816, 12);
 
         }
         finally {
@@ -5966,21 +6924,21 @@ public class BlockParser extends DebugParser {
 
 
     // $ANTLR start host_name
-    // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:510:1: host_name : ID ;
+    // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:818:1: host_name : ID ;
     public final void host_name() throws RecognitionException {
         try { dbg.enterRule("host_name");
         if ( ruleLevel==0 ) {dbg.commence();}
         ruleLevel++;
-        dbg.location(510, 1);
+        dbg.location(818, 1);
 
         try {
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:511:2: ( ID )
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:819:2: ( ID )
             dbg.enterAlt(1);
 
-            // /home/sambuddho/plt_project/chitra_lancom_3/Block.g:511:4: ID
+            // D:\\Users\\arpi\\Desktop\\Assignments\\LANCOM\\plt_project\\chitra_lancom_3\\Block.g:819:4: ID
             {
-            dbg.location(511,4);
-            match(input,ID,FOLLOW_ID_in_host_name1968); 
+            dbg.location(819,4);
+            match(input,ID,FOLLOW_ID_in_host_name2338); 
 
             }
 
@@ -5991,7 +6949,7 @@ public class BlockParser extends DebugParser {
         }
         finally {
         }
-        dbg.location(511, 6);
+        dbg.location(819, 6);
 
         }
         finally {
@@ -6007,31 +6965,30 @@ public class BlockParser extends DebugParser {
 
     protected DFA28 dfa28 = new DFA28(this);
     static final String DFA28_eotS =
-        "\127\uffff";
+        "\133\uffff";
     static final String DFA28_eofS =
-        "\127\uffff";
+        "\133\uffff";
     static final String DFA28_minS =
-        "\1\10\1\uffff\1\4\4\uffff\2\114\2\uffff\1\10\1\uffff\1\127\1\10"+
-        "\1\uffff\1\10\2\17\2\10\2\17\2\10\2\17\3\10\1\126\1\10\1\14\1\10"+
-        "\1\17\1\10\1\4\1\17\1\10\1\17\2\uffff\1\10\1\17\1\10\1\17\1\10\1"+
-        "\17\1\10\1\17\1\10\1\17\1\10\1\17\3\10\1\14\1\10\1\127\1\4\1\10"+
-        "\1\14\1\10\1\uffff\2\17\2\10\2\17\2\10\2\17\3\10\1\126\1\10\1\17"+
-        "\1\10\1\17\1\10\1\17\1\10\1\14";
+        "\1\10\1\uffff\1\4\4\uffff\2\114\2\uffff\1\10\1\uffff\1\125\1\10"+
+        "\1\uffff\1\10\2\17\1\116\3\10\3\17\1\14\3\10\1\125\1\4\3\17\1\10"+
+        "\2\uffff\3\10\1\17\1\116\1\10\1\116\1\17\3\10\1\14\1\10\2\17\1\14"+
+        "\1\17\1\10\1\4\1\14\3\10\1\17\1\uffff\3\17\4\10\1\17\1\116\2\17"+
+        "\3\10\1\17\1\14\4\10\1\14\1\17\1\10\1\17\1\10\1\17\2\10";
     static final String DFA28_maxS =
-        "\1\133\1\uffff\1\73\4\uffff\2\114\2\uffff\1\13\1\uffff\1\127\1\10"+
-        "\1\uffff\1\10\2\17\2\10\2\17\2\10\2\17\2\10\2\126\1\10\1\115\1\10"+
-        "\1\17\1\10\1\133\1\17\1\10\1\17\2\uffff\1\10\1\17\1\10\1\17\1\10"+
-        "\1\17\1\10\1\17\1\10\1\17\1\10\1\17\3\10\1\115\1\126\1\127\1\73"+
-        "\1\10\1\115\1\10\1\uffff\2\17\2\10\2\17\2\10\2\17\3\10\1\126\1\10"+
-        "\1\17\1\10\1\17\1\10\1\17\1\10\1\115";
+        "\1\133\1\uffff\1\73\4\uffff\2\114\2\uffff\1\13\1\uffff\1\125\1\10"+
+        "\1\uffff\1\13\2\17\1\116\2\10\1\13\3\17\1\115\3\10\1\125\1\73\3"+
+        "\17\1\13\2\uffff\3\10\1\17\3\116\1\17\1\10\1\13\1\10\1\115\1\10"+
+        "\2\17\1\115\1\17\1\10\1\133\1\115\3\10\1\17\1\uffff\3\17\4\10\1"+
+        "\17\1\116\2\17\3\10\1\17\1\115\2\10\1\116\1\10\1\115\1\17\1\10\1"+
+        "\17\1\10\1\17\2\10";
     static final String DFA28_acceptS =
         "\1\uffff\1\1\1\uffff\1\3\1\5\1\6\1\7\2\uffff\1\13\1\14\1\uffff\1"+
-        "\2\2\uffff\1\4\30\uffff\1\11\1\12\26\uffff\1\10\26\uffff";
+        "\2\2\uffff\1\4\24\uffff\1\10\1\11\30\uffff\1\12\34\uffff";
     static final String DFA28_specialS =
-        "\127\uffff}>";
+        "\133\uffff}>";
     static final String[] DFA28_transitionS = {
-            "\1\2\1\uffff\1\3\2\uffff\1\1\17\uffff\1\6\1\uffff\1\7\56\uffff"+
-            "\2\4\4\uffff\1\11\2\uffff\1\5\1\12\1\uffff\1\12\1\10",
+            "\1\2\1\uffff\1\3\2\uffff\1\1\17\uffff\1\6\1\uffff\1\7\57\uffff"+
+            "\2\4\4\uffff\1\5\1\11\2\uffff\2\12\1\10",
             "",
             "\4\14\7\uffff\1\13\10\uffff\1\14\21\uffff\1\14\5\uffff\14\14",
             "",
@@ -6047,55 +7004,53 @@ public class BlockParser extends DebugParser {
             "\1\20",
             "\1\21",
             "",
-            "\1\22",
-            "\1\23",
+            "\1\22\2\uffff\1\23",
             "\1\24",
             "\1\25",
             "\1\26",
             "\1\27",
             "\1\30",
-            "\1\31",
-            "\1\32",
+            "\1\31\2\uffff\1\32",
             "\1\33",
             "\1\34",
             "\1\35",
-            "\1\36",
-            "\1\40\115\uffff\1\37",
+            "\1\36\100\uffff\1\37",
+            "\1\40",
             "\1\41",
             "\1\42",
-            "\1\43\100\uffff\1\44",
-            "\1\45",
+            "\1\43",
+            "\4\44\7\uffff\1\44\10\uffff\1\44\4\uffff\1\45\1\uffff\1\45\12"+
+            "\uffff\1\44\5\uffff\14\44",
             "\1\46",
             "\1\47",
-            "\4\51\7\uffff\1\51\10\uffff\1\51\4\uffff\1\50\14\uffff\1\51"+
-            "\5\uffff\14\51\37\uffff\1\50",
-            "\1\52",
+            "\1\50",
+            "\1\51\2\uffff\1\52",
+            "",
+            "",
             "\1\53",
             "\1\54",
-            "",
-            "",
             "\1\55",
             "\1\56",
             "\1\57",
-            "\1\60",
-            "\1\61",
+            "\1\61\105\uffff\1\60",
+            "\1\26",
             "\1\62",
             "\1\63",
-            "\1\64",
-            "\1\65",
+            "\1\64\2\uffff\1\65",
             "\1\66",
-            "\1\67",
-            "\1\70",
+            "\1\67\100\uffff\1\70",
             "\1\71",
-            "\1\40",
             "\1\72",
-            "\1\73\100\uffff\1\74",
-            "\1\76\115\uffff\1\75",
+            "\1\73",
+            "\1\36\100\uffff\1\37",
+            "\1\74",
+            "\1\75",
+            "\4\76\7\uffff\1\76\10\uffff\1\76\4\uffff\1\45\14\uffff\1\76"+
+            "\5\uffff\14\76\37\uffff\1\45",
+            "\1\36\100\uffff\1\37",
             "\1\77",
-            "\4\100\7\uffff\1\100\10\uffff\1\100\4\uffff\1\50\1\uffff\1\50"+
-            "\12\uffff\1\100\5\uffff\14\100",
+            "\1\100",
             "\1\101",
-            "\1\43\100\uffff\1\44",
             "\1\102",
             "",
             "\1\103",
@@ -6106,20 +7061,26 @@ public class BlockParser extends DebugParser {
             "\1\110",
             "\1\111",
             "\1\112",
+            "\1\57",
             "\1\113",
             "\1\114",
             "\1\115",
             "\1\116",
-            "\1\76",
             "\1\117",
             "\1\120",
+            "\1\36\100\uffff\1\37",
+            "\1\61",
             "\1\121",
-            "\1\122",
-            "\1\123",
+            "\1\123\105\uffff\1\122",
             "\1\124",
+            "\1\67\100\uffff\1\70",
             "\1\125",
             "\1\126",
-            "\1\73\100\uffff\1\74"
+            "\1\127",
+            "\1\130",
+            "\1\131",
+            "\1\132",
+            "\1\123"
     };
 
     static final short[] DFA28_eot = DFA.unpackEncodedString(DFA28_eotS);
@@ -6152,7 +7113,7 @@ public class BlockParser extends DebugParser {
             this.transition = DFA28_transition;
         }
         public String getDescription() {
-            return "273:1: object_values returns [Symbol sym] : ( char_value | int_value | STRING | ip_addr | policy | host | role | host_group | topology | serv_group | interf | route );";
+            return "361:1: object_values returns [Symbol sym] : ( char_value | int_value | STRING | ip_addr | policy | host | role | host_group | topology | serv_group | interf | route );";
         }
         public void error(NoViableAltException nvae) {
             dbg.recognitionException(nvae);
@@ -6160,8 +7121,8 @@ public class BlockParser extends DebugParser {
     }
  
 
-    public static final BitSet FOLLOW_22_in_prog83 = new BitSet(new long[]{0x1000A387B7002D00L,0x000000000D90CFFEL});
-    public static final BitSet FOLLOW_statement_list_in_prog85 = new BitSet(new long[]{0x1000A387B7802D00L,0x000000000D90CFFEL});
+    public static final BitSet FOLLOW_22_in_prog83 = new BitSet(new long[]{0x1000A387B7002D00L,0x000000000E618FFEL});
+    public static final BitSet FOLLOW_statement_list_in_prog85 = new BitSet(new long[]{0x1000A387B7802D00L,0x000000000E618FFEL});
     public static final BitSet FOLLOW_23_in_prog88 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_statement_in_statement_list104 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_declr_stmt_in_statement_list111 = new BitSet(new long[]{0x0000000000000002L});
@@ -6176,241 +7137,260 @@ public class BlockParser extends DebugParser {
     public static final BitSet FOLLOW_24_in_statement_expr199 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_route_oper_in_config_statement219 = new BitSet(new long[]{0x0000000000000800L});
     public static final BitSet FOLLOW_object_name_in_config_statement221 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_route_oper_in_config_statement226 = new BitSet(new long[]{0x0000000000000000L,0x0000000005000000L});
+    public static final BitSet FOLLOW_route_oper_in_config_statement226 = new BitSet(new long[]{0x0000000000000000L,0x0000000006000000L});
     public static final BitSet FOLLOW_route_in_config_statement228 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_25_in_config_statement233 = new BitSet(new long[]{0x0000000000000800L});
     public static final BitSet FOLLOW_object_name_in_config_statement235 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_26_in_config_statement242 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_27_in_config_statement244 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_object_name_in_config_statement246 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_26_in_config_statement252 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_27_in_config_statement254 = new BitSet(new long[]{0x0000000080000000L,0x0000000008000000L});
-    public static final BitSet FOLLOW_topology_in_config_statement256 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_config_statement262 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_27_in_config_statement264 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_object_name_in_config_statement266 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_config_statement273 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_27_in_config_statement275 = new BitSet(new long[]{0x0000000080000000L,0x0000000008000000L});
-    public static final BitSet FOLLOW_topology_in_config_statement277 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_set_oper_in_config_statement284 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_29_in_config_statement286 = new BitSet(new long[]{0x0000000020000800L});
-    public static final BitSet FOLLOW_object_name_in_config_statement289 = new BitSet(new long[]{0x0000000000000800L,0x000000000000C000L});
-    public static final BitSet FOLLOW_role_in_config_statement291 = new BitSet(new long[]{0x0000000000000800L,0x000000000000C000L});
-    public static final BitSet FOLLOW_object_name_in_config_statement295 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_policy_in_config_statement297 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_26_in_config_statement305 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_29_in_config_statement307 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_object_name_in_config_statement309 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_26_in_config_statement316 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_29_in_config_statement318 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_role_in_config_statement320 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_config_statement326 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_29_in_config_statement328 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_object_name_in_config_statement330 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_config_statement336 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_29_in_config_statement338 = new BitSet(new long[]{0x0000000020000000L});
-    public static final BitSet FOLLOW_role_in_config_statement340 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_26_in_config_statement346 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_30_in_config_statement348 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_object_name_in_config_statement350 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_26_in_config_statement356 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_30_in_config_statement358 = new BitSet(new long[]{0x0000000000000000L,0x000000000000C000L});
-    public static final BitSet FOLLOW_policy_in_config_statement360 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_config_statement366 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_30_in_config_statement368 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_object_name_in_config_statement370 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_28_in_config_statement376 = new BitSet(new long[]{0x0000000040000000L});
-    public static final BitSet FOLLOW_30_in_config_statement378 = new BitSet(new long[]{0x0000000000000000L,0x000000000000C000L});
-    public static final BitSet FOLLOW_policy_in_config_statement380 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_set_oper_in_config_statement386 = new BitSet(new long[]{0x0000000080000000L});
-    public static final BitSet FOLLOW_31_in_config_statement388 = new BitSet(new long[]{0x0000000080000800L});
-    public static final BitSet FOLLOW_object_name_in_config_statement391 = new BitSet(new long[]{0x0000000000000800L,0x0000000000800000L});
-    public static final BitSet FOLLOW_host_group_in_config_statement394 = new BitSet(new long[]{0x0000000000000800L,0x0000000000800000L});
-    public static final BitSet FOLLOW_object_name_in_config_statement398 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_host_in_config_statement400 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_config_display_in_config_statement407 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_32_in_route_oper427 = new BitSet(new long[]{0x0000000200000000L});
-    public static final BitSet FOLLOW_33_in_route_oper429 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_32_in_route_oper434 = new BitSet(new long[]{0x0000000400000000L});
-    public static final BitSet FOLLOW_34_in_route_oper436 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_33_in_set_oper451 = new BitSet(new long[]{0x0000000800000000L});
-    public static final BitSet FOLLOW_35_in_set_oper453 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_34_in_set_oper458 = new BitSet(new long[]{0x0000001000000000L});
-    public static final BitSet FOLLOW_36_in_set_oper460 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_32_in_config_display479 = new BitSet(new long[]{0x0000002000000000L});
-    public static final BitSet FOLLOW_37_in_config_display481 = new BitSet(new long[]{0x0000004000000000L});
-    public static final BitSet FOLLOW_38_in_config_display483 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_32_in_config_display488 = new BitSet(new long[]{0x0000002000000000L});
-    public static final BitSet FOLLOW_37_in_config_display490 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_39_in_config_display496 = new BitSet(new long[]{0x0000002000000000L});
-    public static final BitSet FOLLOW_37_in_config_display498 = new BitSet(new long[]{0x0000004000000000L});
-    public static final BitSet FOLLOW_38_in_config_display500 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_39_in_config_display504 = new BitSet(new long[]{0x0000002000000000L});
-    public static final BitSet FOLLOW_37_in_config_display506 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_40_in_condition_statement528 = new BitSet(new long[]{0x0000020000000000L});
-    public static final BitSet FOLLOW_41_in_condition_statement530 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_equality_expr_in_condition_statement532 = new BitSet(new long[]{0x0000040000000000L});
-    public static final BitSet FOLLOW_42_in_condition_statement534 = new BitSet(new long[]{0x1000A387B7002D00L,0x000000000D90CFFEL});
-    public static final BitSet FOLLOW_statement_list_in_condition_statement536 = new BitSet(new long[]{0x0000180000000000L});
-    public static final BitSet FOLLOW_43_in_condition_statement539 = new BitSet(new long[]{0x1000A387B7002D00L,0x000000000D90CFFEL});
-    public static final BitSet FOLLOW_statement_list_in_condition_statement541 = new BitSet(new long[]{0x0000100000000000L});
-    public static final BitSet FOLLOW_44_in_condition_statement545 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_45_in_iteration_statement561 = new BitSet(new long[]{0x0000020000000000L});
-    public static final BitSet FOLLOW_41_in_iteration_statement563 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_equality_expr_in_iteration_statement565 = new BitSet(new long[]{0x0000040000000000L});
-    public static final BitSet FOLLOW_42_in_iteration_statement567 = new BitSet(new long[]{0x1000A387B7002D00L,0x000000000D90CFFEL});
-    public static final BitSet FOLLOW_statement_list_in_iteration_statement569 = new BitSet(new long[]{0x0000400000000000L});
-    public static final BitSet FOLLOW_46_in_iteration_statement571 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_47_in_print_statement587 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_STRING_in_print_statement589 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_24_in_print_statement593 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_assignment_expr_in_expression609 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_object_name_in_assignment_expr630 = new BitSet(new long[]{0xE000000000100000L,0x0000000000000001L});
-    public static final BitSet FOLLOW_assignment_operator_in_assignment_expr634 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_assignment_expr_in_assignment_expr645 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_conditional_expr_in_assignment_expr658 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_logicalOR_expr_in_conditional_expr692 = new BitSet(new long[]{0x0001000000000002L});
-    public static final BitSet FOLLOW_48_in_conditional_expr700 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_expression_in_conditional_expr702 = new BitSet(new long[]{0x0002000000000000L});
-    public static final BitSet FOLLOW_49_in_conditional_expr704 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_conditional_expr_in_conditional_expr706 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_logicalAND_expr_in_logicalOR_expr730 = new BitSet(new long[]{0x0004000000000002L});
-    public static final BitSet FOLLOW_50_in_logicalOR_expr738 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_logicalAND_expr_in_logicalOR_expr740 = new BitSet(new long[]{0x0004000000000002L});
-    public static final BitSet FOLLOW_bitwiseOR_expr_in_logicalAND_expr763 = new BitSet(new long[]{0x0008000000000002L});
-    public static final BitSet FOLLOW_51_in_logicalAND_expr771 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_bitwiseOR_expr_in_logicalAND_expr773 = new BitSet(new long[]{0x0008000000000002L});
-    public static final BitSet FOLLOW_bitwiseAND_expr_in_bitwiseOR_expr797 = new BitSet(new long[]{0x0010000000000002L});
-    public static final BitSet FOLLOW_52_in_bitwiseOR_expr805 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_bitwiseAND_expr_in_bitwiseOR_expr807 = new BitSet(new long[]{0x0010000000000002L});
-    public static final BitSet FOLLOW_equality_expr_in_bitwiseAND_expr830 = new BitSet(new long[]{0x0020000000000002L});
-    public static final BitSet FOLLOW_53_in_bitwiseAND_expr838 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_equality_expr_in_bitwiseAND_expr840 = new BitSet(new long[]{0x0020000000000002L});
-    public static final BitSet FOLLOW_relational_expr_in_equality_expr865 = new BitSet(new long[]{0x00C0000000000002L});
-    public static final BitSet FOLLOW_set_in_equality_expr874 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_relational_expr_in_equality_expr882 = new BitSet(new long[]{0x00C0000000000002L});
-    public static final BitSet FOLLOW_expr_in_relational_expr906 = new BitSet(new long[]{0x0F00000000000002L});
-    public static final BitSet FOLLOW_set_in_relational_expr917 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_expr_in_relational_expr927 = new BitSet(new long[]{0x0F00000000000002L});
-    public static final BitSet FOLLOW_term_in_expr953 = new BitSet(new long[]{0x0000000000000032L});
-    public static final BitSet FOLLOW_set_in_expr964 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_term_in_expr975 = new BitSet(new long[]{0x0000000000000032L});
-    public static final BitSet FOLLOW_unary_expr_in_term1001 = new BitSet(new long[]{0x00000000000000C2L});
-    public static final BitSet FOLLOW_set_in_term1012 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_unary_expr_in_term1022 = new BitSet(new long[]{0x00000000000000C2L});
-    public static final BitSet FOLLOW_postfix_expression_in_unary_expr1048 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_60_in_unary_expr1056 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_unary_expr_in_unary_expr1058 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_factor_in_postfix_expression1085 = new BitSet(new long[]{0x0000000000008002L});
-    public static final BitSet FOLLOW_DOT_in_postfix_expression1088 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_ID_in_postfix_expression1089 = new BitSet(new long[]{0x0000000000008002L});
+    public static final BitSet FOLLOW_25_in_config_statement239 = new BitSet(new long[]{0x0000000000000000L,0x0000000000400000L});
+    public static final BitSet FOLLOW_interf_in_config_statement241 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_config_statement245 = new BitSet(new long[]{0x0000000008000000L});
+    public static final BitSet FOLLOW_27_in_config_statement247 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_object_name_in_config_statement249 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_config_statement255 = new BitSet(new long[]{0x0000000008000000L});
+    public static final BitSet FOLLOW_27_in_config_statement257 = new BitSet(new long[]{0x0000000080000000L,0x0000000008000000L});
+    public static final BitSet FOLLOW_topology_in_config_statement259 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_config_statement265 = new BitSet(new long[]{0x0000000008000000L});
+    public static final BitSet FOLLOW_27_in_config_statement267 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_object_name_in_config_statement269 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_config_statement276 = new BitSet(new long[]{0x0000000008000000L});
+    public static final BitSet FOLLOW_27_in_config_statement278 = new BitSet(new long[]{0x0000000080000000L,0x0000000008000000L});
+    public static final BitSet FOLLOW_topology_in_config_statement280 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_set_oper_in_config_statement287 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_29_in_config_statement289 = new BitSet(new long[]{0x0000000020000800L});
+    public static final BitSet FOLLOW_object_name_in_config_statement292 = new BitSet(new long[]{0x0000000000000800L,0x0000000000018000L});
+    public static final BitSet FOLLOW_role_in_config_statement294 = new BitSet(new long[]{0x0000000000000800L,0x0000000000018000L});
+    public static final BitSet FOLLOW_object_name_in_config_statement298 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_policy_in_config_statement300 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_config_statement308 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_29_in_config_statement310 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_object_name_in_config_statement312 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_config_statement319 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_29_in_config_statement321 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_role_in_config_statement323 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_config_statement329 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_29_in_config_statement331 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_object_name_in_config_statement333 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_config_statement339 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_29_in_config_statement341 = new BitSet(new long[]{0x0000000020000000L});
+    public static final BitSet FOLLOW_role_in_config_statement343 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_config_statement349 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_30_in_config_statement351 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_object_name_in_config_statement355 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_26_in_config_statement365 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_30_in_config_statement367 = new BitSet(new long[]{0x0000000000000000L,0x0000000000018000L});
+    public static final BitSet FOLLOW_policy_in_config_statement371 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_config_statement380 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_30_in_config_statement382 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_object_name_in_config_statement384 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_28_in_config_statement390 = new BitSet(new long[]{0x0000000040000000L});
+    public static final BitSet FOLLOW_30_in_config_statement392 = new BitSet(new long[]{0x0000000000000000L,0x0000000000018000L});
+    public static final BitSet FOLLOW_policy_in_config_statement394 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_set_oper_in_config_statement400 = new BitSet(new long[]{0x0000000080000000L});
+    public static final BitSet FOLLOW_31_in_config_statement402 = new BitSet(new long[]{0x0000000080000800L});
+    public static final BitSet FOLLOW_object_name_in_config_statement405 = new BitSet(new long[]{0x0000000000000800L,0x0000000000200000L});
+    public static final BitSet FOLLOW_host_group_in_config_statement408 = new BitSet(new long[]{0x0000000000000800L,0x0000000000200000L});
+    public static final BitSet FOLLOW_object_name_in_config_statement412 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_host_in_config_statement414 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_config_display_in_config_statement421 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_32_in_route_oper441 = new BitSet(new long[]{0x0000000200000000L});
+    public static final BitSet FOLLOW_33_in_route_oper443 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_32_in_route_oper448 = new BitSet(new long[]{0x0000000400000000L});
+    public static final BitSet FOLLOW_34_in_route_oper450 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_33_in_set_oper465 = new BitSet(new long[]{0x0000000800000000L});
+    public static final BitSet FOLLOW_35_in_set_oper467 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_34_in_set_oper472 = new BitSet(new long[]{0x0000001000000000L});
+    public static final BitSet FOLLOW_36_in_set_oper474 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_32_in_config_display493 = new BitSet(new long[]{0x0000002000000000L});
+    public static final BitSet FOLLOW_37_in_config_display495 = new BitSet(new long[]{0x0000004000000000L});
+    public static final BitSet FOLLOW_38_in_config_display497 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_32_in_config_display502 = new BitSet(new long[]{0x0000002000000000L});
+    public static final BitSet FOLLOW_37_in_config_display504 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_39_in_config_display510 = new BitSet(new long[]{0x0000002000000000L});
+    public static final BitSet FOLLOW_37_in_config_display512 = new BitSet(new long[]{0x0000004000000000L});
+    public static final BitSet FOLLOW_38_in_config_display514 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_39_in_config_display518 = new BitSet(new long[]{0x0000002000000000L});
+    public static final BitSet FOLLOW_37_in_config_display520 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_40_in_condition_statement542 = new BitSet(new long[]{0x0000020000000000L});
+    public static final BitSet FOLLOW_41_in_condition_statement544 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_equality_expr_in_condition_statement546 = new BitSet(new long[]{0x0000040000000000L});
+    public static final BitSet FOLLOW_42_in_condition_statement548 = new BitSet(new long[]{0x1000A387B7002D00L,0x000000000E618FFEL});
+    public static final BitSet FOLLOW_statement_list_in_condition_statement550 = new BitSet(new long[]{0x0000180000000000L});
+    public static final BitSet FOLLOW_43_in_condition_statement553 = new BitSet(new long[]{0x1000A387B7002D00L,0x000000000E618FFEL});
+    public static final BitSet FOLLOW_statement_list_in_condition_statement555 = new BitSet(new long[]{0x0000100000000000L});
+    public static final BitSet FOLLOW_44_in_condition_statement559 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_45_in_iteration_statement575 = new BitSet(new long[]{0x0000020000000000L});
+    public static final BitSet FOLLOW_41_in_iteration_statement577 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_equality_expr_in_iteration_statement579 = new BitSet(new long[]{0x0000040000000000L});
+    public static final BitSet FOLLOW_42_in_iteration_statement581 = new BitSet(new long[]{0x1000A387B7002D00L,0x000000000E618FFEL});
+    public static final BitSet FOLLOW_statement_list_in_iteration_statement583 = new BitSet(new long[]{0x0000400000000000L});
+    public static final BitSet FOLLOW_46_in_iteration_statement585 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_47_in_print_statement601 = new BitSet(new long[]{0x0000000000000400L});
+    public static final BitSet FOLLOW_STRING_in_print_statement603 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_24_in_print_statement607 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_assignment_expr_in_expression623 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_object_name_in_assignment_expr644 = new BitSet(new long[]{0xE000000000100000L,0x0000000000000001L});
+    public static final BitSet FOLLOW_assignment_operator_in_assignment_expr648 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_assignment_expr_in_assignment_expr659 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_conditional_expr_in_assignment_expr672 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_logicalOR_expr_in_conditional_expr706 = new BitSet(new long[]{0x0001000000000002L});
+    public static final BitSet FOLLOW_48_in_conditional_expr714 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_expression_in_conditional_expr716 = new BitSet(new long[]{0x0002000000000000L});
+    public static final BitSet FOLLOW_49_in_conditional_expr718 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_conditional_expr_in_conditional_expr720 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_logicalAND_expr_in_logicalOR_expr744 = new BitSet(new long[]{0x0004000000000002L});
+    public static final BitSet FOLLOW_50_in_logicalOR_expr752 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_logicalAND_expr_in_logicalOR_expr754 = new BitSet(new long[]{0x0004000000000002L});
+    public static final BitSet FOLLOW_bitwiseOR_expr_in_logicalAND_expr777 = new BitSet(new long[]{0x0008000000000002L});
+    public static final BitSet FOLLOW_51_in_logicalAND_expr785 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_bitwiseOR_expr_in_logicalAND_expr787 = new BitSet(new long[]{0x0008000000000002L});
+    public static final BitSet FOLLOW_bitwiseAND_expr_in_bitwiseOR_expr811 = new BitSet(new long[]{0x0010000000000002L});
+    public static final BitSet FOLLOW_52_in_bitwiseOR_expr819 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_bitwiseAND_expr_in_bitwiseOR_expr821 = new BitSet(new long[]{0x0010000000000002L});
+    public static final BitSet FOLLOW_equality_expr_in_bitwiseAND_expr844 = new BitSet(new long[]{0x0020000000000002L});
+    public static final BitSet FOLLOW_53_in_bitwiseAND_expr852 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_equality_expr_in_bitwiseAND_expr854 = new BitSet(new long[]{0x0020000000000002L});
+    public static final BitSet FOLLOW_relational_expr_in_equality_expr879 = new BitSet(new long[]{0x00C0000000000002L});
+    public static final BitSet FOLLOW_set_in_equality_expr888 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_relational_expr_in_equality_expr896 = new BitSet(new long[]{0x00C0000000000002L});
+    public static final BitSet FOLLOW_expr_in_relational_expr920 = new BitSet(new long[]{0x0F00000000000002L});
+    public static final BitSet FOLLOW_set_in_relational_expr931 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_expr_in_relational_expr941 = new BitSet(new long[]{0x0F00000000000002L});
+    public static final BitSet FOLLOW_term_in_expr967 = new BitSet(new long[]{0x0000000000000032L});
+    public static final BitSet FOLLOW_set_in_expr978 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_term_in_expr989 = new BitSet(new long[]{0x0000000000000032L});
+    public static final BitSet FOLLOW_unary_expr_in_term1015 = new BitSet(new long[]{0x00000000000000C2L});
+    public static final BitSet FOLLOW_set_in_term1026 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_unary_expr_in_term1036 = new BitSet(new long[]{0x00000000000000C2L});
+    public static final BitSet FOLLOW_postfix_expression_in_unary_expr1062 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_60_in_unary_expr1070 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_unary_expr_in_unary_expr1072 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_factor_in_postfix_expression1099 = new BitSet(new long[]{0x0000000000008002L});
+    public static final BitSet FOLLOW_DOT_in_postfix_expression1102 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_ID_in_postfix_expression1103 = new BitSet(new long[]{0x0000000000008002L});
     public static final BitSet FOLLOW_set_in_assignment_operator0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_factor1152 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_literal_in_factor1160 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_41_in_factor1169 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000D90C000L});
-    public static final BitSet FOLLOW_expression_in_factor1171 = new BitSet(new long[]{0x0000040000000000L});
-    public static final BitSet FOLLOW_42_in_factor1173 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_object_values_in_literal1195 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_type_name_in_declr_stmt1213 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_object_name_in_declr_stmt1217 = new BitSet(new long[]{0x0000000001001000L});
-    public static final BitSet FOLLOW_COMMA_in_declr_stmt1224 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_object_name_in_declr_stmt1230 = new BitSet(new long[]{0x0000000001001000L});
-    public static final BitSet FOLLOW_24_in_declr_stmt1240 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_char_value_in_object_values1275 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_int_value_in_object_values1280 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_STRING_in_object_values1289 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ip_addr_in_object_values1294 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_policy_in_object_values1301 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_host_in_object_values1308 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_role_in_object_values1315 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_host_group_in_object_values1322 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_topology_in_object_values1327 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_serv_group_in_object_values1332 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_interf_in_object_values1337 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_route_in_object_values1342 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_factor1166 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_literal_in_factor1174 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_41_in_factor1183 = new BitSet(new long[]{0x10000200A0002D00L,0x000000000E618000L});
+    public static final BitSet FOLLOW_expression_in_factor1185 = new BitSet(new long[]{0x0000040000000000L});
+    public static final BitSet FOLLOW_42_in_factor1187 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_object_values_in_literal1209 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_type_name_in_declr_stmt1227 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_object_name_in_declr_stmt1231 = new BitSet(new long[]{0x0000000001001000L});
+    public static final BitSet FOLLOW_COMMA_in_declr_stmt1238 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_object_name_in_declr_stmt1244 = new BitSet(new long[]{0x0000000001001000L});
+    public static final BitSet FOLLOW_24_in_declr_stmt1254 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_type_name0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_29_in_role1417 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_76_in_role1419 = new BitSet(new long[]{0x0000000000000000L,0x000000000000C000L});
-    public static final BitSet FOLLOW_policy_in_role1421 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
-    public static final BitSet FOLLOW_COMMA_in_role1424 = new BitSet(new long[]{0x0000000000000000L,0x000000000000C000L});
-    public static final BitSet FOLLOW_policy_in_role1426 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
-    public static final BitSet FOLLOW_77_in_role1430 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_direction_in_policy1446 = new BitSet(new long[]{0x0000000000000000L,0x0000000000030000L});
-    public static final BitSet FOLLOW_verdict_in_policy1450 = new BitSet(new long[]{0x0000000000000000L,0x00000000000C0000L});
-    public static final BitSet FOLLOW_proto_in_policy1454 = new BitSet(new long[]{0x0000000000000102L});
-    public static final BitSet FOLLOW_port_in_policy1459 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_direction_in_policy1473 = new BitSet(new long[]{0x0000000000000000L,0x0000000000030000L});
-    public static final BitSet FOLLOW_verdict_in_policy1477 = new BitSet(new long[]{0x0000000000004000L});
-    public static final BitSet FOLLOW_icmp_cntrl_message_in_policy1481 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_host_group_in_topology1497 = new BitSet(new long[]{0x00000000A0000000L});
-    public static final BitSet FOLLOW_role_in_topology1501 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_serv_group_in_topology1507 = new BitSet(new long[]{0x0000000020000000L,0x0000000008000000L});
-    public static final BitSet FOLLOW_role_in_topology1511 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NUMBER_in_int_value1531 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CHAR_in_char_value1553 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_char_value_in_object_values1350 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_int_value_in_object_values1355 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_STRING_in_object_values1364 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ip_addr_in_object_values1369 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_policy_in_object_values1377 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_host_in_object_values1386 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_role_in_object_values1395 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_host_group_in_object_values1403 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_topology_in_object_values1411 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_serv_group_in_object_values1416 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_interf_in_object_values1421 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_route_in_object_values1428 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_29_in_role1453 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_76_in_role1455 = new BitSet(new long[]{0x0000000000000800L,0x0000000000018000L});
+    public static final BitSet FOLLOW_policy_in_role1461 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_object_name_in_role1469 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_COMMA_in_role1488 = new BitSet(new long[]{0x0000000000000800L,0x0000000000018000L});
+    public static final BitSet FOLLOW_policy_in_role1494 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_object_name_in_role1502 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_77_in_role1516 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_direction_in_policy1547 = new BitSet(new long[]{0x0000000000000000L,0x0000000000060000L});
+    public static final BitSet FOLLOW_verdict_in_policy1551 = new BitSet(new long[]{0x0000000000000000L,0x0000000000180000L});
+    public static final BitSet FOLLOW_proto_in_policy1555 = new BitSet(new long[]{0x0000000000000900L});
+    public static final BitSet FOLLOW_ip_addr_in_policy1560 = new BitSet(new long[]{0x0000000000000000L,0x0000000000004000L});
+    public static final BitSet FOLLOW_object_name_in_policy1565 = new BitSet(new long[]{0x0000000000000000L,0x0000000000004000L});
+    public static final BitSet FOLLOW_78_in_policy1575 = new BitSet(new long[]{0x0000000000000900L});
+    public static final BitSet FOLLOW_ip_addr_in_policy1580 = new BitSet(new long[]{0x0000000000000102L});
+    public static final BitSet FOLLOW_object_name_in_policy1587 = new BitSet(new long[]{0x0000000000000102L});
+    public static final BitSet FOLLOW_port_in_policy1596 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_direction_in_policy1623 = new BitSet(new long[]{0x0000000000000000L,0x0000000000060000L});
+    public static final BitSet FOLLOW_verdict_in_policy1627 = new BitSet(new long[]{0x0000000000004000L});
+    public static final BitSet FOLLOW_icmp_cntrl_message_in_policy1631 = new BitSet(new long[]{0x0000000000000900L});
+    public static final BitSet FOLLOW_ip_addr_in_policy1637 = new BitSet(new long[]{0x0000000000000000L,0x0000000000004000L});
+    public static final BitSet FOLLOW_object_name_in_policy1644 = new BitSet(new long[]{0x0000000000000000L,0x0000000000004000L});
+    public static final BitSet FOLLOW_78_in_policy1656 = new BitSet(new long[]{0x0000000000000900L});
+    public static final BitSet FOLLOW_ip_addr_in_policy1661 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_object_name_in_policy1671 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_host_group_in_topology1693 = new BitSet(new long[]{0x00000000A0000000L});
+    public static final BitSet FOLLOW_role_in_topology1697 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_serv_group_in_topology1703 = new BitSet(new long[]{0x0000000020000000L,0x0000000008000000L});
+    public static final BitSet FOLLOW_role_in_topology1707 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NUMBER_in_int_value1727 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CHAR_in_char_value1752 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_direction0 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_verdict0 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_set_in_proto0 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ICMP_MESSAGE_TYPE_in_icmp_cntrl_message1634 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NUMBER_in_port1644 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_object_name1654 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_84_in_interface_name1668 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_ID_in_interface_name1671 = new BitSet(new long[]{0x0000000000000000L,0x0000000000200000L});
-    public static final BitSet FOLLOW_85_in_interface_name1674 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_NUMBER_in_interface_name1677 = new BitSet(new long[]{0x0000000000000082L});
-    public static final BitSet FOLLOW_DIV_in_interface_name1680 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_NUMBER_in_interface_name1682 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NUMBER_in_ip_addr1706 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_DOT_in_ip_addr1708 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_NUMBER_in_ip_addr1710 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_DOT_in_ip_addr1712 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_NUMBER_in_ip_addr1714 = new BitSet(new long[]{0x0000000000008000L});
-    public static final BitSet FOLLOW_DOT_in_ip_addr1716 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_NUMBER_in_ip_addr1718 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_86_in_nmask1737 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_nmask1739 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_87_in_host1752 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_host1754 = new BitSet(new long[]{0x0000000000000000L,0x0000000000400000L});
-    public static final BitSet FOLLOW_86_in_host1756 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_host1758 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ip_addr_in_dns_set1778 = new BitSet(new long[]{0x0000000000001002L});
-    public static final BitSet FOLLOW_COMMA_in_dns_set1781 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_dns_set1784 = new BitSet(new long[]{0x0000000000001002L});
-    public static final BitSet FOLLOW_ip_addr_in_gateway1794 = new BitSet(new long[]{0x0000000000001002L});
-    public static final BitSet FOLLOW_COMMA_in_gateway1797 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_gateway1799 = new BitSet(new long[]{0x0000000000001002L});
-    public static final BitSet FOLLOW_31_in_host_group1812 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_76_in_host_group1815 = new BitSet(new long[]{0x0000000000000000L,0x0000000000800000L});
-    public static final BitSet FOLLOW_host_in_host_group1817 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
-    public static final BitSet FOLLOW_COMMA_in_host_group1820 = new BitSet(new long[]{0x0000000000000000L,0x0000000000800000L});
-    public static final BitSet FOLLOW_host_in_host_group1822 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
-    public static final BitSet FOLLOW_77_in_host_group1826 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_interface_name_in_interf1848 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_interf1850 = new BitSet(new long[]{0x0000000000000000L,0x0000000000400000L});
-    public static final BitSet FOLLOW_86_in_interf1852 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_interf1854 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_88_in_route1870 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_route1872 = new BitSet(new long[]{0x0000000000000000L,0x0000000002000000L});
-    public static final BitSet FOLLOW_89_in_route1874 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_route1876 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_90_in_route1880 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_route1882 = new BitSet(new long[]{0x0000000000000000L,0x0000000000400000L});
-    public static final BitSet FOLLOW_86_in_route1884 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_route1886 = new BitSet(new long[]{0x0000000000000000L,0x0000000002000000L});
-    public static final BitSet FOLLOW_89_in_route1888 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_route1890 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_91_in_serv_group1907 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_76_in_serv_group1909 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_serv_group1911 = new BitSet(new long[]{0x0000000000000100L,0x0000000000400000L});
-    public static final BitSet FOLLOW_86_in_serv_group1914 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_serv_group1916 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_serv_listen_port_in_serv_group1920 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
-    public static final BitSet FOLLOW_COMMA_in_serv_group1924 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_ip_addr_in_serv_group1926 = new BitSet(new long[]{0x0000000000000100L,0x0000000000400000L});
-    public static final BitSet FOLLOW_nmask_in_serv_group1929 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_serv_listen_port_in_serv_group1933 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
-    public static final BitSet FOLLOW_77_in_serv_group1938 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_NUMBER_in_serv_listen_port1958 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ID_in_host_name1968 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ICMP_MESSAGE_TYPE_in_icmp_cntrl_message1833 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NUMBER_in_port1843 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_object_name1858 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NUMBER_in_ip_addr1895 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_DOT_in_ip_addr1897 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_NUMBER_in_ip_addr1901 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_DOT_in_ip_addr1903 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_NUMBER_in_ip_addr1907 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_DOT_in_ip_addr1909 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_NUMBER_in_ip_addr1913 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_78_in_nmask1933 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_nmask1935 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_85_in_host1956 = new BitSet(new long[]{0x0000000000000900L});
+    public static final BitSet FOLLOW_ip_addr_in_host1961 = new BitSet(new long[]{0x0000000000000000L,0x0000000000004000L});
+    public static final BitSet FOLLOW_object_name_in_host1966 = new BitSet(new long[]{0x0000000000000000L,0x0000000000004000L});
+    public static final BitSet FOLLOW_78_in_host1973 = new BitSet(new long[]{0x0000000000000900L});
+    public static final BitSet FOLLOW_ip_addr_in_host1978 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_object_name_in_host2008 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ip_addr_in_dns_set2031 = new BitSet(new long[]{0x0000000000001002L});
+    public static final BitSet FOLLOW_COMMA_in_dns_set2034 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_dns_set2037 = new BitSet(new long[]{0x0000000000001002L});
+    public static final BitSet FOLLOW_ip_addr_in_gateway2047 = new BitSet(new long[]{0x0000000000001002L});
+    public static final BitSet FOLLOW_COMMA_in_gateway2050 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_gateway2052 = new BitSet(new long[]{0x0000000000001002L});
+    public static final BitSet FOLLOW_31_in_host_group2074 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_76_in_host_group2077 = new BitSet(new long[]{0x0000000000000000L,0x0000000000200000L});
+    public static final BitSet FOLLOW_host_in_host_group2081 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_COMMA_in_host_group2088 = new BitSet(new long[]{0x0000000000000000L,0x0000000000200000L});
+    public static final BitSet FOLLOW_host_in_host_group2092 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_77_in_host_group2099 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_86_in_interf2130 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_ID_in_interf2135 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_interf2141 = new BitSet(new long[]{0x0000000000000000L,0x0000000000004000L});
+    public static final BitSet FOLLOW_78_in_interf2143 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_interf2148 = new BitSet(new long[]{0x0000000000000000L,0x0000000000800000L});
+    public static final BitSet FOLLOW_87_in_interf2153 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_76_in_interf2156 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_interf2160 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_COMMA_in_interf2167 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_interf2172 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_77_in_interf2178 = new BitSet(new long[]{0x0000000000000000L,0x0000000001000000L});
+    public static final BitSet FOLLOW_88_in_interf2186 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_interf2191 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_89_in_route2212 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_route2216 = new BitSet(new long[]{0x0000000000000000L,0x0000000001000000L});
+    public static final BitSet FOLLOW_88_in_route2218 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_route2222 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_90_in_route2234 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_route2238 = new BitSet(new long[]{0x0000000000000000L,0x0000000000004000L});
+    public static final BitSet FOLLOW_78_in_route2240 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_route2244 = new BitSet(new long[]{0x0000000000000000L,0x0000000001000000L});
+    public static final BitSet FOLLOW_88_in_route2246 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_route2251 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_91_in_serv_group2277 = new BitSet(new long[]{0x0000000000000000L,0x0000000000001000L});
+    public static final BitSet FOLLOW_76_in_serv_group2279 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_serv_group2281 = new BitSet(new long[]{0x0000000000000100L,0x0000000000004000L});
+    public static final BitSet FOLLOW_78_in_serv_group2284 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_serv_group2286 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_serv_listen_port_in_serv_group2290 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_COMMA_in_serv_group2294 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_ip_addr_in_serv_group2296 = new BitSet(new long[]{0x0000000000000100L,0x0000000000004000L});
+    public static final BitSet FOLLOW_nmask_in_serv_group2299 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_serv_listen_port_in_serv_group2303 = new BitSet(new long[]{0x0000000000001000L,0x0000000000002000L});
+    public static final BitSet FOLLOW_77_in_serv_group2308 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_NUMBER_in_serv_listen_port2328 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ID_in_host_name2338 = new BitSet(new long[]{0x0000000000000002L});
 
 }

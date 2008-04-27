@@ -1,5 +1,5 @@
 
-all: ExceedsLancomSizeException Ipaddress IntType Assignment Policy Host Interface Hostgroup Route Role Symbol Scope 
+all: ExceedsLancomSizeException Ipaddress Symbol Scope IntType Assignment Policy Host ExceedsLancomSizeException Interface Hostgroup Route Role 
 IntType:
 	javac -classpath . IntType.java
 Symbol:
