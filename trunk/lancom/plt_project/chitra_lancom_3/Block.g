@@ -20,6 +20,7 @@ tokens {
 	import java.util.Set;
 	import java.util.Iterator;
 	import java.util.Map;
+	import java.util.zip.DataFormatException;
 
 }
 
@@ -108,7 +109,30 @@ prog
  	 }
  	 else  { System.out.println(" p is null");}
  	}
- 	| 'apply' 'policy' policy
+ 	| 'apply' 'policy' p2=policy
+	{
+	Policy p=(Policy)p2.lookupValue();
+	//System.out.println(p.verdict);
+	 String command = "/sbin/iptables";
+ 	 String verd = null;
+ 	 if(p.verdict.equals("allow"))
+ 	  {
+ 	    verd = "ACCEPT";
+ 	    }
+ 	  if(p.verdict.equals(" deny "))
+ 	  {
+ 	    verd = "DROP";
+ 	    }  
+ 	   if( verd == null)
+ 	      { 
+ 	      System.out.println("verdict is null");
+ 	      }
+ 	 String arg = "  -I INPUT -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	  System.out.println(command+arg);
+ 	  
+ 	 
+	
+	}
  	| 'undo' 'policy' object_name
  	| 'undo' 'policy' policy
  	| set_oper 'host_group' (object_name| host_group) (object_name|host) 
@@ -349,7 +373,7 @@ object_values returns [Symbol sym]
 	| host   {
 	$sym = $host.sym ; 
 	}
-	| role /* Similarly with other types */
+	| role {$sym=$role.sym;}/* Similarly with other types */
 	| host_group { $sym = $host_group.sym;} 
 	| topology
 	| serv_group
@@ -365,7 +389,40 @@ role  returns [Symbol sym]:
 	      Vector <Policy> policies;
 	      policies = new Vector <Policy>() ;	     
 	 }
-	'role' '{' p_i=policy {policies.add((Policy)p_i.lookupValue());} (COMMA p_j=policy {policies.add((Policy)p_j.lookupValue());} )* '}'
+	'role' '{' ((p_i=policy {policies.add((Policy)p_i.lookupValue());})|(var=object_name{
+		  Symbol s2 = currentScope.getSymbol($var.text);
+		  String st=s2.getType();
+		  try{
+		  if((st.equals("policy_type_t")!=true)){
+		  throw(new DataFormatException("rule:role"));
+	//	  System.out.println("added"+p3.verdict);
+		  }}catch(DataFormatException dfe)
+		  {
+		  System.out.println(dfe);
+		  }
+		  Policy p3=(Policy)s2.lookupValue();
+		  policies.add(p3);
+		  System.out.println("Daaldiya");
+		  }
+		))
+		  
+		   (COMMA ((p_j=policy {policies.add((Policy)p_j.lookupValue());})|(var2=object_name
+		   {
+		   Symbol s3 = currentScope.getSymbol($var2.text);
+		  String st=s3.getType();
+		  try{
+		  if((st.equals("policy_type_t")!=true)){
+		  throw(new DataFormatException("rule:role"));
+	//	  System.out.println("added"+p3.verdict);
+		  }}catch(DataFormatException dfe)
+		  {
+		  System.out.println(dfe);
+		  }
+		  Policy p4=(Policy)s3.lookupValue();
+		  policies.add(p4);
+		  System.out.println("Daaldiya");
+		   
+		   })) )* '}'
 	{
 	Role role = new Role (policies);
 	Symbol s = new Symbol ("role_group_type_t","role_group_type_t",role);
