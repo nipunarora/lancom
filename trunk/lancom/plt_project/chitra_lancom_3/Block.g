@@ -148,9 +148,11 @@ prog
  	  System.out.println(command+arg);
  	  	 
 	}
- 	| 'undo' 'policy' object_name 
+ 	| 'undo' 'policy' var=object_name
  	{
-
+ 	  Policy p = (Policy) currentScope.lookup($var.text);
+ 	 if(p!=null)
+ 	 {
  	  String command = "/sbin/iptables";
  	 String verd = null;
  	 if(p.verdict.equals("allow"))
@@ -167,7 +169,9 @@ prog
  	      }
  	 String arg = "  -D FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
  	  System.out.println(command+arg);
-	
+ 	  
+ 	 }
+ 	 else  { System.out.println(" p is null");}
  	}
  	| 'undo' 'policy' policy
  	{
@@ -188,7 +192,7 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -I FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	 String arg = "  -D FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
  	  System.out.println(command+arg);
 
  	}
