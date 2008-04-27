@@ -1,4 +1,4 @@
-grammar Block;
+ grammar Block;
 
 tokens {
  	PLUS 	= '+' ;
@@ -120,7 +120,7 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -I INPUT -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	 String arg = "  -I FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
  	  System.out.println(command+arg);
  	  
  	 }
@@ -144,14 +144,54 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -I INPUT -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	 String arg = "  -I FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
  	  System.out.println(command+arg);
- 	  
- 	 
-	
+ 	  	 
 	}
- 	| 'undo' 'policy' object_name
+ 	| 'undo' 'policy' object_name 
+ 	{
+
+ 	  String command = "/sbin/iptables";
+ 	 String verd = null;
+ 	 if(p.verdict.equals("allow"))
+ 	  {
+ 	    verd = "ACCEPT";
+ 	    }
+ 	  if(p.verdict.equals(" deny "))
+ 	  {
+ 	    verd = "DROP";
+ 	    }  
+ 	   if( verd == null)
+ 	      { 
+ 	      System.out.println("verdict is null");
+ 	      }
+ 	 String arg = "  -D FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	  System.out.println(command+arg);
+	
+ 	}
  	| 'undo' 'policy' policy
+ 	{
+ 	
+	Policy p=(Policy)p2.lookupValue();
+	//System.out.println(p.verdict);
+	 String command = "/sbin/iptables";
+ 	 String verd = null;
+ 	 if(p.verdict.equals("allow"))
+ 	  {
+ 	    verd = "ACCEPT";
+ 	    }
+ 	  if(p.verdict.equals(" deny "))
+ 	  {
+ 	    verd = "DROP";
+ 	    }  
+ 	   if( verd == null)
+ 	      { 
+ 	      System.out.println("verdict is null");
+ 	      }
+ 	 String arg = "  -I FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	  System.out.println(command+arg);
+
+ 	}
  	| set_oper 'host_group' (object_name| host_group) (object_name|host) 
 // 	| set_oper 'serv_group' (object_name|serv_group) serv_descr 
 	|config_display 
@@ -393,7 +433,7 @@ object_values returns [Symbol sym]
 	| role {$sym=$role.sym;}/* Similarly with other types */
 	| host_group { $sym = $host_group.sym;} 
 	| topology
-	| serv_group
+	| serv_group 
 	| interf { $sym = $interf.sym;}
 	| route {$sym = $route.sym;}
 	//	| object_name
@@ -1207,7 +1247,9 @@ route returns [Symbol sym]	:
 //	: ip_addr (nmask)? serv_listen_port;
 
 serv_group
-	: 'service_set' '{' ip_addr ('netmask' ip_addr)? serv_listen_port  (',' ip_addr (nmask)? serv_listen_port)*  '}'  
+	: 
+	'service_set' '{'ip_addr ('netmask' ip_addr)? 
+	serv_listen_port  (',' ip_addr ('netmask' ip_addr)? serv_listen_port)*  '}'  
 //	{
 	// Sambuddho : Not yet decided
 //	}
