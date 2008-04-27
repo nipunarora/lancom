@@ -122,11 +122,44 @@ class Scope {
     public void printSymbols()
     {
         Set entries = symbolMap.entrySet();
+         if( entries == null){        
+	        System.out.println(" entries is null ");
+        }
+
 	  Iterator iter = entries.iterator();
+          if (iter == null)
+		{	
+		 System.out.println(" iter is null ");
+
+		}
 	  while(iter.hasNext())
 	  {
 		Map.Entry entry = (Map.Entry)iter.next();
+		if (entry == null)
+		{		
+		  System.out.println(" entry is null ");	
+		}
 		Symbol s = symbolMap.get(entry.getKey());
+		if( s == null)
+		 {
+  			System.out.println(" s is null ");
+		 }
+		else{
+		if( s.getName() == null)
+		  {
+			System.out.println(" s.getName() is null ");
+		  }
+		else if( s.getType() == null)
+		{
+			System.out.println(" s.getType() is null ");
+		}
+
+		else if(s.getString() == null)
+		{
+			System.out.println(" s.getString() is null ");
+		}
+
+		}
 	  	System.out.println(s.getName() + " " + s.getType() + " " + 			s.getString());
 	  }
     }
