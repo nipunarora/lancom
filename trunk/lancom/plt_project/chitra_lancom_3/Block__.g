@@ -75,21 +75,21 @@ T89 : 'host' ;
 T90 : 'net' ;
 T91 : 'service_set' ;
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 825
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1226
 ID	:	LETTER (LETTER|DIGIT)* ;
                            
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 827
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1228
 fragment LETTER	
 	:	'A'..'Z'
  	|	'a'..'z'
  	|	'_'
  	;
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 833
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1234
 DOT 	:	'.';
 //CHARS	:	(('a'..'z')|('A'..'Z'));
 	
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 836
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1237
 ICMP_MESSAGE_TYPE
 	:	'ECHO REPLY'
 	|	'REDIRECT MESSAGE'
@@ -98,39 +98,39 @@ ICMP_MESSAGE_TYPE
 	|	'ADDRESS MASK REPLY'
 	;	
 	
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 844
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1245
 COMMA	: ',';	
 		
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 846
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1247
 CHAR	:	'\'' ( EscapeSequence | ~('\''|'\\') ) '\'';
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 848
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1249
 STRING	:	'"' ( EscapeSequence | ~('\\'|'"') )* '"';
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 850
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1251
 fragment EscapeSequence
  	:   '\\' ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
  	;
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 854
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1255
 NUMBER	: (DIGIT)+ ;
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 856
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1257
 fragment DIGIT
 	: '0'..'9' ;	
 
 //DELIMITER
 //	:	 ';';
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 862
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1263
 LINE_COMMENT 
 	:	'#' ~('\n'|'\r')* '\r'? '\n' {$channel=HIDDEN;}
 	;
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 866
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1267
 EQUAL	:	'=';
 	
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 868
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1269
 WHITESPACE 
 	:	('\t' | ' ' | '\r' | '\n' | '\u000C')+ {$channel=HIDDEN;}
 	;

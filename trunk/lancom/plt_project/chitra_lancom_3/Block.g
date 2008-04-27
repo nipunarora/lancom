@@ -81,7 +81,15 @@ prog
  	   }
  	  
  	  }
- 	|route_oper route
+ 	|route_cmd2=route_oper robj2=route
+ 	{
+ 	Route r=(Route)robj2.lookupValue();
+ 	if(r!=null)
+ 	{
+ 	System.out.println(" route command :"+$route_cmd2.text);
+ 	System.out.println(" inputs :"+r.getString());
+ 	}
+ 	}
  	|'ifconfig' object_name
 	|'ifconfig' interf
 	|'apply' 'topology' object_name
@@ -858,9 +866,10 @@ interf returns [Symbol sym]
   
 route returns [Symbol sym]	: 
 {
-   boolean ip_object_used , gw_object_used ;
+   boolean ip_object_used , gw_object_used,nm_object_used ;
    ip_object_used = false;
    gw_object_used = false;
+   nm_object_used=false;
 }
 'host' (dst=ip_addr|(ip_obj =object_name {ip_object_used=true;})) 'gw' (gw=ip_addr|(gw_ip_obj = object_name{gw_object_used=true;}))
 	{
@@ -900,7 +909,7 @@ route returns [Symbol sym]	:
 	   }
       	  
 	  Ipaddress gwip = (Ipaddress) s.lookupValue();
-	  Route rh = new Route ($ip_obj.text,gwip.getString());
+	  Route rh = new Route ($ip_obj.text,gwip.getString());//it should be $dst.text instead of ip_obj
 	  Symbol s_ret = new Symbol("route_host_string", "route_type_t", rh);
 	  $sym = s_ret;
 	}
@@ -950,12 +959,237 @@ route returns [Symbol sym]	:
 	|
 	
 	
-	 'net' dst=ip_addr 'netmask' netmask_ip=ip_addr 'gw' gw= ip_addr
+	 'net' (dst=ip_addr|(ip_obj=object_name{ip_object_used=true;})) 'netmask' (netmask_ip=ip_addr|(nm_ip_obj=object_name{nm_object_used=true;})) 'gw' (gw= ip_addr|(gw_ip_obj=object_name{gw_object_used=true;}))
 	{
+	 if((ip_object_used ==true )&& (nm_object_used==false) && (gw_object_used==false))
+	 {
+	 Symbol s = currentScope.getSymbol($ip_obj.text);
+	 
+	 try{
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	    }
+	   
+	  Ipaddress ip = (Ipaddress) s.lookupValue();
+	  Route rh = new Route (ip.getString(),$netmask_ip.text,$gw.text);
+	  Symbol s_ret = new Symbol("route_host_string", "route_type_t", rh);
+	 $sym = s_ret;
+	 
+	 }
+	 else if(ip_object_used ==false && nm_object_used==true && gw_object_used==false)
+	 {
+	 Symbol s = currentScope.getSymbol($nm_ip_obj.text);
+      	  
+      	  /* Check for type error in netmask  */
+      	   try{
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+      	  
+	  Ipaddress nmip = (Ipaddress) s.lookupValue();
+	  Route rh = new Route ($dst.text,nmip.getString(),$gw.text);
+	  Symbol s_ret = new Symbol("route_host_string", "route_type_t", rh);
+	  $sym = s_ret;
+	 }
+	 else if(ip_object_used ==false && nm_object_used==false && gw_object_used==true)
+	 {
+	 
+	 Symbol s = currentScope.getSymbol($gw_ip_obj.text);
+      	  
+      	  /* Check for type error in netmask  */
+      	   try{
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+      	  
+	  Ipaddress gwip = (Ipaddress) s.lookupValue();
+	  Route rh = new Route ($dst.text,$netmask_ip.text,gwip.getString());
+	  Symbol s_ret = new Symbol("route_host_string", "route_type_t", rh);
+	  $sym = s_ret;
+	 
+	 }
+	 
+	 
+	 else if(ip_object_used ==true && nm_object_used==true && gw_object_used==false)
+	 {
+	 
+	 	 	
+	  Symbol dst_ip =  currentScope.getSymbol($ip_obj.text);
+	
+	 try{  /* Check fot type exceptions in ip_address */
+	  if(dst_ip.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+	
+	
+	  Ipaddress ip = (Ipaddress) dst_ip.lookupValue();
+	 
+  	  Symbol dst_nm = currentScope.getSymbol($nm_ip_obj.text);
+	
+	 try{  /* Check for type exception in netmask  */
+	  if(dst_nm.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+	  
+	  
+	  Ipaddress nmip = (Ipaddress) dst_nm.lookupValue();
+	 
+	 Route rh = new Route (ip.getString(),nmip.getString(),$gw.text);
+	  Symbol s_ret = new Symbol("route_host_string", "host_type_t", rh);
+	 $sym = s_ret;
+	 
+	 
+	 }
+	 else if(ip_object_used ==true && nm_object_used==false && gw_object_used==true)
+	 {
+	 
+	 
+	 	
+	  Symbol dst_ip =  currentScope.getSymbol($ip_obj.text);
+	
+	 try{  /* Check fot type exceptions in ip_address */
+	  if(dst_ip.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+	
+	
+	  Ipaddress ip = (Ipaddress) dst_ip.lookupValue();
+	 
+  	  Symbol dst_gw = currentScope.getSymbol($gw_ip_obj.text);
+	
+	 try{  /* Check for type exception in netmask  */
+	  if(dst_gw.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+	  
+	  
+	  Ipaddress gwip = (Ipaddress) dst_gw.lookupValue();
+	 
+	 Route rh = new Route (ip.getString(),$netmask_ip.text,gwip.getString());
+	  Symbol s_ret = new Symbol("route_host_string", "host_type_t", rh);
+	 $sym = s_ret;
+	 }
+	 else if(ip_object_used ==false && nm_object_used==true && gw_object_used==true)
+	 {
+	 
+	 
+	 	 	
+	  Symbol nm_ip =  currentScope.getSymbol($nm_ip_obj.text);
+	
+	 try{  /* Check fot type exceptions in ip_address */
+	  if(nm_ip.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+	
+	
+	  Ipaddress nmip = (Ipaddress) nm_ip.lookupValue();
+	 
+  	  Symbol dst_gw = currentScope.getSymbol($gw_ip_obj.text);
+	
+	 try{  /* Check for type exception in netmask  */
+	  if(dst_gw.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+	  
+	  
+	  Ipaddress gwip = (Ipaddress) dst_gw.lookupValue();
+	 
+	 Route rh = new Route ($dst.txt,nmip.getString(),gwip.getString());
+	  Symbol s_ret = new Symbol("route_host_string", "host_type_t", rh);
+	 $sym = s_ret;
+	 }
+	 else if(ip_object_used ==true && nm_object_used==true && gw_object_used==true)
+	 {
+	 	
+	  Symbol dst_ip =  currentScope.getSymbol($ip_obj.text);
+	
+	 try{  /* Check fot type exceptions in ip_address */
+	  if(dst_ip.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+	
+	
+	  Ipaddress ip = (Ipaddress) dst_ip.lookupValue();
+	 	
+	 	 	
+	  Symbol nm_ip =  currentScope.getSymbol($nm_ip_obj.text);
+	
+	 try{  /* Check fot type exceptions in ip_address */
+	  if(nm_ip.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+	
+	
+	  Ipaddress nmip = (Ipaddress) nm_ip.lookupValue();
+	 
+  	  Symbol dst_gw = currentScope.getSymbol($gw_ip_obj.text);
+	
+	 try{  /* Check for type exception in netmask  */
+	  if(dst_gw.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("rule : route:host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+	  
+	  
+	  Ipaddress gwip = (Ipaddress) dst_gw.lookupValue();
+	 
+	 Route rh = new Route (ip.getString(),nmip.getString(),gwip.getString());
+	  Symbol s_ret = new Symbol("route_host_string", "host_type_t", rh);
+	 $sym = s_ret;
+	 }
+	 else
+	 {
 	 Route rn = new Route ($dst.text,$netmask_ip.text,$gw.text);
    	  Symbol s = new Symbol("net_route_string", "route_type_t", rn);
 	  $sym = s;
-	  
+	  }
 	}
 	;
 
