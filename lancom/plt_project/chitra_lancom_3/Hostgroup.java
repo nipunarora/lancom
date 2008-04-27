@@ -7,7 +7,6 @@
  * and open the template in the editor.
  */
 
-package Lancom;
 import java.util.*;
 import java.lang.*;
 import java.util.*;

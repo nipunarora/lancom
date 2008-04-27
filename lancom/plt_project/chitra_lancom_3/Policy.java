@@ -19,13 +19,13 @@ import java.lang.*;
 public class Policy 
 {
     
-    String direction;
-    String verdict;
-    String protocol;
-    String icmpMessage;
-    Ipaddress ipAddress;
-    Ipaddress netMask;
-    int sourcePort;
+    public String direction;
+    public String verdict;
+    public String protocol;
+    public String icmpMessage;
+    public Ipaddress ipAddress;
+    public Ipaddress netMask;
+    public int sourcePort;
     
     
     /** Creates a new instance of Policy */
@@ -64,9 +64,8 @@ public class Policy
     
     public String getString()
     {
-        String temp = "direction : " + direction +  "ipAddress: " + ipAddress.getString() + "netmask: " + netMask.getString();
-        System.out.println(temp); 
-	 return temp;
+        return  new String("direction : " + direction +  "ipAddress: " + ipAddress.getString() + "netmask: " + netMask.getString());
+	
     }
     
 }
