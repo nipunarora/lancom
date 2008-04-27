@@ -102,7 +102,7 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -I INPUT -p "+p.protocol+" -s " + p.ipAddress.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	 String arg = "  -I INPUT -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
  	  System.out.println(command+arg);
  	  
  	 }
@@ -381,7 +381,7 @@ policy returns [Symbol sym]	:
   	 ip_object_used = false;
   	 netmask_object_used = false;
   	}
-  	dir=direction verd=verdict protocol=proto (src_ip=ip_addr|(ip_obj=object_name {ip_object_used = true;}))
+  	dir=direction verd=verdict protocol=proto (src_ip=ip_addr|(ip_obj=object_name {System.out.println(" object name:"+$ip_obj.text);ip_object_used = true;}))
   	 'netmask' (netmask_ip=ip_addr|(netmask_ip_obj = object_name {netmask_object_used = true;})) (sport=port  {src_port++;} )?  //ip_addr 'netmask' src_netmask=ip_addr  sport=(port)?
 {
 	Ipaddress sip =null, snetmask=null;
@@ -389,10 +389,12 @@ policy returns [Symbol sym]	:
 	{
 	  Symbol s = currentScope.getSymbol($ip_obj.text);
 	   sip = (Ipaddress) s.lookupValue();
+	   snetmask = new Ipaddress($netmask_ip.text);
 	  }
 	else if (ip_object_used == false  && netmask_object_used ==true)
 	{
       	  Symbol s = currentScope.getSymbol($netmask_ip_obj.text);
+      	   sip = new Ipaddress ($src_ip.text);
 	   snetmask = (Ipaddress) s.lookupValue();
 	}
 	else if(ip_object_used ==true && netmask_object_used ==true)
@@ -412,6 +414,10 @@ policy returns [Symbol sym]	:
 	 {
 	   System.out.println( " source ip for policy :  "+ sip.getString());
 	   }
+	 if(snetmask == null)
+	  {
+	   System.out.println("XXX");
+	   }  
 	 if(snetmask != null)
 	 {
 	  System.out.println(" source netmask for policy :"+snetmask.getString());
