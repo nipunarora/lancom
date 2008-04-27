@@ -45,7 +45,8 @@ public class Interface
             temp= temp + iter.next().getString();
         }
    
-	return temp;
+//	System.out.println(temp);
+	return (new String (temp));
     }
     
 }
