@@ -120,8 +120,20 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -I FORWARD -p "+p.protocol+" -d"+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
- 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() +" --destination-port "+p.destPort+" --source-port " +p.sourcePort+" -j " +verd;
+ 	      
+ 	       
+ 	 String arg = "  -I FORWARD -p "+p.protocol+" -d "+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
+ 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() ;
+ 	 
+ 	 if(p.destPort != 0){
+ 	 arg = arg + " --destination-port "+p.destPort;
+ 	 }
+ 	 
+ 	 if(p.sourcePort != 0){
+ 	 arg = arg + " --source-port "+p.sourcePort;
+ 	 }
+ 	 arg = arg+" -j " +verd;
+ 	 
  	  System.out.println(command+arg);
  	  
  	 }
@@ -145,8 +157,21 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -I FORWARD -p "+p.protocol+" -d"+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
- 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() +" --destination-port "+p.destPort+" --source-port " +p.sourcePort+" -j " +verd;
+ 	      
+ 	      String arg = "  -I FORWARD -p "+p.protocol+" -d "+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
+ 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() ;
+ 	 
+ 	 if(p.destPort != 0){
+ 	 arg = arg + " --destination-port "+p.destPort;
+ 	 }
+ 	 
+ 	 if(p.sourcePort != 0){
+ 	 arg = arg + " --source-port "+p.sourcePort;
+ 	 }
+ 	 arg = arg+" -j " +verd;
+ 	 
+ 	  System.out.println(command+arg);
+	      
  	  System.out.println(command+arg);
  	  	 
 	}
@@ -169,11 +194,23 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -D FORWARD -p "+p.protocol+" -d"+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
- 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() +" --destination-port "+p.destPort+" --source-port " +p.sourcePort+" -j " +verd;
- 	  System.out.println(command+arg);
- 	  
+
+
+	String arg = "  -D FORWARD -p "+p.protocol+" -d "+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
+ 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() ;
+ 	 
+ 	 if(p.destPort != 0){
+ 	 arg = arg + " --destination-port "+p.destPort;
  	 }
+ 	 
+ 	 if(p.sourcePort != 0){
+ 	 arg = arg + " --source-port "+p.sourcePort;
+ 	 }
+ 	 arg = arg+" -j " +verd;
+ 	 
+	  System.out.println(command+arg);
+  
+	 }
  	 else  { System.out.println(" policy object is null");}
  	}
  	| 'undo' 'policy' p3=policy
@@ -195,8 +232,18 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -D FORWARD -p "+p.protocol+" -d"+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
- 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() +" --destination-port "+p.destPort+" --source-port " +p.sourcePort+" -j " +verd;
+ 	String arg = "  -D FORWARD -p "+p.protocol+" -d "+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
+ 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() ;
+ 	 
+ 	 if(p.destPort != 0){
+ 	 arg = arg + " --destination-port "+p.destPort;
+ 	 }
+ 	 
+ 	 if(p.sourcePort != 0){
+ 	 arg = arg + " --source-port "+p.sourcePort;
+ 	 }
+ 	 arg = arg+" -j " +verd;
+ 	 
  	  System.out.println(command+arg);
  	}
  	| set_oper 'host_group' (object_name| host_group) (object_name|host) 
@@ -304,7 +351,7 @@ set_oper
 				//System.out.println(" current symbol table");				
 			//	currentScope.printSymbols();
 			}
-			currentScope.printSymbols();
+		//	currentScope.printSymbols();
 			map.clear();
  		}
  
@@ -583,7 +630,7 @@ policy returns [Symbol sym]	:
   	   
   	   sip = (Ipaddress) s.lookupValue(); }))
 	   
-  	 'netmask' ((snetmask_ip=ip_addr {dnetmask = new Ipaddress($snetmask_ip.text);})|
+  	 'netmask' ((snetmask_ip=ip_addr {snetmask = new Ipaddress($snetmask_ip.text);})|
   	  (snetmask_ip_obj = object_name 
   	  {Symbol s = currentScope.getSymbol($snetmask_ip_obj.text);  
   	  
@@ -600,16 +647,17 @@ policy returns [Symbol sym]	:
 	  {
 	   System.out.println(dfe);
 	   }
-  	  
   	  snetmask = (Ipaddress) s.lookupValue();}))
-  	  
+  	
   	  ((sport=port {sp = new String($sport.text);} ) | ('all')) ) ?
   	 	
   	 
 {
+	System.out.println ($dir.text+$verd.text+$protocol.text+sip.getString()+snetmask.getString()+
+	                                      sp+dip.getString()+ dnetmask.getString()+dp);
 	
-	Policy pl = new Policy($dir.text,$verd.text, $protocol.text, dip.getString(),dnetmask.getString(),
-		               dp,sip.getString(),snetmask.getString(),sp);		
+	Policy pl = new Policy($dir.text,$verd.text, $protocol.text, sip.getString(),snetmask.getString(),
+		              sp,dip.getString(),dnetmask.getString(),dp);		
 
 	 Symbol s = new Symbol("policy_tcp_udp","policy_type_t",pl);
 	$sym = s;
