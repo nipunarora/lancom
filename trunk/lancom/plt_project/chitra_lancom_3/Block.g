@@ -108,11 +108,11 @@ prog
  	 {
  	  String command = "/sbin/iptables";
  	 String verd = null;
- 	 if(p.verdict.equals("allow"))
+ 	 if(p.verdict.equals("allow")==true)
  	  {
  	    verd = "ACCEPT";
  	    }
- 	  if(p.verdict.equals(" deny "))
+ 	  if(p.verdict.equals("deny")==true)
  	  {
  	    verd = "DROP";
  	    }  
@@ -120,7 +120,8 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -I FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	 String arg = "  -I FORWARD -p "+p.protocol+" -d"+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
+ 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() +" --destination-port "+p.destPort+" --source-port " +p.sourcePort+" -j " +verd;
  	  System.out.println(command+arg);
  	  
  	 }
@@ -136,7 +137,7 @@ prog
  	  {
  	    verd = "ACCEPT";
  	    }
- 	  if(p.verdict.equals(" deny "))
+ 	  if(p.verdict.equals("deny"))
  	  {
  	    verd = "DROP";
  	    }  
@@ -144,7 +145,8 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -I FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	 String arg = "  -I FORWARD -p "+p.protocol+" -d"+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
+ 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() +" --destination-port "+p.destPort+" --source-port " +p.sourcePort+" -j " +verd;
  	  System.out.println(command+arg);
  	  	 
 	}
@@ -159,7 +161,7 @@ prog
  	  {
  	    verd = "ACCEPT";
  	    }
- 	  if(p.verdict.equals(" deny "))
+ 	  if(p.verdict.equals("deny"))
  	  {
  	    verd = "DROP";
  	    }  
@@ -167,16 +169,17 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -D FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	 String arg = "  -D FORWARD -p "+p.protocol+" -d"+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
+ 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() +" --destination-port "+p.destPort+" --source-port " +p.sourcePort+" -j " +verd;
  	  System.out.println(command+arg);
  	  
  	 }
- 	 else  { System.out.println(" p is null");}
+ 	 else  { System.out.println(" policy object is null");}
  	}
- 	| 'undo' 'policy' policy
+ 	| 'undo' 'policy' p3=policy
  	{
  	
-	Policy p=(Policy)p2.lookupValue();
+	Policy p=(Policy)p3.lookupValue();
 	//System.out.println(p.verdict);
 	 String command = "/sbin/iptables";
  	 String verd = null;
@@ -184,7 +187,7 @@ prog
  	  {
  	    verd = "ACCEPT";
  	    }
- 	  if(p.verdict.equals(" deny "))
+ 	  if(p.verdict.equals("deny"))
  	  {
  	    verd = "DROP";
  	    }  
@@ -192,9 +195,9 @@ prog
  	      { 
  	      System.out.println("verdict is null");
  	      }
- 	 String arg = "  -D FORWARD -p "+p.protocol+" -s " + p.ipAddress.getString()+"/"+p.netMask.getString() +"  --source-port " +p.sourcePort+" -j " +verd;
+ 	 String arg = "  -D FORWARD -p "+p.protocol+" -d"+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
+ 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() +" --destination-port "+p.destPort+" --source-port " +p.sourcePort+" -j " +verd;
  	  System.out.println(command+arg);
-
  	}
  	| set_oper 'host_group' (object_name| host_group) (object_name|host) 
 // 	| set_oper 'serv_group' (object_name|serv_group) serv_descr 
@@ -301,7 +304,8 @@ set_oper
 				//System.out.println(" current symbol table");				
 			//	currentScope.printSymbols();
 			}
-		//	currentScope.printSymbols();
+			currentScope.printSymbols();
+			map.clear();
  		}
  
  	;
@@ -492,139 +496,249 @@ role  returns [Symbol sym]:
 	
 	;
 //policy  :	direction verdict proto (port)?  ;//ip_addr 'netmask' src_netmask=ip_addr  sport=(port)?;
+/* Policy which can be used for RBAC as well as traditional FIREWALL / PACKET FILTER policies */
 
 policy returns [Symbol sym]	: 
-  	{int src_port = 0;
-  	 boolean ip_object_used , netmask_object_used ;
-  	 ip_object_used = false;
-  	 netmask_object_used = false;
+  	{
+  	 String sp;
+  	 sp ="0";
+  	 String dp;
+  	 dp ="0";
+  	 Ipaddress dip;
+  	 dip  = new Ipaddress("0.0.0.0") ;
+  	 Ipaddress dnetmask ;
+  	 dnetmask = new Ipaddress("0.0.0.0");
+  	 Ipaddress sip ;
+  	 sip = new Ipaddress("0.0.0.0");
+  	 Ipaddress snetmask;
+  	 snetmask = new Ipaddress("0.0.0.0");
   	}
-  	dir=direction verd=verdict protocol=proto (src_ip=ip_addr|(ip_obj=object_name {System.out.println(" object name:"+$ip_obj.text);ip_object_used = true;}))
-  	 'netmask' (netmask_ip=ip_addr|(netmask_ip_obj = object_name {netmask_object_used = true;})) (sport=port  {src_port++;} )?  //ip_addr 'netmask' src_netmask=ip_addr  sport=(port)?
-{
-	Ipaddress sip =null, snetmask=null;
-	if(ip_object_used == true && netmask_object_used ==false)
-	{
-	  Symbol s = currentScope.getSymbol($ip_obj.text);
-	   sip = (Ipaddress) s.lookupValue();
-	   snetmask = new Ipaddress($netmask_ip.text);
+  	dir=direction verd=verdict protocol=proto 
+  	('dst' 
+  	  ((dst_ip = ip_addr { dip = new Ipaddress($dst_ip.text);})  	| 
+  	  (dip_obj = object_name
+  	   { Symbol s = currentScope.getSymbol($dip_obj.text);   
+  	   
+  	   if ( s == null)
+  	   {
+  	    System.out.println ("object : "+$dip_obj.text+"  not found");
+  	    } 
+  	    
+  	   try{  /* Check fot type exceptions in ip_address */
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("policy : tcp/udp:destip"));}
 	  }
-	else if (ip_object_used == false  && netmask_object_used ==true)
-	{
-      	  Symbol s = currentScope.getSymbol($netmask_ip_obj.text);
-      	   sip = new Ipaddress ($src_ip.text);
-	   snetmask = (Ipaddress) s.lookupValue();
-	}
-	else if(ip_object_used ==true && netmask_object_used ==true)
-	{
-	  Symbol s_ip =  currentScope.getSymbol($ip_obj.text);
-	   sip = (Ipaddress) s_ip.lookupValue();
-  	  Symbol s_nmask = currentScope.getSymbol($netmask_ip_obj.text);
-	   snetmask = (Ipaddress) s_nmask.lookupValue();
-	}
-	else{
-	sip = new Ipaddress($src_ip.text);
-	snetmask = new Ipaddress($netmask_ip.text);
-	}
-
-
-	if(sip != null)
-	 {
-	   System.out.println( " source ip for policy :  "+ sip.getString());
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
 	   }
+  	   	
+  	   dip = (Ipaddress) s.lookupValue(); }))
+	   
+  	 'netmask' ((dnetmask_ip=ip_addr {dnetmask = new Ipaddress($dnetmask_ip.text);})|
+  	  (dnetmask_ip_obj = object_name 
+  	  {Symbol s = currentScope.getSymbol($dnetmask_ip_obj.text);  
+  	  
+  	  if ( s == null)
+  	   {
+  	    System.out.println ("object : "+ $dnetmask_ip_obj.text+"  not found");
+  	    } 
+  	    
+  	   try{  /* Check fot type exceptions in ip_address */
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("policy : tcp/udp:dest_netmask"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+  	  
+  	  
+  	   dnetmask = (Ipaddress) s.lookupValue();
+  	  
+  	  
+  	  }))
+  	  
+  	    ((dport=port {dp = new String($dport.text);} ) | ('all')) ) ?
+  	  
+  	  
+  	('src'
+  	((src_ip = ip_addr { sip = new Ipaddress($src_ip.text);})  	| 
+  	  (sip_obj = object_name
+  	   { Symbol s = currentScope.getSymbol($sip_obj.text);   
+  	   
+  	   if ( s == null)
+  	   {
+  	    System.out.println ("object : "+$sip_obj.text+"  not found");
+  	    } 
+  	    
+  	   try{  /* Check fot type exceptions in ip_address */
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("policy : tcp/udp:srcip"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+  	   
+  	   sip = (Ipaddress) s.lookupValue(); }))
+	   
+  	 'netmask' ((snetmask_ip=ip_addr {dnetmask = new Ipaddress($snetmask_ip.text);})|
+  	  (snetmask_ip_obj = object_name 
+  	  {Symbol s = currentScope.getSymbol($snetmask_ip_obj.text);  
+  	  
+  	  if ( s == null)
+  	   {
+  	    System.out.println ("object : "+$snetmask_ip_obj.text+"  not found");
+  	    } 
+  	    
+  	   try{  /* Check fot type exceptions in ip_address */
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("policy : tcp/udp:snetmask"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+  	  
+  	  snetmask = (Ipaddress) s.lookupValue();}))
+  	  
+  	  ((sport=port {sp = new String($sport.text);} ) | ('all')) ) ?
+  	 	
+  	 
+{
 	
-	 if(snetmask != null)
-	 {
-	  System.out.println(" source netmask for policy :"+snetmask.getString());
-	 }  
+	Policy pl = new Policy($dir.text,$verd.text, $protocol.text, dip.getString(),dnetmask.getString(),
+		               dp,sip.getString(),snetmask.getString(),sp);		
 
-
-	Policy pl;
-                          if(src_port>0){
-	 pl = new Policy($dir.text,$verd.text, $protocol.text, sip.getString(),snetmask.getString(),$sport.text);
-	}
-	 else{
- 	  pl = new Policy($dir.text,$verd.text, $protocol.text, sip.getString(),snetmask.getString(),"0");		
- 	  }
- 	  
- 	   	  
-                          Symbol s = new Symbol("policy_tcp_udp","policy_type_t",pl);
+	 Symbol s = new Symbol("policy_tcp_udp","policy_type_t",pl);
 	$sym = s;
+
+	
 //	currentScope.printSymbols();
 }
 	| 
 	
-	{int src_port = 0;
-  	 boolean ip_object_used , netmask_object_used ;
-  	 ip_object_used = false;
-  	 netmask_object_used = false;
-  	}
-		
-	dir=direction verd=verdict icmp_mesg=icmp_cntrl_message  (src_ip=ip_addr | (ip_obj=object_name {ip_object_used = true;})) 
-	    'netmask' (src_netmask=ip_addr | (netmask_ip_obj  = object_name {netmask_object_used = true;}))
 	{
+	 String sp;
+  	 sp ="0";
+  	 String dp;
+  	 dp ="0";
+  	 Ipaddress dip;
+  	 dip  = new Ipaddress("0.0.0.0");
+  	 Ipaddress dnetmask ;
+  	 dnetmask = new Ipaddress("0.0.0.0");
+  	 Ipaddress sip ;
+  	 sip = new Ipaddress("0.0.0.0" );
+  	 Ipaddress snetmask;
+  	 snetmask = new Ipaddress("0.0.0.0");
+	}	
+	
+	dir=direction verd=verdict icmp_mesg=icmp_cntrl_message  
+	('dst' 
+  	  ((dst_ip = ip_addr { dip = new Ipaddress($dst_ip.text);})  	| 
+  	  (dip_obj = object_name
+  	   { Symbol s = currentScope.getSymbol($dip_obj.text); 
+  	   
+  	   if ( s == null)
+  	   {
+  	    System.out.println ("object : $dip_obj.text  not found");
+  	    } 
+  	    
+  	   try{  /* Check fot type exceptions in ip_address */
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("policy : icmp:destip"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+  	   
+  	   
+  	     dip = (Ipaddress) s.lookupValue(); }))
+	   
+  	 'netmask' ((dnetmask_ip=ip_addr {dnetmask = new Ipaddress($dnetmask_ip.text);})|
+  	  (dnetmask_ip_obj = object_name 
+  	  {Symbol s = currentScope.getSymbol($dnetmask_ip_obj.text); 
+  	  
+  	  if ( s == null)
+  	   {
+  	    System.out.println ("object : $dnetmask_obj.text  not found");
+  	    } 
+  	    
+  	   try{  /* Check fot type exceptions in ip_address */
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("policy : icmp:dnetmask"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+  	  
+  	    dnetmask = (Ipaddress) s.lookupValue();})))?
+  	  	  
+  	  
+  	('src'
+  	((src_ip = ip_addr { sip = new Ipaddress($src_ip.text);})  	| 
+  	  (sip_obj = object_name
+  	   { Symbol s = currentScope.getSymbol($sip_obj.text);  
+  	   
+  	   if ( s == null)
+  	   {
+  	    System.out.println ("object : $src_obj.text  not found");
+  	    } 
+  	    
+  	   try{  /* Check fot type exceptions in ip_address */
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("policy : icmp:srcip"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+  	   
+  	   
+  	    sip = (Ipaddress) s.lookupValue(); }))
+	   
+  	 'netmask' ((snetmask_ip=ip_addr {dnetmask = new Ipaddress($snetmask_ip.text);})|
+  	  (snetmask_ip_obj = object_name 
+  	  {Symbol s = currentScope.getSymbol($snetmask_ip_obj.text); 
+  	  
+  	  if ( s == null)
+  	   {
+  	    System.out.println ("object : "+ $snetmask_ip_obj.text+"  not found");
+  	    } 
+  	    
+  	   try{  /* Check fot type exceptions in ip_address */
+	  if(s.getType().equals ("ipaddr_t") != true) 
+	  { throw (new DataFormatException("policy : icmp:snetmask"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	   }
+  	  
+  	  
+  	    snetmask = (Ipaddress) s.lookupValue();})))?
+ 	  
+	
+	
+	{
+	
+	Policy pl = new Policy($dir.text,$verd.text, $icmp_mesg.text, dip.getString(),dnetmask.getString(),
+		               sip.getString(),snetmask.getString());		
+
+	 Symbol s = new Symbol("policy_tcp_udp","policy_type_t",pl);
+	$sym = s;
+	}	
 	
 //	Policy pl;
 
-	Ipaddress sip =null , snetmask=null;
-	if(ip_object_used == true && netmask_object_used ==false)
-	{
-	  Symbol s = currentScope.getSymbol($ip_obj.text);
-	   sip = (Ipaddress) s.lookupValue();
-	  }
-	else if (ip_object_used == false  && netmask_object_used ==true)
-	{
-      	  Symbol s = currentScope.getSymbol($netmask_ip_obj.text);
-	   snetmask = (Ipaddress) s.lookupValue();
-	}
-	else if(ip_object_used ==true && netmask_object_used ==true)
-	{
-	  Symbol s_ip =  currentScope.getSymbol($ip_obj.text);
-	   sip = (Ipaddress) s_ip.lookupValue();
-  	  Symbol s_nmask = currentScope.getSymbol($netmask_ip_obj.text);
-	   snetmask = (Ipaddress) s_nmask.lookupValue();
-	}
-	else{
-	sip = new Ipaddress($src_ip.text);
-	snetmask = new Ipaddress($netmask_ip.text);
-	}
-
-	if(sip != null)
-	 {
-	   System.out.println( " source ip for policy :  "+ sip.getString());
-	   }
-	 if(snetmask != null)
-	 {
-	  System.out.println(" source netmask for policy :"+snetmask.getString());
-	 }  
-	   
-	Policy p2 = new Policy($dir.text,$verd.text, $icmp_mesg.text, sip.getString(),snetmask.getString());
-	
-                          Symbol s = new Symbol("policy_icmp","policy_type_t",p2);
-	$sym = s;
-//	currentScope.printSymbols();
-	}
-/*	|
-	policy_obj_name=object_name
-	{
-	 Policy p3;
-	 Symbol s = currentScope.getSymbol($policy_obj_name.text);
-                            if (s == null)
-                             {
-                               System.out.println (" policy: symbol not found ");
-                              }
-                             else
-                             {
-                                p3 = (Policy)(s.lookupValue()).clone();
-                                Symbol s = new Symbol(s.getName(),s.getType(),p3);
-                                } 
-	  $sym = s;
-	} */
 	;	
 	
 
-topology:	(host_group)+ role
-	|	(serv_group)+ role	
+topology :	host_group role
+	|serv_group role	
 	;
 
 /* adding integers and characters */
@@ -669,13 +783,13 @@ char_value  /*returns [Symbol sym]*/
 	; //requires object name here as well  for something like : char x = y; 
 
 
-direction 	
+direction
 	:	'inbound' 
 	| 	'outbound'
 	;
 
-verdict : 	'allow' 
-	| 	'deny'
+verdict returns [String verd] : 	'allow' { $verd = new String("allow"); }
+	| 	'deny' {$verd = new String ("deny");}
 	;
 
 proto   :  'udp'
@@ -822,7 +936,6 @@ host	returns [Symbol sym]:
 	  
 	  
 	  Ipaddress nmask = (Ipaddress) s_nmask.lookupValue();
-	 
 	  h = new Host	( ip.getString(),nmask.getString());
 	  Symbol s_ret = new Symbol("host_descr_string", "host_type_t", h);
 	 $sym = s_ret;
