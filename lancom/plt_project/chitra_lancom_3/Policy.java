@@ -23,48 +23,73 @@ public class Policy
     public String verdict;
     public String protocol;
     public String icmpMessage;
-    public Ipaddress ipAddress;
-    public Ipaddress netMask;
-    public int sourcePort;
-    
+    public Ipaddress sourceIpAddress = new Ipaddress("0.0.0.0");
+    public Ipaddress sourceNetMask = new Ipaddress("0.0.0.0");
+    public int sourcePort = 0;
+    public Ipaddress destIpAddress = new Ipaddress("0.0.0.0");
+    public Ipaddress destNetMask = new Ipaddress("0.0.0.0");
+    public int destPort = 0;
+     
     
     /** Creates a new instance of Policy */
-    public Policy(String dir, String verd, String proto, String ip, String net, String source) 
+    public Policy(String dir, String verd, String proto, String sip, String snet, String source,
+		  String dip, String dnet, String dest) 
     {
         try
         {
                     direction = new String (dir);
                     verdict = new String(verd);
                     protocol= new String (proto);
-                    ipAddress = new Ipaddress(ip);
-                    netMask = new Ipaddress(net);
+                
+		    sourceIpAddress = new Ipaddress(sip);
+                    sourceNetMask = new Ipaddress(snet);
                     sourcePort = Integer.parseInt(source);
-                    if(sourcePort> 65536)
+		    
+		    if(sourcePort> 65535)
                     {
-                        throw new ExceedsLancomSizeException();
+                        throw new ExceedsLancomSizeException("Source port > 65535");
+                    }	   
+
+		    destIpAddress = new Ipaddress(dip);
+                    destNetMask = new Ipaddress(dnet);
+                    destPort = Integer.parseInt(dest);
+		 
+                    if(destPort> 65536)
+                    {
+                        throw new ExceedsLancomSizeException("Destination port > 65535");
                     }
         }
         catch(Exception e)
         {
-            System.out.println("Exception occured in class policy");
+            System.out.println("Exception occured in class policy "+ e);
             e.printStackTrace();
         }
 
     }
     
-    public Policy(String dir, String verd, String icmp, String ip, String net)
+    public Policy(String dir, String verd, String icmp, String sip, String snet,
+		  String dip, String dnet)
     {
-                    direction = new String (dir);
+
+		    direction = new String (dir);
                     verdict = new String(verd);
-                    icmpMessage = new String(icmp);
-                    ipAddress = new Ipaddress(ip);
-                    netMask = new Ipaddress(net);
-                    
+
+                    sourceIpAddress = new Ipaddress(sip);
+                    sourceNetMask = new Ipaddress(snet);
+		    
+
+		    destIpAddress = new Ipaddress(dip);
+                    destNetMask = new Ipaddress(dnet);
+		      
+		    icmpMessage = new String(icmp);	
+		   	
     }
     
     public String getString()
     {
-        return  new String("direction : " + direction +  "ipAddress: " + ipAddress.getString() + "netmask: " + netMask.getString());
+        return  new String("direction : " + direction +  "sourceIpAddress: " + sourceIpAddress.getString() + "sourceNetmask: " + sourceNetMask.getString()
+			   + "destIpAddress : "+destIpAddress.getString()+"destNetMask:" + destNetMask.getString()+"soucePort:"+sourcePort+"destPort"+destPort);	
+				
 	
     }
     
