@@ -18,4 +18,8 @@ public class ExceedsLancomSizeException extends Exception{
     public ExceedsLancomSizeException() {
     }
     
+     public ExceedsLancomSizeException(String expmesg) {
+     super(expmesg);	
+    }
+
 }
