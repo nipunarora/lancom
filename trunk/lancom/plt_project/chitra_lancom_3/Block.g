@@ -488,7 +488,7 @@ object_values returns [Symbol sym]
 	| role {$sym=$role.sym;}/* Similarly with other types */
 	| host_group { $sym = $host_group.sym;} 
 	| topology
-	| serv_group 
+	| serv_group {$sym = $serv_group.sym;}
 	| interf { $sym = $interf.sym;}
 	| route {$sym = $route.sym;}
 	//	| object_name
@@ -1411,10 +1411,98 @@ route returns [Symbol sym]	:
 //serv_descr 
 //	: ip_addr (nmask)? serv_listen_port;
 
-serv_group
+serv_group returns [Symbol sym]
 	: 
-	'service_set' '{'ip_addr ('netmask' ip_addr)? 
-	serv_listen_port  (',' ip_addr ('netmask' ip_addr)? serv_listen_port)*  '}'  
+	{
+	 Ipaddress serviceIp;
+	 serviceIp = new Ipaddress ("0.0.0.0");
+	 Ipaddress serviceNetmask;
+	 serviceNetmask = new Ipaddress("0.0.0.0");
+	 String servicePort;
+	 servicePort = "0";
+	Vector <Servicedescriptor> sDesc;
+	sDesc = new Vector <Servicedescriptor> ();
+	}
+
+	'service_group' '{' ((serv_ip_str =  ip_addr { serviceIp = new Ipaddress($serv_ip_str.text);})
+		| (serv_ip_obj = object_name { 
+		 Symbol s = currentScope.getSymbol($serv_ip_obj.text);
+	 
+		 try{
+		  if(s.getType().equals ("ipaddr_t") != true) 
+		  { throw (new DataFormatException("rule : service_group:service ip"));}
+		  }
+		  catch (DataFormatException dfe)
+		  {
+		   System.out.println(dfe);
+		    }
+	   
+		  serviceIp = (Ipaddress) s.lookupValue();
+		  }))
+		
+		
+		
+		
+		 ('netmask' ((serv_netmask_str=ip_addr{serviceNetmask = new Ipaddress($serv_netmask_str.text);})|
+		                       (serv_netmask_obj = object_name{ 
+		                       Symbol s = currentScope.getSymbol($serv_netmask_obj.text);
+		                       
+		 try{
+		  if(s.getType().equals ("ipaddr_t") != true) 
+		  { throw (new DataFormatException("rule : service_group: service_netmask"));}
+		  }
+		  catch (DataFormatException dfe)
+		  {
+		   System.out.println(dfe);
+		    }
+		    
+		    serviceNetmask = (Ipaddress)s.lookupValue();
+	                               })) )?  
+		      serv_port_str=serv_listen_port  { sDesc.add ((new Servicedescriptor(serviceIp.getString(),serviceNetmask.getString(),
+		      			         $serv_port_str.text)));}
+		      
+		      
+	(', '  ((extra_ip_str =  ip_addr { serviceIp = new Ipaddress($extra_ip_str.text);})
+		| (extra_ip_obj = object_name { 
+		 Symbol s = currentScope.getSymbol($extra_ip_obj.text);
+	 
+		 try{
+		  if(s.getType().equals ("ipaddr_t") != true) 
+		  { throw (new DataFormatException("rule : service_group:service ip:second_comma_separated_values"));}
+		  }
+		  catch (DataFormatException dfe)
+		  {
+		   System.out.println(dfe);
+		    }
+	   
+		  serviceIp = (Ipaddress) s.lookupValue();
+		  }))
+		
+				
+		 ('netmask' ((extra_serv_netmask_str=ip_addr{serviceNetmask = new Ipaddress($extra_serv_netmask_str.text);})|
+		                       (extra_serv_netmask_obj = object_name{ 
+		                       Symbol s = currentScope.getSymbol($extra_serv_netmask_obj.text);
+		                       
+		 try{
+		  if(s.getType().equals ("ipaddr_t") != true) 
+		  { throw (new DataFormatException("rule : service_group: service_netmask"));}
+		  }
+		  catch (DataFormatException dfe)
+		  {
+		   System.out.println(dfe);
+		    }
+		    
+		    serviceNetmask = (Ipaddress)s.lookupValue();
+	                               })) )?  
+		      extra_serv_port_str=serv_listen_port  { sDesc.add ((new Servicedescriptor(serviceIp.getString(),serviceNetmask.getString(),
+		      			         $extra_serv_port_str.text)));}
+		      )*  '}'  
+		      
+		      {
+		       Servicegroup sg = new Servicegroup(sDesc);
+		       Symbol s = new Symbol ("serv_group_type_t","serv_group_type_t",sDesc);
+		       $sym = s;		      
+		     }
 //	{
 	// Sambuddho : Not yet decided
 //	}
