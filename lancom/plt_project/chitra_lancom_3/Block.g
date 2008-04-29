@@ -487,7 +487,7 @@ object_values returns [Symbol sym]
 	}
 	| role {$sym=$role.sym;}/* Similarly with other types */
 	| host_group { $sym = $host_group.sym;} 
-	| topology
+	| topology //{$sym = $topology.sym;}
 	| serv_group {$sym = $serv_group.sym;}
 	| interf { $sym = $interf.sym;}
 	| route {$sym = $route.sym;}
@@ -785,8 +785,22 @@ policy returns [Symbol sym]	:
 	;	
 	
 
-topology :	host_group role
-	|serv_group role	
+topology  returns [Symbol sym]:
+	{
+	Hostgroup hg;
+	Servicegroup sg;
+	Role rl;
+	}
+		
+	((host_group_sym=host_group {hg = (Hostgroup)host_group_sym.lookupValue();}) |( host_group_obj=object_name  
+	{Symbol s  = currentScope.getSymbol ($host_group_obj.text); 
+	hg = (Hostgroup) s.lookupValue(); }))
+		
+	 ((role_sym=role {rl = (Role) role_sym.lookupValue(); })| ( role_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($role_obj.text);
+	 rl = (Role) s.lookupValue(); } ))
+	 
+	 |serv_group role	
+	 
 	;
 
 /* adding integers and characters */
