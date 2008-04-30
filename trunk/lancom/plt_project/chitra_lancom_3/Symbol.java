@@ -2,7 +2,8 @@ public class Symbol {
     public String name;
     public String type;
     Object value;
-    
+    public static String OS = "linux";
+ 
     public Symbol(String name) 
     {
         this.name = name;
@@ -66,7 +67,14 @@ public class Symbol {
 			
 			//val = n.toString();
 		}
-		
+		if(this.type.equals("serv_group_type_t"))
+		{
+			Servicegroup temp = (Servicegroup)this.value;
+			return (new String(temp.getString()));
+			
+			//val = n.toString();
+		}
+
 		if(this.type.equals("host_group_type_t"))
 		{
 			Hostgroup temp = (Hostgroup)this.value;
