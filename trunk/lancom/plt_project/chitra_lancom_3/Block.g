@@ -28,10 +28,16 @@ tokens {
 {      
 	Scope globalScope = new Scope(null);
 	Scope currentScope = globalScope;
+	
 	Map<String, Assignment> map = new HashMap<String, Assignment>(); 
-
+	//OStype osType= new OStype("linux");
+	
+//	public static char OS ;
+	
     	public static void main(String[] args) throws Exception 
     	{
+    	OStype.i = 1;
+    	System.out.println(" i:" + OStype.i);
         	BlockLexer lex = new BlockLexer(new ANTLRFileStream(args[0]));
 	       	CommonTokenStream tokens = new CommonTokenStream(lex);
 
@@ -39,7 +45,7 @@ tokens {
 
 	        try 
 	        {
-	            parser.role();
+	            parser.prog();
         	} 
         	catch (RecognitionException e)  
         	{
@@ -48,7 +54,7 @@ tokens {
     	}
 }
 prog
-	:	'prog' statement_list+ 'endprog'
+	:	'prog'  statement_list+ 'endprog'
  	;
  	
  statement_list
@@ -103,7 +109,14 @@ prog
  	| 'undo' 'role' role
  	| 'apply' 'policy' var=object_name
  	{
- 	  Policy p = (Policy) currentScope.lookup($var.text);
+ 	System.out.println(OStype.i);
+ 	/*if(osType.ostype.equals("linux")==true)
+ 	{
+ 	System.out.println("zz");
+ 	}*/
+ 	
+ //	if(OS.equals("linux") != false){
+/* 	  Policy p = (Policy) currentScope.lookup($var.text);
  	 if(p!=null)
  	 {
  	  String command = "/sbin/iptables";
@@ -138,11 +151,52 @@ prog
  	  
  	 }
  	 else  { System.out.println(" p is null");}
+ 	// }
+ */	
+ 	
+ 	Policy p = (Policy) currentScope.lookup($var.text);
+ 	 if(p!=null)
+ 	 {
+ 	  String command = "/sbin/ipfw";
+ 	 String verd = null;
+ 	 
+ 	 if(p.verdict.equals("allow")==true)
+ 	  {
+ 	    verd = "allow";
+ 	    }
+ 	  if(p.verdict.equals("deny")==true)
+ 	  {
+ 	    verd = "deny";
+ 	    }  
+ 	   if( verd == null)
+ 	      { 
+ 	      System.out.println("verdict is null");
+ 	      }
+ 	      
+ 	       
+ 	 String arg = " add "+verd+" "+p.protocol+" from "+p.sourceIpAddress.getString()+":"+p.sourceNetMask.getString()+" ";
+ 	 
+ 	 if(p.sourcePort != 0){
+ 	 arg = arg+p.sourcePort;
+ 	 
+ 	 }
+ 	 arg = arg+  " to " + p.destIpAddress.getString()+":"+p.destNetMask.getString() +" ";
+ 	 
+ 	 if(p.destPort !=0){
+ 	 arg = arg+p.destPort;
+ 	 }
+ 	  	  System.out.println(command+arg);
+ 	  
+ 	 }
+ 	 else  { System.out.println(" p is null");}
+ 	
+ 	
  	}
  	| 'apply' 'policy' p2=policy
 	{
+
 	Policy p=(Policy)p2.lookupValue();
-	//System.out.println(p.verdict);
+/*	//System.out.println(p.verdict);
 	 String command = "/sbin/iptables";
  	 String verd = null;
  	 if(p.verdict.equals("allow"))
@@ -171,8 +225,39 @@ prog
  	 arg = arg+" -j " +verd;
  	 
  	  System.out.println(command+arg);
+	    */
+	    
+	     String command = "/sbin/ipfw";
+ 	 String verd = null;
+ 	 
+ 	 if(p.verdict.equals("allow")==true)
+ 	  {
+ 	    verd = "allow";
+ 	    }
+ 	  if(p.verdict.equals("deny")==true)
+ 	  {
+ 	    verd = "deny";
+ 	    }  
+ 	   if( verd == null)
+ 	      { 
+ 	      System.out.println("verdict is null");
+ 	      }
+ 	      
+ 	       
+ 	 String arg = " add "+verd+" "+p.protocol+" from "+p.sourceIpAddress.getString()+":"+p.sourceNetMask.getString()+" " ;
+ 	 
+ 	 if(p.sourcePort != 0){
+ 	 arg = arg+p.sourcePort;
+ 	 
+ 	 }
+ 	 arg = arg+  " to " + p.destIpAddress.getString()+":"+p.destNetMask.getString() +" ";
+ 	 
+ 	 if(p.destPort !=0){
+ 	 arg = arg+p.destPort;
+ 	 }
+ 	  	  System.out.println(command+arg);
+	    
 	      
- 	  System.out.println(command+arg);
  	  	 
 	}
  	| 'undo' 'policy' var=object_name
@@ -212,6 +297,7 @@ prog
   
 	 }
  	 else  { System.out.println(" policy object is null");}
+ 	 
  	}
  	| 'undo' 'policy' p3=policy
  	{
@@ -245,6 +331,7 @@ prog
  	 arg = arg+" -j " +verd;
  	 
  	  System.out.println(command+arg);
+ 	  
  	}
  	| set_oper 'host_group' (object_name| host_group) (object_name|host) 
 // 	| set_oper 'serv_group' (object_name|serv_group) serv_descr 
@@ -1076,7 +1163,7 @@ interf returns [Symbol sym]
 	         }
 	 'ifname' (interface_name=ID) interface_ip= ip_addr 'netmask' interface_netmask= ip_addr 
 	 'dns'  '{' i=ip_addr {dns_ip.add(new Ipaddress($i.text));}  ( ','  j=ip_addr{dns_ip.add(new Ipaddress($j.text));} )* '}'   
-	  'gw'  gw_ip=ip_addr   
+	  'defgw'  gw_ip=ip_addr   
 	{
 	Interface iface = new Interface ($interface_name.text,$interface_ip.text,$interface_netmask.text,$gw_ip.text, dns_ip);
 	Symbol s = new Symbol("interface_descriptor", "interface_type_t", iface);
