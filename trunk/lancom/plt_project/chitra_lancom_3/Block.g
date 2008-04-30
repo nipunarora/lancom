@@ -54,7 +54,7 @@ tokens {
     	}
 }
 prog
-	:	'prog'  statement_list+ 'endprog'
+	:	'prog' {OStype.i =1; } statement_list+ 'endprog'
  	;
  	
  statement_list
@@ -109,17 +109,13 @@ prog
  	| 'undo' 'role' role
  	| 'apply' 'policy' var=object_name
  	{
- 	System.out.println(OStype.i);
- 	/*if(osType.ostype.equals("linux")==true)
- 	{
- 	System.out.println("zz");
- 	}*/
- 	
- //	if(OS.equals("linux") != false){
-/* 	  Policy p = (Policy) currentScope.lookup($var.text);
+ 	 Policy p = (Policy) currentScope.lookup($var.text);
+ 	 String output = null;  
  	 if(p!=null)
  	 {
- 	  String command = "/sbin/iptables";
+                           
+                             if(OStype.i == 1){
+	   String command = "/sbin/iptables";
  	 String verd = null;
  	 if(p.verdict.equals("allow")==true)
  	  {
@@ -135,7 +131,7 @@ prog
  	      }
  	      
  	       
- 	 String arg = "  -I FORWARD -p "+p.protocol+" -d "+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
+ 	 String arg = " -I FORWARD -p "+p.protocol+" -d "+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
  	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() ;
  	 
  	 if(p.destPort != 0){
@@ -146,17 +142,11 @@ prog
  	 arg = arg + " --source-port "+p.sourcePort;
  	 }
  	 arg = arg+" -j " +verd;
- 	 
  	  System.out.println(command+arg);
- 	  
- 	 }
- 	 else  { System.out.println(" p is null");}
- 	// }
- */	
+ 	  output = command+arg;
+ 	  }
  	
- 	Policy p = (Policy) currentScope.lookup($var.text);
- 	 if(p!=null)
- 	 {
+ 	 else if (OStype.i == 2){
  	  String command = "/sbin/ipfw";
  	 String verd = null;
  	 
@@ -178,17 +168,38 @@ prog
  	 
  	 if(p.sourcePort != 0){
  	 arg = arg+p.sourcePort;
- 	 
- 	 }
+ 	  }
  	 arg = arg+  " to " + p.destIpAddress.getString()+":"+p.destNetMask.getString() +" ";
  	 
  	 if(p.destPort !=0){
  	 arg = arg+p.destPort;
  	 }
- 	  	  System.out.println(command+arg);
- 	  
+ 	 System.out.println(command+arg);
+ 	  output = command+arg;
  	 }
+ 	 
  	 else  { System.out.println(" p is null");}
+ 	}
+ 	
+ 	if(output != null)
+ 	 {
+ 	  String filename = "default_policy";
+ 	   if(OStype.i == 1)
+ 	    { filename = "policyiptables";}
+ 	    else if(OStype.i == 2) { filename = "policyipfw";}
+ 	 try {
+  	            FileWriter outFile = new FileWriter(filename);
+  	            PrintWriter out = new PrintWriter(outFile);
+ 	            out.println("#/bin/bash");
+ 	            out.println(output);
+  	            out.close();
+	     } catch (IOException e){
+  	         e.printStackTrace();
+  	        }
+ 	 
+ 	 
+ 	 
+ 	 }
  	
  	
  	}
