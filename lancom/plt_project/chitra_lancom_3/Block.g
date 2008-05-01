@@ -541,7 +541,7 @@ declr_stmt
 		System.out.println(" type : " + $type_name.text +" var : "+ $var_name.text);
 		currentScope.defineSymbol($var_name.text, $type_name.text);
 	}
-	(COMMA {count_com++;} next_var=object_name)* 
+	(',' {count_com++;} next_var=object_name)* 
 	{
 	//	System.out.println(" commas : "+ count_com);
 		
@@ -615,8 +615,8 @@ role  returns [Symbol sym]:
 		  
 		  }
 		))
-		  
-		   (COMMA ((p_j=policy {policies.add((Policy)p_j.lookupValue());})|(var2=object_name
+		 
+		  (  ','  ((p_j=policy {policies.add((Policy)p_j.lookupValue());})|(var2=object_name
 		   {
 		   Symbol s3 = currentScope.getSymbol($var2.text);
 		  String st=s3.getType();
@@ -892,12 +892,63 @@ topology  returns [Symbol sym]:
 		
 	((host_group_sym=host_group {hg = (Hostgroup)host_group_sym.lookupValue();}) |( host_group_obj=object_name  
 	{Symbol s  = currentScope.getSymbol ($host_group_obj.text); 
+	
+	try{
+	  if(s.getType().equals ("host_group_type_t") != true) 
+	  { throw (new DataFormatException("rule : host"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	    }
+	    
 	hg = (Hostgroup) s.lookupValue(); }))
+
+
 		
-	 ((role_sym=role {rl = (Role) role_sym.lookupValue(); })| ( role_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($role_obj.text);
+	 ((role_sym=role {rl = (Role) role_sym.lookupValue(); })| 
+	 
+	 ( role_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($role_obj.text);
+	 
+	 try{
+	  if(s.getType().equals ("role_type_t") != true) 
+	  { throw (new DataFormatException("rule : topology: host:role"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	    }
+	 
 	 rl = (Role) s.lookupValue(); } ))
 	 
-	 |serv_group role	
+	 |	
+	 
+	 ((serv_group_sym=serv_group {sg = (Servicegroup)serv_group_sym.lookupValue();}) |( serv_group_obj=object_name  
+	{Symbol s  = currentScope.getSymbol ($serv_group_obj.text); 
+	
+	try{
+	  if(s.getType().equals ("serv_group_type_t") != true) 
+	  { throw (new DataFormatException("rule : topology : servgroup:role"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	    }
+	
+	sg = (Servicegroup) s.lookupValue(); }))
+		
+	 ((role_sym=role {rl = (Role) role_sym.lookupValue(); })| ( role_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($role_obj.text);
+	 
+	 try{
+	  if(s.getType().equals ("role_type_t") != true) 
+	  { throw (new DataFormatException("rule : topology:servgroup:role"));}
+	  }
+	  catch (DataFormatException dfe)
+	  {
+	   System.out.println(dfe);
+	    }
+	 
+	 rl = (Role) s.lookupValue(); } ))
 	 
 	;
 
@@ -1612,7 +1663,7 @@ serv_group returns [Symbol sym]
 		      
 		      {
 		       Servicegroup sg = new Servicegroup(sDesc);
-		       Symbol s = new Symbol ("serv_group_type_t","serv_group_type_t",sDesc);
+		       Symbol s = new Symbol ("serv_group_type_t","serv_group_type_t",sg);
 		       $sym = s;		      
 		     }
 //	{
@@ -1650,7 +1701,7 @@ ICMP_MESSAGE_TYPE
 	|	'ADDRESS MASK REPLY'
 	;	
 	
-COMMA	: ',';	
+
 		
 CHAR	:	'\'' ( EscapeSequence | ~('\''|'\\') ) '\'';
 
