@@ -96,19 +96,213 @@ prog
  	System.out.println(" inputs :"+r.getString());
  	}
  	}
- 	|'ifconfig' object_name
-	|'ifconfig' interf
-	|'apply' 'topology' object_name
- 	| 'apply' 'topology' topology
+ 	|'ifconfig' object_name//interf_obj_name=object_name 
+ /*	{
+ 	  Symbol s = (Symbol) currentScope.getSymbol($interf_obj_name.text);
+ 	  try{
+ 	 if (s.type.equals("interface_type_t")!=true)
+ 	 {
+ 	   throw (new DataFormatException(" ifconfig:interface object"));
+ 	 }
+ 	 }
+ 	 
+ 	 catch (DataFormatException dfe)
+ 	 {
+ 	    System.out.println(dfe);
+ 	  }
+ 	
+ 	  String filename = "interf_config";
+ 	  Interface interface = (Interface) currentScope.lookup($interf_obj_name.text);
+ 	  ConfigInterf cfginterf  = new ConfigInterf();
+ 	  
+ 	    if (cfginterf != null)
+ 	  {
+ 	    switch(OStype.i){
+ 	    case 1:
+ 	     cfginterf.configure(interface,OStype.i,filename+".os_"+1);
+ 	     break;
+ 	    case 2:
+ 	    cfginterf.configure(interface,OStype.i,filename+".os_"+2);
+ 	    break;
+ 	    }
+ 	  }
+ 	  else {
+ 	    System.out.println(" apply:context:obj not found");
+ 	    }
+
+ 	
+ 	
+ 	}*/
+	|'ifconfig'  interf//interf_sym=interf
+/*	{
+	
+ 	  String filename = "interf_config";
+ 	  Interface interface = (Interface) interf_sym.lookupValue();
+ 	  ConfigInterf cfginterf  = new ConfigInterf();
+ 	  
+ 	    if (cfginterf != null)
+ 	  {
+ 	    switch(OStype.i){
+ 	    case 1:
+ 	     cfginterf.configure(interface,OStype.i,filename+".os_"+1);
+ 	     break;
+ 	    case 2:
+ 	    cfginterf.configure(interface,OStype.i,filename+".os_"+2);
+ 	    break;
+ 	    }
+ 	  }
+ 	  else {
+ 	    System.out.println(" apply:context:obj not found");
+ 	    }
+	
+	}*/
+	|'apply' 'topology' topology_obj_name=object_name
+	{
+	
+	Symbol s = (Symbol) currentScope.getSymbol($topology_obj_name.text);
+ 	  try{
+ 	 if (s.type.equals("topology_type_t")!=true)
+ 	 {
+ 	   throw (new DataFormatException(" apply : topology : object"));
+ 	 }
+ 	 }
+ 	 
+ 	 catch (DataFormatException dfe)
+ 	 {
+ 	    System.out.println(dfe);
+ 	  }
+ 	
+ 	  String filename = "topology_config";
+ 	  Topology tolpology = (Topology) currentScope.lookup($topology_obj_name.text);
+ 	  TopologyCbac tcbac  = new TopologyCbac();
+ 	  
+ 	    if (topology != null)
+ 	  {
+ 	    switch(OStype.i){
+ 	    case 1:
+ 	     cbac.configure(topology,OStype.i,filename+"iptables+1);
+ 	     break;
+ 	    case 2:
+ 	    cbac.configure(topology,OStype.i,filename+"ipfw"+2);
+ 	    break;
+ 	    }
+ 	  }
+ 	  else {
+ 	    System.out.println(" apply:topology:obj not found");
+ 	    }
+
+	
+	}
+ 	| 'apply' 'topology' topology_sym=topology
+ 	{
+ 	Topoloogy topology = (Topology)topology_sym.lookupValue();
+ 	
+ 	  String filename = "topology_config";
+ 	  Topology tolpology = (Topology) currentScope.lookup($topology_obj_name.text);
+ 	  TopologyCbac tcbac  = new TopologyCbac();
+ 	  
+ 	    if (topology != null)
+ 	  {
+ 	    switch(OStype.i){
+ 	    case 1:
+ 	     tcbac.configure(topology,OStype.i,filename+"iptables+1);
+ 	     break;
+ 	    case 2:
+ 	    tcbac.configure(topology,OStype.i,filename+"ipfw"+2);
+ 	    break;
+ 	    }
+ 	  }
+ 	  else {
+ 	    System.out.println(" apply:topology:obj not found");
+ 	    }
+ 	
+ 	
+ 	
+ 	}
  	| 'undo' 'topology' object_name 
  	| 'undo' 'topology' topology
- 	|  set_oper 'role' (object_name|role) (object_name|policy)
- 	|  'apply' 'role' object_name
- 	|  'apply' 'role' role
- 	| 'undo' 'role' object_name
- 	| 'undo' 'role' role
+ 	|  set_oper 'context' (object_name|context) (object_name|policy)
+ 	
+ 	|  'apply' 'context' context_obj_name=object_name
+ 	{
+ 	  ContextBasedAccessControl cbac = new ContextBasedAccessControl(); 
+ 	  Symbol s = (Symbol) currentScope.getSymbol($var.text);
+ 	  try{
+ 	 if (s.type.equals("policy_type_t")!=true)
+ 	 {
+ 	   throw (new DataFormatException(" apply:policy:policy object"));
+ 	 }
+ 	 }
+ 	 catch (DataFormatException dfe)
+ 	 {
+ 	    System.out.println(dfe);
+ 	  }
+ 	
+ 	  String filename = "cbac";
+ 	  Context context = (Context) currentScope.lookup($context_obj_name.text);
+ 	    if (context != null)
+ 	  {
+ 	    switch(OStype.i){
+ 	    case 1:
+ 	     cbac.applyContext(context,OStype.i,filename+"iptables");
+ 	     break;
+ 	    case 2:
+ 	    cbac.applyContext(context,OStype.i,filename+"ipfw");
+ 	    break;
+ 	    }
+ 	  }
+ 	  else {
+ 	    System.out.println(" apply:context:obj not found");
+ 	    }
+ 	
+ 	}
+ 	
+ 	|  'apply' 'context' context_sym=context
+ 	
+ 	{
+ 	ContextBasedAccessControl cbac = new ContextBasedAccessControl(); 
+ 	String filename="cbac";
+ 	Context context = (Context)context_sym.lookupValue();
+ 	 if (context != null )
+ 	  {
+ 	    switch(OStype.i){
+ 	    case 1:
+ 	     cbac = new ContextBasedAccessControl ();
+ 	     String interpPath = "/bin/bash";
+ 	     String fwPath = "/sbin/iptables";
+ 	     cbac.applyContext(context,fwPath,interpPath,filename+"iptables");
+ 	     break;
+
+ 	    case 2:
+ 	     cbac = new ContextBasedAccessControl ();
+ 	     String interpPath = "/bin/bash";
+ 	     String fwPath = "/sbin/ipfw";
+ 	     cbac.applyContext(context,fwPath,interpPath,filename+"ipfw");
+ 	     break;
+ 	    
+ 	    }
+ 	  }
+ 	  else {
+ 	    System.out.println(" apply:context:obj not found");
+ 	    }
+ 	}
+ 	
+ 	| 'undo' 'context' object_name
+ 	| 'undo' 'context' context
  	| 'apply' 'policy' var=object_name
  	{
+ 	 Symbol s = (Symbol) currentScope.getSymbol($var.text);
+ 	  try{
+ 	 if (s.type.equals("policy_type_t")!=true)
+ 	 {
+ 	   throw (new DataFormatException(" apply:policy:policy object"));
+ 	 }
+ 	 }
+ 	 catch (DataFormatException dfe)
+ 	 {
+ 	    System.out.println(dfe);
+ 	  }
+ 	 
  	 Policy p = (Policy) currentScope.lookup($var.text);
  	 String output = null;  
  	 if(p!=null)
@@ -559,7 +753,7 @@ type_name
 	|	'host_type_t'
 	|	'host_group_type_t'
 	|	'serv_group_type_t'
-	|	'role_type_t'
+	|	'context_type_t'
 	|	'policy_type_t'
 	|	'route_type_t'
 	|	'interface_type_t'
@@ -583,9 +777,9 @@ object_values returns [Symbol sym]
 	| host   {
 	$sym = $host.sym ; 
 	}
-	| role {$sym=$role.sym;}/* Similarly with other types */
+	| context {$sym=$context.sym;}/* Similarly with other types */
 	| host_group { $sym = $host_group.sym;} 
-	| topology //{$sym = $topology.sym;}
+	| topology {$sym = $topology.sym;}
 	| serv_group {$sym = $serv_group.sym;}
 	| interf { $sym = $interf.sym;}
 	| route {$sym = $route.sym;}
@@ -594,17 +788,17 @@ object_values returns [Symbol sym]
 //	object_values: object_name|serv_group|topology|host_group|role|host|policy|ip_addr|STRING|int_value|char_value;
 
 
-role  returns [Symbol sym]: 
+context returns [Symbol sym]: 
 	{ 
 	      Vector <Policy> policies;
 	      policies = new Vector <Policy>() ;	     
 	 }
-	'role' '{' ((p_i=policy {policies.add((Policy)p_i.lookupValue());})|(var=object_name{
+	'context' '{' ((p_i=policy {policies.add((Policy)p_i.lookupValue());})|(var=object_name{
 		  Symbol s2 = currentScope.getSymbol($var.text);
 		  String st=s2.getType();
 		  try{
 		  if((st.equals("policy_type_t")!=true)){
-		  throw(new DataFormatException("rule:role"));
+		  throw(new DataFormatException("rule:context"));
 	//	  System.out.println("added"+p3.verdict);
 		  }}catch(DataFormatException dfe)
 		  {
@@ -622,7 +816,7 @@ role  returns [Symbol sym]:
 		  String st=s3.getType();
 		  try{
 		  if((st.equals("policy_type_t")!=true)){
-		  throw(new DataFormatException("rule:role"));
+		  throw(new DataFormatException("rule:context"));
 	//	  System.out.println("added"+p3.verdict);
 		  }}catch(DataFormatException dfe)
 		  {
@@ -634,8 +828,8 @@ role  returns [Symbol sym]:
 		   
 		   })) )* '}'
 	{
-	Role role = new Role (policies);
-	Symbol s = new Symbol ("role_group_type_t","role_group_type_t",role);
+	Context context = new Context (policies);
+	Symbol s = new Symbol ("context_type_t","context_type_t",context);
 	$sym = s;  		
 	}
 	
@@ -887,7 +1081,7 @@ topology  returns [Symbol sym]:
 	{
 	Hostgroup hg;
 	Servicegroup sg;
-	Role rl;
+	Context cxt;
 	}
 		
 	((host_group_sym=host_group {hg = (Hostgroup)host_group_sym.lookupValue();}) |( host_group_obj=object_name  
@@ -906,20 +1100,20 @@ topology  returns [Symbol sym]:
 
 
 		
-	 ((role_sym=role {rl = (Role) role_sym.lookupValue(); })| 
+	 ((cxt_sym=context {cxt = (Context) cxt_sym.lookupValue(); })| 
 	 
-	 ( role_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($role_obj.text);
+	 ( cxt_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($cxt_obj.text);
 	 
 	 try{
-	  if(s.getType().equals ("role_type_t") != true) 
-	  { throw (new DataFormatException("rule : topology: host:role"));}
+	  if(s.getType().equals ("context_type_t") != true) 
+	  { throw (new DataFormatException("rule : topology: host:context"));}
 	  }
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
 	    }
 	 
-	 rl = (Role) s.lookupValue(); } ))
+	 cxt = (Context) s.lookupValue(); } ))
 	 
 	 |	
 	 
@@ -928,7 +1122,7 @@ topology  returns [Symbol sym]:
 	
 	try{
 	  if(s.getType().equals ("serv_group_type_t") != true) 
-	  { throw (new DataFormatException("rule : topology : servgroup:role"));}
+	  { throw (new DataFormatException("rule : topology : servgroup:context"));}
 	  }
 	  catch (DataFormatException dfe)
 	  {
@@ -937,18 +1131,18 @@ topology  returns [Symbol sym]:
 	
 	sg = (Servicegroup) s.lookupValue(); }))
 		
-	 ((role_sym=role {rl = (Role) role_sym.lookupValue(); })| ( role_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($role_obj.text);
+	 ((cxt_sym=context {cxt = (Context) cxt_sym.lookupValue(); })| ( cxt_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($cxt_obj.text);
 	 
 	 try{
-	  if(s.getType().equals ("role_type_t") != true) 
-	  { throw (new DataFormatException("rule : topology:servgroup:role"));}
+	  if(s.getType().equals ("context_type_t") != true) 
+	  { throw (new DataFormatException("rule : topology:servgroup:context"));}
 	  }
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
 	    }
 	 
-	 rl = (Role) s.lookupValue(); } ))
+	 cxt = (Context) s.lookupValue(); } ))
 	 
 	;
 

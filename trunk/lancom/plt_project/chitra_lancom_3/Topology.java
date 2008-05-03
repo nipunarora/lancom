@@ -17,26 +17,26 @@ import java.lang.*;
 public class Topology {
     
     Hostgroup hostGroup;
-    Role role;
+    Context context;
     Servicegroup serviceGroup;
     
     
     /** Creates a new instance of Topology */
-    public Topology(Hostgroup hG, Role r) 
+    public Topology(Hostgroup hG, Context c) 
     {
         hostGroup.hostGroup = new Vector<Host>(hG.hostGroup);
-        role = r;
+        context = c;
     }
     
-    public Topology(Servicegroup sG, Role r)
+    public Topology(Servicegroup sG, Context c)
     {
         serviceGroup.serviceGroup = new Vector<Servicedescriptor>(sG.serviceGroup);
-        role = r;
+        context = c;
     }
     
     public String getString()
     {
-        String temp = "role: " + role.getString();
+        String temp = "context: " + context.getString();
         return new String(temp);
     }
     
