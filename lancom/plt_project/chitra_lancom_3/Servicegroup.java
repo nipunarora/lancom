@@ -31,7 +31,7 @@ public class Servicegroup {
         Iterator <Servicedescriptor> sd = serviceGroup.iterator();
         while(sd.hasNext())
         {
-            temp = temp + sd.next().getString();
+            temp = temp + (sd.next()).getString();
         }
         System.out.println(temp); 
         return (new String(temp));
