@@ -96,44 +96,8 @@ prog
  	System.out.println(" inputs :"+r.getString());
  	}
  	}
- 	|'ifconfig' object_name//interf_obj_name=object_name 
- /*	{
- 	  Symbol s = (Symbol) currentScope.getSymbol($interf_obj_name.text);
- 	  try{
- 	 if (s.type.equals("interface_type_t")!=true)
- 	 {
- 	   throw (new DataFormatException(" ifconfig:interface object"));
- 	 }
- 	 }
- 	 
- 	 catch (DataFormatException dfe)
- 	 {
- 	    System.out.println(dfe);
- 	  }
- 	
- 	  String filename = "interf_config";
- 	  Interface interface = (Interface) currentScope.lookup($interf_obj_name.text);
- 	  ConfigInterf cfginterf  = new ConfigInterf();
- 	  
- 	    if (cfginterf != null)
- 	  {
- 	    switch(OStype.i){
- 	    case 1:
- 	     cfginterf.configure(interface,OStype.i,filename+".os_"+1);
- 	     break;
- 	    case 2:
- 	    cfginterf.configure(interface,OStype.i,filename+".os_"+2);
- 	    break;
- 	    }
- 	  }
- 	  else {
- 	    System.out.println(" apply:context:obj not found");
- 	    }
-
- 	
- 	
- 	}*/
-	|'ifconfig'  interf//interf_sym=interf
+ 	|'ifconfig'  object_name//interf_obj_name=object_name 
+ 	|'ifconfig'  interf//interf_sym=interf
 /*	{
 	
  	  String filename = "interf_config";
@@ -1455,12 +1419,30 @@ interf returns [Symbol sym]
 	: { 
 	     Vector <Ipaddress> dns_ip;
 	       dns_ip = new Vector <Ipaddress>() ;	     
+	       boolean dns_used = false;
+	       boolean defgw_used = false;
+	       Interface iface;
 	         }
 	 'ifname' (interface_name=ID) interface_ip= ip_addr 'netmask' interface_netmask= ip_addr 
-	 'dns'  '{' i=ip_addr {dns_ip.add(new Ipaddress($i.text));}  ( ','  j=ip_addr{dns_ip.add(new Ipaddress($j.text));} )* '}'   
-	  'defgw'  gw_ip=ip_addr   
+	( 'dns'  '{' i=ip_addr {dns_ip.add(new Ipaddress($i.text));}  ( ','  j=ip_addr{dns_ip.add(new Ipaddress($j.text));} )* '}' 
+	   {dns_used = true;}  )* 
+	 ( 'defgw'  gw_ip=ip_addr {defgw_used = true;})*
 	{
-	Interface iface = new Interface ($interface_name.text,$interface_ip.text,$interface_netmask.text,$gw_ip.text, dns_ip);
+	String interf_name = $interface_name.text;
+	String interf_ip = $interface_ip.text;
+	String interf_netmask = $interface_netmask.text;
+	String interf_gw = null;
+	if(defgw_used == true)
+	 {
+	  interf_gw = $gw_ip.text;
+	 }
+	 if(dns_used == true){
+	   iface = new Interface (interf_name,interf_ip,interf_netmask,interf_gw, dns_ip);
+	}
+	else{
+	 iface = new Interface (interf_name,interf_ip,interf_netmask,interf_gw, null);
+	}
+	
 	Symbol s = new Symbol("interface_descriptor", "interface_type_t", iface);
 	$sym = s;  
 	} ;
