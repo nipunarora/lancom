@@ -156,7 +156,7 @@ prog
  	    }
 	
 	}*/
-	|'apply' 'topology' topology_obj_name=object_name
+/*	|'apply' 'topology' topology_obj_name=object_name
 	{
 	
 	Symbol s = (Symbol) currentScope.getSymbol($topology_obj_name.text);
@@ -218,12 +218,12 @@ prog
  	
  	
  	
- 	}
+ 	}*/
  	| 'undo' 'topology' object_name 
  	| 'undo' 'topology' topology
  	|  set_oper 'context' (object_name|context) (object_name|policy)
  	
- 	|  'apply' 'context' context_obj_name=object_name
+/* 	|  'apply' 'context' context_obj_name=object_name
  	{
  	  ContextBasedAccessControl cbac = new ContextBasedAccessControl(); 
  	  Symbol s = (Symbol) currentScope.getSymbol($var.text);
@@ -285,11 +285,11 @@ prog
  	  else {
  	    System.out.println(" apply:context:obj not found");
  	    }
- 	}
+ 	}*/
  	
  	| 'undo' 'context' object_name
  	| 'undo' 'context' context
- 	| 'apply' 'policy' var=object_name
+/* 	| 'apply' 'policy' var=object_name
  	{
  	 Symbol s = (Symbol) currentScope.getSymbol($var.text);
  	  try{
@@ -396,11 +396,11 @@ prog
  	 }
  	
  	
- 	}
- 	| 'apply' 'policy' p2=policy
-	{
+ 	}*/
+// 	| 'apply' 'policy' p2=policy
+//	{
 
-	Policy p=(Policy)p2.lookupValue();
+//	Policy p=(Policy)p2.lookupValue();
 /*	//System.out.println(p.verdict);
 	 String command = "/sbin/iptables";
  	 String verd = null;
@@ -432,7 +432,7 @@ prog
  	  System.out.println(command+arg);
 	    */
 	    
-	     String command = "/sbin/ipfw";
+/*	     String command = "/sbin/ipfw";
  	 String verd = null;
  	 
  	 if(p.verdict.equals("allow")==true)
@@ -537,7 +537,7 @@ prog
  	 
  	  System.out.println(command+arg);
  	  
- 	}
+ 	}*/
  	| set_oper 'host_group' (object_name| host_group) (object_name|host) 
 // 	| set_oper 'serv_group' (object_name|serv_group) serv_descr 
 	|config_display 
@@ -1077,14 +1077,22 @@ policy returns [Symbol sym]	:
 	;	
 	
 
-topology  returns [Symbol sym]:
+topology  returns [Symbol sym]
+
+	:
+
 	{
 	Hostgroup hg;
 	Servicegroup sg;
 	Context cxt;
-	}
+	hg = null;
+	sg = null;
+	cxt =null;
+	
+	}	
 		
-	((host_group_sym=host_group {hg = (Hostgroup)host_group_sym.lookupValue();}) |( host_group_obj=object_name  
+	(('host_group' ((host_group_sym=host_group {hg = (Hostgroup)host_group_sym.lookupValue();}) 
+	|( host_group_obj=object_name  
 	{Symbol s  = currentScope.getSymbol ($host_group_obj.text); 
 	
 	try{
@@ -1096,11 +1104,11 @@ topology  returns [Symbol sym]:
 	   System.out.println(dfe);
 	    }
 	    
-	hg = (Hostgroup) s.lookupValue(); }))
+	hg = (Hostgroup) s.lookupValue(); })))
 
 
 		
-	 ((cxt_sym=context {cxt = (Context) cxt_sym.lookupValue(); })| 
+	 ('context' ((cxt_sym=context {cxt = (Context) cxt_sym.lookupValue(); })| 
 	 
 	 ( cxt_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($cxt_obj.text);
 	 
@@ -1113,11 +1121,35 @@ topology  returns [Symbol sym]:
 	   System.out.println(dfe);
 	    }
 	 
-	 cxt = (Context) s.lookupValue(); } ))
+	 cxt = (Context) s.lookupValue(); } )))
+	{
+	 if(hg == null)
+	 {
+	  System.out.println("hg is null");	
+	 }
+	  if(cxt == null)
+	 {
+	  System.out.println("cxt  is null");	
+	 }
+	 Topology topology = new Topology(hg,cxt);
+	 Symbol s = new Symbol("topology_host_group_context","topology_type_t",topology);
+	 $sym = s;	
+	})
+	 |
 	 
-	 |	
+	 {
+	Hostgroup hg;
+	Servicegroup sg;
+	Context cxt;
+	hg = null;
+	sg = null;
+	cxt = null;
+	}
 	 
-	 ((serv_group_sym=serv_group {sg = (Servicegroup)serv_group_sym.lookupValue();}) |( serv_group_obj=object_name  
+	 (	
+	 
+	 ('serv_group' ((serv_group_sym=serv_group {sg = (Servicegroup)serv_group_sym.lookupValue();}) 
+	 |( serv_group_obj=object_name  
 	{Symbol s  = currentScope.getSymbol ($serv_group_obj.text); 
 	
 	try{
@@ -1129,9 +1161,10 @@ topology  returns [Symbol sym]:
 	   System.out.println(dfe);
 	    }
 	
-	sg = (Servicegroup) s.lookupValue(); }))
+	sg = (Servicegroup) s.lookupValue(); })))
 		
-	 ((cxt_sym=context {cxt = (Context) cxt_sym.lookupValue(); })| ( cxt_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($cxt_obj.text);
+	 ('context' ((cxt_sym=context {cxt = (Context) cxt_sym.lookupValue(); })| 
+	 ( cxt_obj = object_name {Symbol s = (Symbol)currentScope.getSymbol ($cxt_obj.text);
 	 
 	 try{
 	  if(s.getType().equals ("context_type_t") != true) 
@@ -1142,9 +1175,15 @@ topology  returns [Symbol sym]:
 	   System.out.println(dfe);
 	    }
 	 
-	 cxt = (Context) s.lookupValue(); } ))
-	 
+	 cxt = (Context) s.lookupValue(); }) ))
+	 )
+	 {
+	 Topology topology = new Topology(sg,cxt);
+	 Symbol s = new Symbol("topology_serv_group_context","topology_type_t",topology);
+	 $sym = s;
+	 }
 	;
+
 
 /* adding integers and characters */
 int_value returns [Symbol sym]
