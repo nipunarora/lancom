@@ -78,11 +78,21 @@ prog
  	: 
  	  route_cmd=route_oper robj=object_name
  	  {
+ 	  Symbol s = currentScope.getSymbol($robj.text);
+ 	   try{
+ 	 if (s.type.equals("route_type_t")!=true)
+ 	 {
+ 	   throw (new DataFormatException(" route:route object"));
+ 	 }
+ 	 }
+ 	 catch (DataFormatException dfe)
+ 	 {
+ 	    System.out.println(dfe);
+ 	  } 
  	   Route route = (Route) currentScope.lookup($robj.text);
  	   if (route != null)
  	   {
- 	     System.out.println(" route command :"+$route_cmd.text);
- 	     System.out.println(" inputs :"+route.getString());
+ 	   route.configure("route.xml");
  	   }
  	  
  	  }
@@ -91,8 +101,7 @@ prog
  	Route r=(Route)robj2.lookupValue();
  	if(r!=null)
  	{
- 	System.out.println(" route command :"+$route_cmd2.text);
- 	System.out.println(" inputs :"+r.getString());
+ 	r.configure("route.xml");
  	}
  	}
  	|
@@ -118,9 +127,8 @@ prog
 	   })
 	   {	
 	  
- 	  ifc.configure("try.xml");	
+ 	  ifc.configure("interface.xml");	
 	}
-	//interf_sym=interf
 /*	{
 	
  	  String filename = "interf_config";
@@ -276,21 +284,36 @@ prog
  	
  	| 'undo' 'context' object_name
  	| 'undo' 'context' context
-/* 	| 'apply' 'policy' var=object_name
+	
+	| { Policy p;}  
+	  'apply' 'policy' ((var=object_name)
+		{
+		   Symbol s = (Symbol) currentScope.getSymbol($var.text);
+ 	  	try{
+ 		     if (s.type.equals("policy_type_t")!=true)
+ 		      {
+ 	 	       throw (new DataFormatException(" apply:policy:policy object"));
+ 		      }
+ 	 	   }
+ 		 catch (DataFormatException dfe)
+ 	 	{
+ 	    	  System.out.println(dfe);
+ 	  	}	
+		 p = (Policy) currentScope.lookup($var.text);
+				
+		} 
+		
+		| 
+		(policy_sym = policy)
+		{
+		p = (Policy)policy_sym.lookip
+		
+		})
+		
  	{
- 	 Symbol s = (Symbol) currentScope.getSymbol($var.text);
- 	  try{
- 	 if (s.type.equals("policy_type_t")!=true)
- 	 {
- 	   throw (new DataFormatException(" apply:policy:policy object"));
- 	 }
- 	 }
- 	 catch (DataFormatException dfe)
- 	 {
- 	    System.out.println(dfe);
- 	  }
  	 
- 	 Policy p = (Policy) currentScope.lookup($var.text);
+ 	 
+ 	 
  	 String output = null;  
  	 if(p!=null)
  	 {
