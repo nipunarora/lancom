@@ -36,8 +36,7 @@ tokens {
 	
     	public static void main(String[] args) throws Exception 
     	{
-    	OStype.i = 1;
-    	System.out.println(" i:" + OStype.i);
+    	
         	BlockLexer lex = new BlockLexer(new ANTLRFileStream(args[0]));
 	       	CommonTokenStream tokens = new CommonTokenStream(lex);
 
@@ -54,7 +53,7 @@ tokens {
     	}
 }
 prog
-	:	'prog' {OStype.i =1; } statement_list+ 'endprog'
+	:	'prog' statement_list+ 'endprog'
  	;
  	
  statement_list
@@ -96,8 +95,32 @@ prog
  	System.out.println(" inputs :"+r.getString());
  	}
  	}
- 	|'ifconfig'  object_name//interf_obj_name=object_name 
- 	|'ifconfig'  interf//interf_sym=interf
+ 	|
+ 	{Interface ifc=null;}
+ 	'ifconfig'  ((interf_object_name=object_name) {//interf_obj_name=object_name 
+	
+	 Symbol s = (Symbol) currentScope.getSymbol($interf_object_name.text);
+ 	  try{
+ 	 if (s.type.equals("interface_type_t")!=true)
+ 	 {
+ 	   throw (new DataFormatException(" ifconfig:inteface:interface object"));
+ 	 }
+ 	 }
+ 	 catch (DataFormatException dfe)
+ 	 {
+ 	    System.out.println(dfe);
+ 	  }
+ 	  ifc = (Interface) s.lookupValue();
+ 	  
+	}|
+	   (interf_sym = interf){
+	   ifc = (Interface)interf_sym.lookupValue();
+	   })
+	   {	
+	  
+ 	  ifc.configure("try.xml");	
+	}
+	//interf_sym=interf
 /*	{
 	
  	  String filename = "interf_config";
@@ -1423,7 +1446,7 @@ interf returns [Symbol sym]
 	       boolean defgw_used = false;
 	       Interface iface;
 	         }
-	 'ifname' (interface_name=ID) interface_ip= ip_addr 'netmask' interface_netmask= ip_addr 
+	 'ifname' (interface_name=ID) {System.out.println($interface_name.text);} interface_ip= ip_addr 'netmask' interface_netmask= ip_addr 
 	( 'dns'  '{' i=ip_addr {dns_ip.add(new Ipaddress($i.text));}  ( ','  j=ip_addr{dns_ip.add(new Ipaddress($j.text));} )* '}' 
 	   {dns_used = true;}  )* 
 	 ( 'defgw'  gw_ip=ip_addr {defgw_used = true;})*
@@ -1897,7 +1920,7 @@ host_name
 
 //GATEWAY	:'gw';
 //NM	:'netmask';
-ID	:	LETTER (LETTER|DIGIT)* ;
+ID	:	LETTER (LETTER|DIGIT|'/')* ;
                            
 fragment LETTER	
 	:	'A'..'Z'
