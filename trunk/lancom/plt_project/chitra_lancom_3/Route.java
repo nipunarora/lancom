@@ -36,7 +36,34 @@ public class Route {
         netMask = new Ipaddress(nm);
         gateway = new Ipaddress(gw);
     }
-    
+   
+   public void configure(String xmlfile,String xmlTag)
+   {
+   	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
+	CmdArg cmdarg = new CmdArg();
+ 	cmdarg = xmlDoc.getCmdArg(xmlTag);
+	System.out.println("interpreter:"+cmdarg.interpreterPath);
+        System.out.println("cmd:"+cmdarg.cmd);
+	cmdarg.arg = cmdarg.arg.replaceAll("\\$NETMASK",this.netMask.getString());
+	cmdarg.arg = cmdarg.arg.replaceAll("\\$IPADDR",this.ipAddress.getString());
+	cmdarg.arg = cmdarg.arg.replaceAll("\\$GATEWAY",gateway.getString());
+		
+	System.out.println("arg:"+cmdarg.arg);
+
+   }
+    public void display(String xmlfile,String xmlTag)
+    {
+	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
+	CmdArg cmdarg = new CmdArg();
+ 	cmdarg = xmlDoc.getCmdArg(xmlTag);
+	System.out.println("interpreter:"+cmdarg.interpreterPath);
+        System.out.println("cmd:"+cmdarg.cmd);
+
+	System.out.println("arg:"+cmdarg.arg);
+	
+    }
+
+
     /* Print function for debugging */
     public String getString()
     {
