@@ -1,5 +1,5 @@
 
-all: ExceedsLancomSizeException Ipaddress IntType Assignment Policy Host Interface Hostgroup Route Role Symbol Scope 
+all: ExceedsLancomSizeException Ipaddress IntType Assignment Policy Host Interface Hostgroup Route Context Symbol Scope  Servicedescriptor Servicegroup Topology ParseXMLDoc
 IntType:
 	javac -classpath . IntType.java
 Symbol:
@@ -22,10 +22,26 @@ Hostgroup:
 	javac -classpath . Hostgroup.java
 Route:
 	javac -classpath . Route.java
-Role:
-	javac -classpath . Role.java
+Context:
+	javac -classpath . Context.java
+
+Servicedescriptor:
+	javac -classpath . Servicedescriptor.java
+
+Servicegroup:
+	javac -classpath . Servicegroup.java
+
+Topology:
+	javac -classpath . Topology.java
+OStype:
+	javac -classpath . OStype.java
+
+ParseXMLDoc:
+	javac -classpath . ParseXMLDoc.java
+
+
 
 
 
 clean:
-	del *.class
+	rm -rf *.class *~
