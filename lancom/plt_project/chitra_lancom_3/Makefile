@@ -1,5 +1,5 @@
 
-all: ExceedsLancomSizeException Ipaddress IntType Assignment Policy Host Interface Hostgroup Route Context Symbol Scope  Servicedescriptor Servicegroup Topology ParseXMLDoc
+all: ExceedsLancomSizeException Ipaddress IntType Assignment Policy Host Interface Hostgroup Route Context Symbol Scope  Servicedescriptor Servicegroup Topology ParseXMLDoc CmdArg
 IntType:
 	javac -classpath . IntType.java
 Symbol:
@@ -38,6 +38,9 @@ OStype:
 
 ParseXMLDoc:
 	javac -classpath . ParseXMLDoc.java
+CmdArg:
+	javac -classpath . CmdArg.java
+
 
 
 
