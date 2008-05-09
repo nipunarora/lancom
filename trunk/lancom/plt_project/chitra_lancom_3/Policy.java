@@ -84,6 +84,111 @@ public class Policy
 		    icmpMessage = new String(icmp);	
 		   	
     }
+
+
+
+
+
+
+
+
+
+ public void configure(String xmlfile,String xmlTag)
+    {
+	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
+	CmdArg cmdarg = new CmdArg();
+ 	cmdarg = xmlDoc.getCmdArg(xmlTag);
+	//System.out.println("interpreter:"+cmdarg.interpreterPath);
+//System.out.println("cmd:"+cmdarg.cmd);
+
+	//System.out.println(" ip : "+this.ipAddress.getString());
+	//System.out.println(" netmask : "+this.netMask.getString());
+//	cmdarg.arg = cmdarg.arg.replaceAll("\\$INTERFACE_NAME",this.name);
+//	cmdarg.arg = cmdarg.arg.replaceAll("\\$IPADDRESS",
+//				this.ipAddress.getString());	
+	cmdarg.arg = cmdarg.arg.replaceAll("\\$DNETMASK",this.destNetMask.getString());
+	cmdarg.arg = cmdarg.arg.replaceAll("\\$SNETMASK",this.sourceNetMask.getString());
+
+
+	cmdarg.arg = cmdarg.arg.replaceAll("\\$DST_IPADDR",this.destIpAddress.getString());
+	
+	cmdarg.arg = cmdarg.arg.replaceAll("\\$SRC_IPADDR",this.sourceIpAddress.getString());
+
+	//cmdarg.arg = cmdarg.arg.replaceAll("\\$INTERFACE_NAME",name);
+		
+
+cmdarg.arg = cmdarg.arg.replaceAll("\\$PROTO",protocol);
+		
+	
+
+
+
+
+	if(destPort==0)
+		{
+			cmdarg.arg = cmdarg.arg.replaceAll("\\DPORTH","65535");
+			
+cmdarg.arg = cmdarg.arg.replaceAll("\\DPORTL","0");
+	
+		}
+		else{
+			String d=Integer.toString(destPort);
+//String s=Integer.toString(sourcePort);
+
+cmdarg.arg = cmdarg.arg.replaceAll("\\DPORTH",d);
+			
+cmdarg.arg = cmdarg.arg.replaceAll("\\DPORTL",d);
+		}
+	//System.out.println("arg:"+cmdarg.arg);
+	
+    
+	//}
+
+
+if(sourcePort==0)
+		{
+			cmdarg.arg = cmdarg.arg.replaceAll("\\SPORTH","65535");
+			
+cmdarg.arg = cmdarg.arg.replaceAll("\\SPORTL","0");
+	
+		}
+		else{
+			//String d=Integer.toString(destPort);
+String s=Integer.toString(sourcePort);
+
+cmdarg.arg = cmdarg.arg.replaceAll("\\SPORTH",s);
+			
+cmdarg.arg = cmdarg.arg.replaceAll("\\SPORTL",s);
+		}
+	System.out.println("arg:"+cmdarg.arg);
+	
+    }
+
+
+  
+     public void display(String xmlfile,String xmlTag)
+    {
+	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
+	CmdArg cmdarg = new CmdArg();
+ 	cmdarg = xmlDoc.getCmdArg(xmlTag);
+	//System.out.println("interpreter:"+cmdarg.interpreterPath);
+//System.out.println("cmd:"+cmdarg.cmd);
+
+	//System.out.println(" ip : "+this.ipAddress.getString());
+	//System.out.println(" netmask : "+this.netMask.getString());
+	//System.out.println("arg:"+cmdarg.arg);
+	
+
+
+    }
+
+
+
+
+
+
+
+
     
     public String getString()
     {

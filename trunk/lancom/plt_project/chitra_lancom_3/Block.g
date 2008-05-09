@@ -92,16 +92,16 @@ prog
  	   Route route = (Route) currentScope.lookup($robj.text);
  	   if (route != null)
  	   {
- 	   route.configure("route.xml");
+ 	   route.configure("route.xml",route_cmd);
  	   }
  	  
  	  }
  	|route_cmd2=route_oper robj2=route
- 	{
+  	{
  	Route r=(Route)robj2.lookupValue();
  	if(r!=null)
  	{
- 	r.configure("route.xml");
+ 	r.configure("route.xml",route_cmd2);
  	}
  	}
  	|
@@ -127,7 +127,7 @@ prog
 	   })
 	   {	
 	  
- 	  ifc.configure("interface.xml");	
+ 	  ifc.configure("interface.xml","InterfConfig");	
 	}
 /*	{
 	
@@ -285,7 +285,7 @@ prog
  	| 'undo' 'context' object_name
  	| 'undo' 'context' context
 	
-	| { Policy p;}  
+	| { Policy p=null;}  
 	  'apply' 'policy' ((var=object_name)
 		{
 		   Symbol s = (Symbol) currentScope.getSymbol($var.text);
@@ -306,107 +306,16 @@ prog
 		| 
 		(policy_sym = policy)
 		{
-		p = (Policy)policy_sym.lookip
+		p = (Policy)policy_sym.lookupValue();
 		
 		})
 		
- 	{
+ 		{
+ 	 	   p.configure("fw.xml","AddPolicy");
+ 	 	}
  	 
  	 
  	 
- 	 String output = null;  
- 	 if(p!=null)
- 	 {
-                           
-                             if(OStype.i == 1){
-	   String command = "/sbin/iptables";
- 	 String verd = null;
- 	 if(p.verdict.equals("allow")==true)
- 	  {
- 	    verd = "ACCEPT";
- 	    }
- 	  if(p.verdict.equals("deny")==true)
- 	  {
- 	    verd = "DROP";
- 	    }  
- 	   if( verd == null)
- 	      { 
- 	      System.out.println("verdict is null");
- 	      }
- 	      
- 	       
- 	 String arg = " -I FORWARD -p "+p.protocol+" -d "+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
- 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() ;
- 	 
- 	 if(p.destPort != 0){
- 	 arg = arg + " --destination-port "+p.destPort;
- 	 }
- 	 
- 	 if(p.sourcePort != 0){
- 	 arg = arg + " --source-port "+p.sourcePort;
- 	 }
- 	 arg = arg+" -j " +verd;
- 	  System.out.println(command+arg);
- 	  output = command+arg;
- 	  }
- 	
- 	 else if (OStype.i == 2){
- 	  String command = "/sbin/ipfw";
- 	 String verd = null;
- 	 
- 	 if(p.verdict.equals("allow")==true)
- 	  {
- 	    verd = "allow";
- 	    }
- 	  if(p.verdict.equals("deny")==true)
- 	  {
- 	    verd = "deny";
- 	    }  
- 	   if( verd == null)
- 	      { 
- 	      System.out.println("verdict is null");
- 	      }
- 	      
- 	       
- 	 String arg = " add "+verd+" "+p.protocol+" from "+p.sourceIpAddress.getString()+":"+p.sourceNetMask.getString()+" ";
- 	 
- 	 if(p.sourcePort != 0){
- 	 arg = arg+p.sourcePort;
- 	  }
- 	 arg = arg+  " to " + p.destIpAddress.getString()+":"+p.destNetMask.getString() +" ";
- 	 
- 	 if(p.destPort !=0){
- 	 arg = arg+p.destPort;
- 	 }
- 	 System.out.println(command+arg);
- 	  output = command+arg;
- 	 }
- 	 
- 	 else  { System.out.println(" p is null");}
- 	}
- 	
- 	if(output != null)
- 	 {
- 	  String filename = "default_policy";
- 	   if(OStype.i == 1)
- 	    { filename = "policyiptables";}
- 	    else if(OStype.i == 2) { filename = "policyipfw";}
- 	 try {
-  	            FileWriter outFile = new FileWriter(filename);
-  	            PrintWriter out = new PrintWriter(outFile);
- 	            out.println("#/bin/bash");
- 	            out.println(output);
-  	            out.close();
-	     } catch (IOException e){
-  	         e.printStackTrace();
-  	        }
- 	 
- 	 
- 	 
- 	 }
- 	
- 	
- 	}*/
 // 	| 'apply' 'policy' p2=policy
 //	{
 
@@ -555,8 +464,8 @@ prog
  	
  route_oper returns [String route_cmd]
  	:	
-	|cmd='route' sub_cmd='add' { $route_cmd = $cmd.text+$sub_cmd.text;}
- 	|cmd='route' sub_cmd='delete' { $route_cmd = $cmd.text+$sub_cmd.text;}
+	|cmd='route' sub_cmd='add' { $route_cmd = "RouteAdd";}
+ 	|cmd='route' sub_cmd='delete' { $route_cmd = "RouteDelete";}
  	;
 
 set_oper 
