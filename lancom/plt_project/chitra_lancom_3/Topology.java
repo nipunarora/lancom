@@ -16,7 +16,7 @@ import java.lang.*;
  */
 public class Topology {
     
-    Hostgroup hostGroup;
+    Hostgroup hostGroup ;
     Context context;
     Servicegroup serviceGroup;
     
@@ -24,8 +24,19 @@ public class Topology {
     /** Creates a new instance of Topology */
     public Topology(Hostgroup hG, Context c) 
     {
-        hostGroup.hostGroup = new Vector<Host>(hG.hostGroup);
+	hostGroup = new Hostgroup() ;
+       context = new Context();
+      serviceGroup = new Servicegroup();
+   
+	try{
+
+	 hostGroup.hostGroup = new Vector<Host>(hG.hostGroup);
         context = c;
+	}
+	catch(NullPointerException npe)
+	{
+	  npe.printStackTrace();
+	}
     }
     
     public Topology(Servicegroup sG, Context c)
