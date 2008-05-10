@@ -37,33 +37,75 @@ public class Route {
         gateway = new Ipaddress(gw);
     }
    
-   public void configure(String xmlfile,String xmlTag)
+    public void configure(String xmlfile,String xmlTag,String OutputFileName)
    {
    	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
 	CmdArg cmdarg = new CmdArg();
  	cmdarg = xmlDoc.getCmdArg(xmlTag);
-	System.out.println("interpreter:"+cmdarg.interpreterPath);
-        System.out.println("cmd:"+cmdarg.cmd);
 	cmdarg.arg = cmdarg.arg.replaceAll("\\$NETMASK",this.netMask.getString());
 	cmdarg.arg = cmdarg.arg.replaceAll("\\$IPADDR",this.ipAddress.getString());
 	cmdarg.arg = cmdarg.arg.replaceAll("\\$GATEWAY",gateway.getString());
 		
 	System.out.println("arg:"+cmdarg.arg);
+	
+	try
+	    {
+		FileWriter outFile = new FileWriter(OutputFileName);
+		PrintWriter out = new PrintWriter(outFile);
+		if(cmdarg.interpreterPath.equals("default") != true)
+		    {
+			out.println("#!"+cmdarg.interpreterPath);
+		    }
+		out.println(cmdarg.cmd+" "+cmdarg.arg);
+		out.close();
+	    }
+	catch(IOException ioe)
+	    {
+		ioe.printStackTrace();
+	    }
+
 
    }
-    public void display(String xmlfile,String xmlTag)
+    public static void display(String xmlfile,String xmlTag,String OutputFileName)
     {
 	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
 	CmdArg cmdarg = new CmdArg();
  	cmdarg = xmlDoc.getCmdArg(xmlTag);
 	System.out.println("interpreter:"+cmdarg.interpreterPath);
         System.out.println("cmd:"+cmdarg.cmd);
-
 	System.out.println("arg:"+cmdarg.arg);
-	
+
+	try
+	    {
+		FileWriter outFile = new FileWriter(OutputFileName);
+		PrintWriter out = new PrintWriter(outFile);
+		if(cmdarg.interpreterPath.equals("default") != true)
+		    {
+			out.println("#!"+cmdarg.interpreterPath);
+		    }
+		out.println(cmdarg.cmd+" "+cmdarg.arg);
+		out.close();
+	    }
+	catch(IOException ioe)
+	    {
+		ioe.printStackTrace();
+	    }
     }
 
+   public CmdArg addRoute(String xmlfile,String xmlTag)
+	{
+	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
+	CmdArg cmdarg = new CmdArg();
+ 	cmdarg = xmlDoc.getCmdArg(xmlTag);
+       
+	cmdarg.arg = cmdarg.arg.replaceAll("\\$NETMASK",this.netMask.getString());
+	cmdarg.arg = cmdarg.arg.replaceAll("\\$IPADDR",this.ipAddress.getString());
+	cmdarg.arg = cmdarg.arg.replaceAll("\\$GATEWAY",gateway.getString());
+	
+	 return cmdarg;
+	}
 
+   
     /* Print function for debugging */
     public String getString()
     {
