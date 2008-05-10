@@ -20,7 +20,7 @@ ID=11
 'outbound'=84
 '-='=63
 '>'=56
-'context'=27
+'context'=28
 'policy'=29
 'else'=42
 '/='=61
@@ -52,13 +52,13 @@ ID=11
 'inbound'=83
 ':'=48
 '.'=14
-'undo'=25
+'undo'=27
 '*'=6
 'endwhile'=45
 ', '=97
 'ipaddr_t'=73
 '}'=77
-'apply'=28
+'apply'=25
 '~'=59
 'service_group'=96
 ';'=23

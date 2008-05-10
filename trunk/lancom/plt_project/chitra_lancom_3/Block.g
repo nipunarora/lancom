@@ -149,7 +149,9 @@ prog
  	    }
 	
 	}*/
-/*	|'apply' 'topology' topology_obj_name=object_name
+	|
+	{Topology topology = null;}
+	'apply' 'topology' ((topology_obj_name=object_name)
 	{
 	
 	Symbol s = (Symbol) currentScope.getSymbol($topology_obj_name.text);
@@ -164,54 +166,149 @@ prog
  	 {
  	    System.out.println(dfe);
  	  }
- 	
- 	  String filename = "topology_config";
+ 
+                            	
  	  Topology tolpology = (Topology) currentScope.lookup($topology_obj_name.text);
- 	  TopologyCbac tcbac  = new TopologyCbac();
+ 	  }| (topology_sym = topology)
+ 	   {
+ 	   topology = (Topology) topology_sym.lookupValue();
+ 	   }
+ 	  )
+ 	{  
  	  
- 	    if (topology != null)
- 	  {
- 	    switch(OStype.i){
- 	    case 1:
- 	     cbac.configure(topology,OStype.i,filename+"iptables+1);
- 	     break;
- 	    case 2:
- 	    cbac.configure(topology,OStype.i,filename+"ipfw"+2);
- 	    break;
- 	    }
- 	  }
- 	  else {
- 	    System.out.println(" apply:topology:obj not found");
- 	    }
+ 	  if (topology.hostGroup != null) 
+ 	     {
+ 	     
+ 	     Hostgroup hg;
+ 	     hg = topology.hostGroup;
+ 	     Context cxt;
+ 	     cxt = topology.context;
+ 	     Iterator <Host> hostiter= hg.hostGroup.iterator();
+ 	     Iterator <Policy> policyiter= cxt.context.iterator();
+	       
+   	System.out.println(hg.getString());
+   	System.out.println(cxt.getString());
+       	 while(hostiter.hasNext())
+        	{
+	    while(policyiter.hasNext())
+	    {
+	       Host h = hostiter.next();
+	       Policy p = policyiter.next();
+	       if(p.direction.equals("inbound")==true)
+	       {
+	         if(p.destIpAddress.getString().equals("0.0.0.0") == true)
+	         {
+	           p.destIpAddress = new Ipaddress(h.ipAddress.getString());
+	           p.destNetMask = new Ipaddress(h.netMask.getString());
+	           }
+	           else 
+	           	{ System.out.println(" dest IP address alredy present in policy : "+p.getString());
+	           	   System.exit(0);
+	           	   }	
+	       }
+	       else
+	       {
+	       
+	       if(p.sourceIpAddress.getString().equals("0.0.0.0") == true)
+	         {
+	           p.sourceIpAddress = new Ipaddress(h.ipAddress.getString());
+	           p.sourceNetMask = new Ipaddress(h.netMask.getString());
+	           }
+	           else 
+	           	{ System.out.println(" Source IP address alredy present in policy : "+p.getString());
+	           	   System.exit(0);
+	           	   }	
+	      
+	       
+	       }
+	      
+	       p.configure("fw.xml","PolicyAdd","topo_host2");  
+	       
+	       }//while2
+	       }//while1
+	    }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+if (topology.serviceGroup != null) 
+ 	     {
+ 	     
+ 	     Servicegroup sg;
+ 	     sg = topology.serviceGroup;
+ 	     Context cxt;
+ 	     cxt = topology.context;
+ 	     Iterator <Servicedescriptor> serviter= sg.serviceGroup.iterator();
+ 	     Iterator <Policy> policyiter= cxt.context.iterator();
+	       
 	
-	}
- 	| 'apply' 'topology' topology_sym=topology
- 	{
- 	Topoloogy topology = (Topology)topology_sym.lookupValue();
- 	
- 	  String filename = "topology_config";
- 	  Topology tolpology = (Topology) currentScope.lookup($topology_obj_name.text);
- 	  TopologyCbac tcbac  = new TopologyCbac();
+       	 while(serviter.hasNext())
+        	{
+	    while(policyiter.hasNext())
+	    {
+	       Servicedescriptor s = serviter.next();
+	       Policy p = policyiter.next();
+	       if(p.direction.equals("inbound")==true)
+	       {
+	         if(p.destIpAddress.getString().equals("0.0.0.0") == true)
+	         {
+	           p.destIpAddress = new Ipaddress(s.ipAddress.getString());
+	           p.destNetMask = new Ipaddress(s.netMask.getString());
+	           p.destPort=s.port;
+	           }
+	           else 
+	           	{ System.out.println(" dest IP address alredy present in policy : "+p.getString());
+	           	   System.exit(0);
+	           	   }	
+	       }
+	       else
+	       {
+	       
+	       if(p.sourceIpAddress.getString().equals("0.0.0.0") == true)
+	         {
+	           p.sourceIpAddress = new Ipaddress(s.ipAddress.getString());
+	           p.sourceNetMask = new Ipaddress(s.netMask.getString());
+	           p.sourcePort=s.port;
+	           }
+	           else 
+	           	{ System.out.println(" Source IP address alredy present in policy : "+p.getString());
+	           	   System.exit(0);
+	           	   }	
+	       
+	       
+	       }
+	      
+	       p.configure("fw.xml","PolicyAdd","topo_serv");  
+	       
+	       }//while2
+	       }//while1
+	    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+	   }
  	  
- 	    if (topology != null)
- 	  {
- 	    switch(OStype.i){
- 	    case 1:
- 	     tcbac.configure(topology,OStype.i,filename+"iptables+1);
- 	     break;
- 	    case 2:
- 	    tcbac.configure(topology,OStype.i,filename+"ipfw"+2);
- 	    break;
- 	    }
- 	  }
- 	  else {
- 	    System.out.println(" apply:topology:obj not found");
- 	    }
- 	
- 	
- 	
- 	}*/
+ 	 
  	| 'undo' 'topology' object_name 
  	| 'undo' 'topology' topology
  	|  set_oper 'context' (object_name|context) (object_name|policy)
@@ -1616,6 +1713,7 @@ route returns [Symbol sym]	:
 //serv_descr 
 //	: ip_addr (nmask)? serv_listen_port;
 
+
 serv_group returns [Symbol sym]
 	: 
 	{
@@ -1663,7 +1761,13 @@ serv_group returns [Symbol sym]
 		    
 		    serviceNetmask = (Ipaddress)s.lookupValue();
 	                               })) )?  
-		      serv_port_str=serv_listen_port  { sDesc.add ((new Servicedescriptor(serviceIp.getString(),serviceNetmask.getString(),
+		      serv_port_str=serv_listen_port  { 
+		      if(serviceIp.getString().equals("0.0.0.0")!=true)
+		     {
+		     serviceNetmask=new Ipaddress("255.255.255.255");
+		     }
+		      
+		      sDesc.add ((new Servicedescriptor(serviceIp.getString(),serviceNetmask.getString(),
 		      			         $serv_port_str.text)));}
 		      
 		      
@@ -1699,7 +1803,12 @@ serv_group returns [Symbol sym]
 		    
 		    serviceNetmask = (Ipaddress)s.lookupValue();
 	                               })) )?  
-		      extra_serv_port_str=serv_listen_port  { sDesc.add ((new Servicedescriptor(serviceIp.getString(),serviceNetmask.getString(),
+		      extra_serv_port_str=serv_listen_port  { 
+		      if(serviceIp.getString().equals("0.0.0.0")!=true)
+		     {
+		     serviceNetmask=new Ipaddress("255.255.255.255");
+		     }
+		     sDesc.add ((new Servicedescriptor(serviceIp.getString(),serviceNetmask.getString(),
 		      			         $extra_serv_port_str.text)));}
 		      )*  '}'  
 		      

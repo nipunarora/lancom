@@ -53,9 +53,9 @@ public class Symbol {
 			return (new String(n.toString()));
 				
 		}
-		if(this.type.equals("role_type_t"))
+		if(this.type.equals("context_type_t"))
 		{
-			Role temp = (Role)this.value;
+			Context temp = (Context)this.value;
 			return (new String(temp.getString()));
 			
 			//val = n.toString();
@@ -74,7 +74,8 @@ public class Symbol {
 			
 			//val = n.toString();
 		}
-
+	
+	
 		if(this.type.equals("host_group_type_t"))
 		{
 			Hostgroup temp = (Hostgroup)this.value;

@@ -8,10 +8,10 @@ T21 : 'prog' ;
 T22 : 'endprog' ;
 T23 : ';' ;
 T24 : 'ifconfig' ;
-T25 : 'undo' ;
+T25 : 'apply' ;
 T26 : 'topology' ;
-T27 : 'context' ;
-T28 : 'apply' ;
+T27 : 'undo' ;
+T28 : 'context' ;
 T29 : 'policy' ;
 T30 : 'host_group' ;
 T31 : 'route' ;
@@ -82,21 +82,21 @@ T95 : 'net' ;
 T96 : 'service_group' ;
 T97 : ', ' ;
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1855
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1836
 ID	:	LETTER (LETTER|DIGIT|'/')* ;
                            
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1857
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1838
 fragment LETTER	
 	:	'A'..'Z'
  	|	'a'..'z'
  	|	'_'
  	;
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1863
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1844
 DOT 	:	'.';
 //CHARS	:	(('a'..'z')|('A'..'Z'));
 	
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1866
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1847
 ICMP_MESSAGE_TYPE
 	:	'ECHO REPLY'
 	|	'REDIRECT MESSAGE'
@@ -107,36 +107,36 @@ ICMP_MESSAGE_TYPE
 	
 
 		
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1876
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1857
 CHAR	:	'\'' ( EscapeSequence | ~('\''|'\\') ) '\'';
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1878
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1859
 STRING	:	'"' ( EscapeSequence | ~('\\'|'"') )* '"';
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1880
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1861
 fragment EscapeSequence
  	:   '\\' ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
  	;
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1884
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1865
 NUMBER	: (DIGIT)+ ;
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1886
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1867
 fragment DIGIT
 	: '0'..'9' ;	
 
 //DELIMITER
 //	:	 ';';
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1892
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1873
 LINE_COMMENT 
 	:	'#' ~('\n'|'\r')* '\r'? '\n' {$channel=HIDDEN;}
 	;
 
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1896
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1877
 EQUAL	:	'=';
 	
-// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1898
+// $ANTLR src "D:\Users\arpi\Desktop\Assignments\LANCOM\plt_project\chitra_lancom_3\Block.g" 1879
 WHITESPACE 
 	:	('\t' | ' ' | '\r' | '\n' | '\u000C')+ {$channel=HIDDEN;}
 	;
