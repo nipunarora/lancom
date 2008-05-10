@@ -17,13 +17,13 @@ import java.io.*;
  */
 public class Context {
     
-    Vector <Policy> context;
+   public Vector <Policy> context;
     /** Creates a new instance of Context */
     public Context(Vector <Policy> temp) 
     {
         context= new Vector<Policy>(temp);
     }
-    
+   public Context(){} 
     public String getString()
     {
         String temp= new String(" ");
