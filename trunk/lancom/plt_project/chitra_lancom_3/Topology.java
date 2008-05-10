@@ -16,38 +16,36 @@ import java.lang.*;
  */
 public class Topology {
     
-    Hostgroup hostGroup ;
-    Context context;
-    Servicegroup serviceGroup;
+    Hostgroup hostGroup = null;
+    Context context = null;
+    Servicegroup serviceGroup = null;
     
     
     /** Creates a new instance of Topology */
     public Topology(Hostgroup hG, Context c) 
     {
-	hostGroup = new Hostgroup() ;
-       context = new Context();
-      serviceGroup = new Servicegroup();
-   
-	try{
-
-	 hostGroup.hostGroup = new Vector<Host>(hG.hostGroup);
-        context = c;
-	}
-	catch(NullPointerException npe)
-	{
-	  npe.printStackTrace();
-	}
+      hostGroup = new Hostgroup(hG.hostGroup);
+      context = new Context(c.context);	
+  	
     }
     
     public Topology(Servicegroup sG, Context c)
-    {
-        serviceGroup.serviceGroup = new Vector<Servicedescriptor>(sG.serviceGroup);
-        context = c;
+    {  
+	serviceGroup = new Servicegroup(sG.serviceGroup);
+        context = new Context(c.context) ;
     }
     
     public String getString()
     {
         String temp = "context: " + context.getString();
+	if(hostGroup != null)
+	 {
+  	  temp = temp + "hostgroup:"+hostGroup.getString();
+	}
+	else if(serviceGroup != null)
+	 {
+  	  temp = temp + "servicegroup:"+serviceGroup.getString();
+	 }
         return new String(temp);
     }
     
