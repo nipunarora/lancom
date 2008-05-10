@@ -50,7 +50,7 @@ public class Interface
 
     }
     
-    public void configure(String xmlfile,String xmlTag)
+    public void configure(String xmlfile,String xmlTag,String OutputFileName)
     {
 	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
 	CmdArg cmdarg = new CmdArg();
@@ -60,19 +60,98 @@ public class Interface
 
 	System.out.println(" ip : "+this.ipAddress.getString());
 	System.out.println(" netmask : "+this.netMask.getString());
-//	cmdarg.arg = cmdarg.arg.replaceAll("\\$INTERFACE_NAME",this.name);
-//	cmdarg.arg = cmdarg.arg.replaceAll("\\$IPADDRESS",
-//				this.ipAddress.getString());	
+
 	cmdarg.arg = cmdarg.arg.replaceAll("\\$NETMASK",this.netMask.getString());
 	cmdarg.arg = cmdarg.arg.replaceAll("\\$IPADDR",this.ipAddress.getString());
 	cmdarg.arg = cmdarg.arg.replaceAll("\\$INTERFACE_NAME",name);
 		
-	System.out.println("arg:"+cmdarg.arg);
 	
+	try
+	    {
+		FileWriter outFile = new FileWriter(OutputFileName);
+		PrintWriter out = new PrintWriter(outFile);
+
+	    if(cmdarg.interpreterPath.equals("default") != true)
+		{
+		    out.println("#!"+cmdarg.interpreterPath);
+		}
+	    
+	      out.println(cmdarg.cmd+" "+cmdarg.arg);
+	      out.close();
+
+	    }
+	catch(IOException ioe)
+	    {
+		ioe.printStackTrace();
+	    }
+		
+	
+      	CmdArg defgw = new CmdArg();
+	
+	if(defgw_used == true)
+	{
+	 Route route = new Route("0.0.0.0","0.0.0.0",
+		                 this.defaultGateway.getString());
+	 defgw = route.addRoute("route.xml","RouteAdd");
+ 	 System.out.println(" default gateway ");
+	 System.out.println("cmd:"+defgw.cmd);
+	 System.out.println("arg:"+defgw.arg);
+	 
+	 try{
+	      
+		FileWriter outFile = new FileWriter(OutputFileName,true);
+		PrintWriter out = new PrintWriter(outFile);
+		 out.println(cmdarg.cmd+" "+cmdarg.arg);
+		 out.close();
+	 }catch(IOException ioe)
+	     {
+		 ioe.printStackTrace();
+		 
+	     }
+
+	}
+	if(dns_used == true)
+	{
+ 	    Iterator  <Ipaddress> iter = dns.iterator();
+	    CmdArg dnsconf = new CmdArg();
+ 	    dnsconf = xmlDoc.getCmdArg("DnsConf");	   
+	    while(iter.hasNext())
+		{
+		    String dnsip,output ;
+		    dnsip=iter.next().getString();
+		    output = new String(dnsconf.cmd+" "+dnsconf.arg);
+		    output = output.replaceAll("\\$IPADDR",dnsip);
+		    
+		    System.out.println(output);
+	 	
+		    try{
+
+			FileWriter outFile = new FileWriter(OutputFileName,true);
+			PrintWriter out = new PrintWriter(outFile);
+			if(cmdarg.interpreterPath.equals("default") != true)
+			    {
+				out.println("echo\' "+output+" \' >> /etc/rc.resolv.conf");	  
+				out.close();
+			    }
+			else{
+			out.println(output);
+			out.close();
+			}
+		    }catch(IOException ioe)
+			{
+			    ioe.printStackTrace();
+			    
+			}
+
+    
+		}
+	    
+	    
+	}	
     }
 
   
-     public void display(String xmlfile,String xmlTag)
+    public void display(String xmlfile,String xmlTag,String OutputFileName)
     {
 	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
 	CmdArg cmdarg = new CmdArg();
@@ -83,10 +162,36 @@ public class Interface
 	System.out.println(" ip : "+this.ipAddress.getString());
 	System.out.println(" netmask : "+this.netMask.getString());
 	System.out.println("arg:"+cmdarg.arg);
+
+	
+	try
+	    {
+		FileWriter outFile = new FileWriter(OutputFileName);
+		PrintWriter out = new PrintWriter(outFile);
+		if(cmdarg.interpreterPath.equals("default") != true)
+		    {
+			out.println("#!"+cmdarg.interpreterPath);
+		    }
+		out.println(cmdarg.cmd+" "+cmdarg.arg);
+		out.close();
+	    }
+	catch(IOException ioe)
+	    {
+		ioe.printStackTrace();
+	    }
 	
     }
 
-  	
+    public String dnsConf(String xmlfile,String xmlTag)
+	{
+	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
+	String nameServerConf;
+ 	nameServerConf = xmlDoc.getTagValue(xmlTag);
+	System.out.println("nameServerConf:"+nameServerConf);
+        return nameServerConf;
+
+
+	}	
 
 
     public String getString()
