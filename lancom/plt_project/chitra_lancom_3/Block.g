@@ -86,7 +86,10 @@ prog
  	 catch (DataFormatException dfe)
  	 {
  	    System.out.println(dfe);
+ 	    dfe.printStackTrace();
+ 	    System.exit(1);
  	  } 
+ 	  
  	   Route route = (Route) currentScope.lookup($robj.text);
  	   if (route != null)
  	   {
@@ -116,6 +119,8 @@ prog
  	 catch (DataFormatException dfe)
  	 {
  	    System.out.println(dfe);
+ 	    dfe.printStackTrace();
+ 	    System.exit(1);
  	  }
  	  ifc = (Interface) s.lookupValue();
  	  
@@ -127,31 +132,13 @@ prog
 	  
  	  ifc.configure("interface.xml","InterfConfig","ifconf");	
 	}
-/*	{
-	
- 	  String filename = "interf_config";
- 	  Interface interface = (Interface) interf_sym.lookupValue();
- 	  ConfigInterf cfginterf  = new ConfigInterf();
- 	  
- 	    if (cfginterf != null)
- 	  {
- 	    switch(OStype.i){
- 	    case 1:
- 	     cfginterf.configure(interface,OStype.i,filename+".os_"+1);
- 	     break;
- 	    case 2:
- 	    cfginterf.configure(interface,OStype.i,filename+".os_"+2);
- 	    break;
- 	    }
- 	  }
- 	  else {
- 	    System.out.println(" apply:context:obj not found");
- 	    }
-	
-	}*/
+
 	|
-	{Topology topology = null;}
-	'apply' 'topology' ((topology_obj_name=object_name)
+	{Topology topology = null;
+	 boolean applyActions = false;
+	 boolean undoActions = true;
+	}
+	(('apply'){applyActions = true;}|('undo'){applyActions = false;}) 'topology' ((topology_obj_name=object_name)
 	{
 	
 	Symbol s = (Symbol) currentScope.getSymbol($topology_obj_name.text);
@@ -165,17 +152,21 @@ prog
  	 catch (DataFormatException dfe)
  	 {
  	    System.out.println(dfe);
+ 	    dfe.printStackTrace();
+ 	    System.exit(1);
  	  }
  
                             	
- 	  Topology tolpology = (Topology) currentScope.lookup($topology_obj_name.text);
+ 	  topology = (Topology) currentScope.lookup($topology_obj_name.text);
  	  }| (topology_sym = topology)
  	   {
  	   topology = (Topology) topology_sym.lookupValue();
  	   }
  	  )
- 	{  
- 	  
+ 	    
+ 	{
+ 	
+ 	 	  
  	  if (topology.hostGroup != null) 
  	     {
  	     
@@ -186,14 +177,15 @@ prog
  	     Iterator <Host> hostiter= hg.hostGroup.iterator();
  	     Iterator <Policy> policyiter= cxt.context.iterator();
 	       
-   	System.out.println(hg.getString());
-   	System.out.println(cxt.getString());
        	 while(hostiter.hasNext())
         	{
+        	   Host h = hostiter.next();
+	       	
 	    while(policyiter.hasNext())
 	    {
-	       Host h = hostiter.next();
+	       
 	       Policy p = policyiter.next();
+	       
 	       if(p.direction.equals("inbound")==true)
 	       {
 	         if(p.destIpAddress.getString().equals("0.0.0.0") == true)
@@ -221,8 +213,12 @@ prog
 	      
 	       
 	       }
-	      
+	      if((applyActions == true) && (undoActions ==false)){
 	       p.configure("fw.xml","PolicyAdd","topo_host2");  
+	       }
+	       else if((applyActions == false) && (undoActions ==true)){
+	       p.configure("fw.xml","PolicyDelete","topo_host2");  
+	       }
 	       
 	       }//while2
 	       }//while1
@@ -231,17 +227,7 @@ prog
 
 
 
-
-
-
-
-
-
-
-
-
-
-if (topology.serviceGroup != null) 
+           else  if (topology.serviceGroup != null) 
  	     {
  	     
  	     Servicegroup sg;
@@ -254,9 +240,9 @@ if (topology.serviceGroup != null)
 	
        	 while(serviter.hasNext())
         	{
+        	    Servicedescriptor s = serviter.next();
 	    while(policyiter.hasNext())
 	    {
-	       Servicedescriptor s = serviter.next();
 	       Policy p = policyiter.next();
 	       if(p.direction.equals("inbound")==true)
 	       {
@@ -264,6 +250,12 @@ if (topology.serviceGroup != null)
 	         {
 	           p.destIpAddress = new Ipaddress(s.ipAddress.getString());
 	           p.destNetMask = new Ipaddress(s.netMask.getString());
+	            if(p.destPort != s.port )
+	           {
+	           System.out.println(" Destination port present in policy : "+
+	                                               p.getString()+ "  different from the one specified in service descriptor");
+	             System.exit(0);
+	           }
 	           p.destPort=s.port;
 	           }
 	           else 
@@ -278,6 +270,11 @@ if (topology.serviceGroup != null)
 	         {
 	           p.sourceIpAddress = new Ipaddress(s.ipAddress.getString());
 	           p.sourceNetMask = new Ipaddress(s.netMask.getString());
+	           if(p.sourcePort != s.port )
+	           {
+	           System.out.println(" Source port present in policy : "+p.getString()+ "  different from the one specified in service descriptor");
+	             System.exit(0);
+	           }
 	           p.sourcePort=s.port;
 	           }
 	           else 
@@ -288,7 +285,12 @@ if (topology.serviceGroup != null)
 	       
 	       }
 	      
-	       p.configure("fw.xml","PolicyAdd","topo_serv");  
+	       if((applyActions == true) && (undoActions ==false)){
+	       p.configure("fw.xml","PolicyAdd","topo_host2");  
+	       }
+	       else if((applyActions == false) && (undoActions ==true)){
+	       p.configure("fw.xml","PolicyDelete","topo_host2");  
+	       }
 	       
 	       }//while2
 	       }//while1
@@ -301,16 +303,11 @@ if (topology.serviceGroup != null)
 
 
 
-
-
-
-
-
 	   }
  	  
  	 
- 	| 'undo' 'topology' object_name 
- 	| 'undo' 'topology' topology
+// 	| 'undo' 'topology' object_name 
+ //	| 'undo' 'topology' topology
  	|  set_oper 'context' (object_name|context) (object_name|policy)
  	
 	| 
@@ -328,6 +325,8 @@ if (topology.serviceGroup != null)
  	 catch (DataFormatException dfe)
  	 {
  	    System.out.println(dfe);
+ 	    dfe.printStackTrace();
+ 	    System.exit(1);
  	  }
  	cxt = (Context)s.lookupValue();
  	}
@@ -358,6 +357,8 @@ if (topology.serviceGroup != null)
  	  catch (DataFormatException dfe)
  	 {
  	    System.out.println(dfe);
+ 	    dfe.printStackTrace();
+ 	    System.exit(1);
  	  }	
  	cxt = (Context)s.lookupValue();
  	}|
@@ -388,6 +389,8 @@ if (topology.serviceGroup != null)
  		 catch (DataFormatException dfe)
  	 	{
  	    	  System.out.println(dfe);
+ 	    	  dfe.printStackTrace();
+	 	  System.exit(1);
  	  	}	
 		 p = (Policy) currentScope.lookup($var.text);
 				
@@ -418,6 +421,8 @@ if (topology.serviceGroup != null)
  		 catch (DataFormatException dfe)
  	 	{
  	    	  System.out.println(dfe);
+ 	    	  dfe.printStackTrace();
+	 	  System.exit(1);
  	  	}	
 		 p = (Policy) currentScope.lookup($var.text);
 				
@@ -453,10 +458,10 @@ set_oper
  	
  config_display 
  	:
- 	 'route' 'show' 'numeric'//  {Route.display("route.xml","DisplayRouteNumeric");}
- 	|'route' 'show' // {Route.display("route.xml","DisplayRoute");}
-	| 'fw' 'show' 'numeric' //{Policy.display("fw.xml","DisplayRulesNumeric");}
-	|'fw' 'show'// {Policy.display("fw.xml","DisplayRules");}
+ 	 'route' 'show' 'numeric'  {Route.display("route.xml","DisplayRouteNumeric","RouteDisp");}
+ 	|'route' 'show'  {Route.display("route.xml","DisplayRoute","RouteDisp");}
+	| 'fw' 'show' 'numeric' {Policy.display("fw.xml","DisplayRulesNumeric","RulesDisp");}
+	|'fw' 'show' {Policy.display("fw.xml","DisplayRules","RulesDisp");}
 	;	
  	
  	
@@ -699,6 +704,8 @@ context returns [Symbol sym]:
 		  }}catch(DataFormatException dfe)
 		  {
 		  System.out.println(dfe);
+		  dfe.printStackTrace();
+	 	  System.exit(1);
 		  }
 		  Policy p3=(Policy)s2.lookupValue();
 		  policies.add(p3);
@@ -717,6 +724,8 @@ context returns [Symbol sym]:
 		  }}catch(DataFormatException dfe)
 		  {
 		  System.out.println(dfe);
+		  dfe.printStackTrace();
+		  System.exit(1);
 		  }
 		  Policy p4=(Policy)s3.lookupValue();
 		  policies.add(p4);
@@ -952,13 +961,12 @@ policy returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+    	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
   	  
-  	  
-  	    snetmask = (Ipaddress) s.lookupValue();})))?
+  	     snetmask = (Ipaddress) s.lookupValue();})))?
  	  
-	
-	
 	{
 	
 	Policy pl = new Policy($dir.text,$verd.text, $icmp_mesg.text, dip.getString(),dnetmask.getString(),
@@ -999,6 +1007,8 @@ topology  returns [Symbol sym]
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	    dfe.printStackTrace();
+ 	    System.exit(1);
 	    }
 	    
 	hg = (Hostgroup) s.lookupValue(); })))
@@ -1016,6 +1026,9 @@ topology  returns [Symbol sym]
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	    dfe.printStackTrace();
+ 	    System.exit(1);
+
 	    }
 	 
 	 cxt = (Context) s.lookupValue(); } )))
@@ -1056,6 +1069,8 @@ topology  returns [Symbol sym]
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	     dfe.printStackTrace();
+ 	    System.exit(1); 
 	    }
 	
 	sg = (Servicegroup) s.lookupValue(); })))
@@ -1070,6 +1085,8 @@ topology  returns [Symbol sym]
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	   dfe.printStackTrace();
+ 	    System.exit(1);
 	    }
 	 
 	 cxt = (Context) s.lookupValue(); }) ))
@@ -1211,7 +1228,8 @@ host	returns [Symbol sym]:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
-	    
+	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
 	   
 	  Ipaddress ip = (Ipaddress) s.lookupValue();
@@ -1231,6 +1249,8 @@ host	returns [Symbol sym]:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	   dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
       	  
 	  Ipaddress ip = (Ipaddress) s.lookupValue();
@@ -1250,6 +1270,8 @@ host	returns [Symbol sym]:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
 	
 	
@@ -1264,6 +1286,8 @@ host	returns [Symbol sym]:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	   dfe.printStackTrace();
+ 	    System.exit(1); 
 	   }
 	  
 	  
@@ -1311,6 +1335,8 @@ host_group returns [Symbol sym]
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	    dfe.printStackTrace();
+ 	    System.exit(1); 
 	   }
 	
 	Host host = (Host) hostsym.lookupValue();
@@ -1327,6 +1353,8 @@ host_group returns [Symbol sym]
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	   dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
 	
 	Host host = (Host) hostsym.lookupValue();
@@ -1393,6 +1421,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	   dfe.printStackTrace();
+ 	    System.exit(1); 
 	    }
 	   
 	  Ipaddress ip = (Ipaddress) s.lookupValue();
@@ -1413,6 +1443,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	   dfe.printStackTrace();
+ 	   System.exit(1);  
 	   }
       	  
 	  Ipaddress gwip = (Ipaddress) s.lookupValue();
@@ -1432,6 +1464,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	   dfe.printStackTrace();
+ 	   System.exit(1);
 	   }
 	
 	
@@ -1446,6 +1480,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
 	  
 	  
@@ -1485,6 +1521,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	    dfe.printStackTrace();
+ 	    System.exit(1);
 	    }
 	   
 	  Ipaddress ip = (Ipaddress) s.lookupValue();
@@ -1505,6 +1543,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+    	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
       	  
 	  Ipaddress nmip = (Ipaddress) s.lookupValue();
@@ -1525,6 +1565,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+    	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
       	  
 	  Ipaddress gwip = (Ipaddress) s.lookupValue();
@@ -1547,6 +1589,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
 	
 	  Ipaddress ip = (Ipaddress) dst_ip.lookupValue();
@@ -1560,6 +1604,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
 	  
 	  
@@ -1583,6 +1629,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
 	
 	
@@ -1596,7 +1644,9 @@ route returns [Symbol sym]	:
 	  }
 	  catch (DataFormatException dfe)
 	  {
-	   System.out.println(dfe);
+	  System.out.println(dfe);
+	   dfe.printStackTrace();
+ 	   System.exit(1);
 	   }
 	  
 	  
@@ -1618,7 +1668,9 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
-	   }
+	   dfe.printStackTrace();
+ 	   System.exit(1);	   
+ 	   }
 	
 	
 	  Ipaddress nmip = (Ipaddress) nm_ip.lookupValue();
@@ -1632,6 +1684,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+    	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
 	  
 	  
@@ -1653,6 +1707,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+	    dfe.printStackTrace();
+ 	    System.exit(1);
 	   }
 	
 	
@@ -1668,6 +1724,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+   	    dfe.printStackTrace();
+ 	    System.exit(1); 
 	   }
 	
 	
@@ -1682,6 +1740,8 @@ route returns [Symbol sym]	:
 	  catch (DataFormatException dfe)
 	  {
 	   System.out.println(dfe);
+  	    dfe.printStackTrace();
+ 	    System.exit(1);  
 	   }
 	  
 	  
@@ -1738,6 +1798,8 @@ serv_group returns [Symbol sym]
 		  catch (DataFormatException dfe)
 		  {
 		   System.out.println(dfe);
+	 	    dfe.printStackTrace();
+	 	    System.exit(1);	   
 		    }
 	   
 		  serviceIp = (Ipaddress) s.lookupValue();
@@ -1757,6 +1819,8 @@ serv_group returns [Symbol sym]
 		  catch (DataFormatException dfe)
 		  {
 		   System.out.println(dfe);
+	 	    dfe.printStackTrace();
+ 		    System.exit(1);		   
 		    }
 		    
 		    serviceNetmask = (Ipaddress)s.lookupValue();
@@ -1782,6 +1846,8 @@ serv_group returns [Symbol sym]
 		  catch (DataFormatException dfe)
 		  {
 		   System.out.println(dfe);
+		    dfe.printStackTrace();
+	 	    System.exit(1);   
 		    }
 	   
 		  serviceIp = (Ipaddress) s.lookupValue();
@@ -1799,6 +1865,8 @@ serv_group returns [Symbol sym]
 		  catch (DataFormatException dfe)
 		  {
 		   System.out.println(dfe);
+		    dfe.printStackTrace();
+	 	    System.exit(1);   
 		    }
 		    
 		    serviceNetmask = (Ipaddress)s.lookupValue();
