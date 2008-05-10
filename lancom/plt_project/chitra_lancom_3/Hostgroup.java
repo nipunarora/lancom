@@ -23,6 +23,7 @@ public class Hostgroup {
     public Hostgroup(Vector <Host>h) {
         hostGroup= new Vector<Host>(h);
     }
+   public Hostgroup(){}	
         
     public String getString()
     {

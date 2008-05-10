@@ -66,7 +66,35 @@ public class ParseXMLDoc {
 		    ioe.printStackTrace();
 		}
 	}
-    
+	
+	public String getTagValue(String tagName)
+	{
+
+	NodeList nl=null;
+	XPathFactory factory = XPathFactory.newInstance();
+	XPath xpath = factory.newXPath();
+	try{
+
+	XPathExpression exp = xpath.compile("//"+tagName+"/text()");	
+	
+	 Object result = exp.evaluate(dom,XPathConstants.NODESET);
+	
+	 nl  = (NodeList)result;
+   	 if(nl == null)
+          {
+            System.out.println("interpreter tag missing within tag :"+tagName+" of file:"+
+				this.xmlfile);
+	}
+	
+	}
+	catch(XPathExpressionException xpee){
+	xpee.printStackTrace();
+	}	
+	
+	return (new String (nl.item(0).getNodeValue()));	
+	
+	}   
+ 
     	private CmdArg parseDocument(String tagName)
 	{
 	NodeList nl=null;
