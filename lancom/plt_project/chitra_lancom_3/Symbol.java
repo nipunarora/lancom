@@ -53,6 +53,15 @@ public class Symbol {
 			return (new String(n.toString()));
 				
 		}
+		if(this.type.equals("topology_type_t"))
+		{
+			Topology temp = (Topology)this.value;
+			return (new String(temp.getString()));
+			
+			//val = n.toString();
+		}
+
+
 		if(this.type.equals("context_type_t"))
 		{
 			Context temp = (Context)this.value;
