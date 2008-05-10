@@ -30,9 +30,7 @@ tokens {
 	Scope currentScope = globalScope;
 	
 	Map<String, Assignment> map = new HashMap<String, Assignment>(); 
-	//OStype osType= new OStype("linux");
 	
-//	public static char OS ;
 	
     	public static void main(String[] args) throws Exception 
     	{
@@ -92,7 +90,7 @@ prog
  	   Route route = (Route) currentScope.lookup($robj.text);
  	   if (route != null)
  	   {
- 	   route.configure("route.xml",route_cmd);
+ 	   route.configure("route.xml",route_cmd,"route");
  	   }
  	  
  	  }
@@ -101,7 +99,7 @@ prog
  	Route r=(Route)robj2.lookupValue();
  	if(r!=null)
  	{
- 	r.configure("route.xml",route_cmd2);
+ 	r.configure("route.xml",route_cmd2,"route");
  	}
  	}
  	|
@@ -127,7 +125,7 @@ prog
 	   })
 	   {	
 	  
- 	  ifc.configure("interface.xml","InterfConfig");	
+ 	  ifc.configure("interface.xml","InterfConfig","ifconf");	
 	}
 /*	{
 	
@@ -243,7 +241,7 @@ prog
  	 Iterator <Policy> iter =cxt.context.iterator();
  	 while(iter.hasNext())
  	 { 
- 	   iter.next().configure("fw.xml","PolicyAdd");	
+ 	   iter.next().configure("fw.xml","PolicyAdd","contextadd");	
  	 }
  	 
  	}
@@ -275,7 +273,7 @@ prog
  	 Iterator <Policy> iter =cxt.context.iterator();
  	 while(iter.hasNext())
  	 { 
- 	   iter.next().configure("fw.xml","PolicyDelete");	
+ 	   iter.next().configure("fw.xml","PolicyDelete","contextdel");	
  	 }
  	  	  
  	 }
@@ -306,7 +304,7 @@ prog
 		})
 		
  		{
- 	 	   p.configure("fw.xml","PolicyAdd");
+ 	 	   p.configure("fw.xml","PolicyAdd","policyadd");
  	 	}
  	 
  	 
@@ -336,7 +334,7 @@ prog
 		})
 		
  		{
- 	 	   p.configure("fw.xml","PolicyDelete");
+ 	 	   p.configure("fw.xml","PolicyDelete","policydel");
  	 	}
 
  	| set_oper 'host_group' (object_name| host_group) (object_name|host) 
@@ -358,10 +356,10 @@ set_oper
  	
  config_display 
  	:
- 	 'route' 'show' 'numeric'  {Route.display("route.xml","DisplayRouteNumeric");}
- 	|'route' 'show'  {Route.display("route.xml","DisplayRoute");}
-	| 'fw' 'show' 'numeric' {Policy.display("fw.xml","DisplayRulesNumeric");}
-	|'fw' 'show' {Policy.display("fw.xml","DisplayRules");}
+ 	 'route' 'show' 'numeric'//  {Route.display("route.xml","DisplayRouteNumeric");}
+ 	|'route' 'show' // {Route.display("route.xml","DisplayRoute");}
+	| 'fw' 'show' 'numeric' //{Policy.display("fw.xml","DisplayRulesNumeric");}
+	|'fw' 'show'// {Policy.display("fw.xml","DisplayRules");}
 	;	
  	
  	
@@ -756,7 +754,7 @@ policy returns [Symbol sym]	:
 	$sym = s;
 
 	
-//	currentScope.printSymbols();
+
 }
 	| 
 	
@@ -1095,15 +1093,6 @@ ip_addr    returns [Symbol sym]:  (a=NUMBER)DOT(b=NUMBER)DOT(c=NUMBER)DOT(d=NUMB
 
 nmask	: 'netmask' ip_addr;//NM LETTER+;
 
-/*host	returns [Symbol sym]: 'ip_addr' ip_string=ip_addr 'netmask' netmask_string=ip_addr 
-{
-
-	Host h = new Host ($ip_string.text,$netmask_string.text); //usure about the text error
-	Symbol s = new Symbol("host_descr_string", "host_type_t", h);
-	$sym = s;
-	return $sym;
-
-}*/
 
 
 
