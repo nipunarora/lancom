@@ -24,6 +24,10 @@ public class Servicegroup {
     {
         serviceGroup = new Vector <Servicedescriptor> (sg);
     }
+	
+   public Servicegroup()
+   {
+   }
     
     public String getString()
     {
