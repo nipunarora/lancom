@@ -218,72 +218,67 @@ prog
  	| 'undo' 'topology' topology
  	|  set_oper 'context' (object_name|context) (object_name|policy)
  	
-/* 	|  'apply' 'context' context_obj_name=object_name
- 	{
- 	  ContextBasedAccessControl cbac = new ContextBasedAccessControl(); 
- 	  Symbol s = (Symbol) currentScope.getSymbol($var.text);
+	| 
+	 {Context cxt = null; }
+	'apply' 'context' ((context_obj_name=object_name){
+	
+	 Symbol s = (Symbol) currentScope.getSymbol($context_obj_name.text);
  	  try{
- 	 if (s.type.equals("policy_type_t")!=true)
+ 	  System.out.println(s.type);
+ 	 if (s.type.equals("context_type_t")!=true)
  	 {
- 	   throw (new DataFormatException(" apply:policy:policy object"));
+ 	   throw (new DataFormatException(" apply:context:policy object"));
  	 }
  	 }
  	 catch (DataFormatException dfe)
  	 {
  	    System.out.println(dfe);
  	  }
- 	
- 	  String filename = "cbac";
- 	  Context context = (Context) currentScope.lookup($context_obj_name.text);
- 	    if (context != null)
- 	  {
- 	    switch(OStype.i){
- 	    case 1:
- 	     cbac.applyContext(context,OStype.i,filename+"iptables");
- 	     break;
- 	    case 2:
- 	    cbac.applyContext(context,OStype.i,filename+"ipfw");
- 	    break;
- 	    }
- 	  }
- 	  else {
- 	    System.out.println(" apply:context:obj not found");
- 	    }
- 	
+ 	cxt = (Context)s.lookupValue();
  	}
- 	
- 	|  'apply' 'context' context_sym=context
- 	
+ 	| (context_sym = context){
+ 	cxt = (Context)context_sym.lookupValue();
+ 	})
  	{
- 	ContextBasedAccessControl cbac = new ContextBasedAccessControl(); 
- 	String filename="cbac";
- 	Context context = (Context)context_sym.lookupValue();
- 	 if (context != null )
- 	  {
- 	    switch(OStype.i){
- 	    case 1:
- 	     cbac = new ContextBasedAccessControl ();
- 	     String interpPath = "/bin/bash";
- 	     String fwPath = "/sbin/iptables";
- 	     cbac.applyContext(context,fwPath,interpPath,filename+"iptables");
- 	     break;
-
- 	    case 2:
- 	     cbac = new ContextBasedAccessControl ();
- 	     String interpPath = "/bin/bash";
- 	     String fwPath = "/sbin/ipfw";
- 	     cbac.applyContext(context,fwPath,interpPath,filename+"ipfw");
- 	     break;
- 	    
- 	    }
- 	  }
- 	  else {
- 	    System.out.println(" apply:context:obj not found");
- 	    }
- 	}*/
+ 	 Iterator <Policy> iter =cxt.context.iterator();
+ 	 while(iter.hasNext())
+ 	 { 
+ 	   iter.next().configure("fw.xml","PolicyAdd");	
+ 	 }
+ 	 
+ 	}
+	
  	
- 	| 'undo' 'context' object_name
- 	| 'undo' 'context' context
+ 	| {Context cxt = null;}
+ 	'undo' 'context' ((var=object_name)
+ 	{
+ 	   Symbol s = (Symbol) currentScope.getSymbol($var.text);	
+ 	
+ 	  try{
+ 	          if (s.type.equals("context_type_t")!=true)
+ 	         {
+ 	           throw (new DataFormatException(" undo:policy:policy object"));
+ 	           }
+ 	     }
+ 	  catch (DataFormatException dfe)
+ 	 {
+ 	    System.out.println(dfe);
+ 	  }	
+ 	cxt = (Context)s.lookupValue();
+ 	}|
+ 	(context_sym = context)
+ 	{
+ 	 cxt = (Context)context_sym.lookupValue();}
+ 	 )
+ 	 {
+ 	 
+ 	 Iterator <Policy> iter =cxt.context.iterator();
+ 	 while(iter.hasNext())
+ 	 { 
+ 	   iter.next().configure("fw.xml","PolicyDelete");	
+ 	 }
+ 	  	  
+ 	 }
 	
 	| { Policy p=null;}  
 	  'apply' 'policy' ((var=object_name)
@@ -311,152 +306,39 @@ prog
 		})
 		
  		{
- 	 	   p.configure("fw.xml","AddPolicy");
+ 	 	   p.configure("fw.xml","PolicyAdd");
  	 	}
  	 
  	 
- 	 
-// 	| 'apply' 'policy' p2=policy
-//	{
+ 	|{ Policy p = null;} 
+ 	'undo' 'policy'((var=object_name)
+		{
+		   Symbol s = (Symbol) currentScope.getSymbol($var.text);
+ 	  	try{
+ 		     if (s.type.equals("policy_type_t")!=true)
+ 		      {
+ 	 	       throw (new DataFormatException(" apply:policy:policy object"));
+ 		      }
+ 	 	   }
+ 		 catch (DataFormatException dfe)
+ 	 	{
+ 	    	  System.out.println(dfe);
+ 	  	}	
+		 p = (Policy) currentScope.lookup($var.text);
+				
+		} 
+		
+		| 
+		(policy_sym = policy)
+		{
+		p = (Policy)policy_sym.lookupValue();
+		
+		})
+		
+ 		{
+ 	 	   p.configure("fw.xml","PolicyDelete");
+ 	 	}
 
-//	Policy p=(Policy)p2.lookupValue();
-/*	//System.out.println(p.verdict);
-	 String command = "/sbin/iptables";
- 	 String verd = null;
- 	 if(p.verdict.equals("allow"))
- 	  {
- 	    verd = "ACCEPT";
- 	    }
- 	  if(p.verdict.equals("deny"))
- 	  {
- 	    verd = "DROP";
- 	    }  
- 	   if( verd == null)
- 	      { 
- 	      System.out.println("verdict is null");
- 	      }
- 	      
- 	      String arg = "  -I FORWARD -p "+p.protocol+" -d "+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
- 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() ;
- 	 
- 	 if(p.destPort != 0){
- 	 arg = arg + " --destination-port "+p.destPort;
- 	 }
- 	 
- 	 if(p.sourcePort != 0){
- 	 arg = arg + " --source-port "+p.sourcePort;
- 	 }
- 	 arg = arg+" -j " +verd;
- 	 
- 	  System.out.println(command+arg);
-	    */
-	    
-/*	     String command = "/sbin/ipfw";
- 	 String verd = null;
- 	 
- 	 if(p.verdict.equals("allow")==true)
- 	  {
- 	    verd = "allow";
- 	    }
- 	  if(p.verdict.equals("deny")==true)
- 	  {
- 	    verd = "deny";
- 	    }  
- 	   if( verd == null)
- 	      { 
- 	      System.out.println("verdict is null");
- 	      }
- 	      
- 	       
- 	 String arg = " add "+verd+" "+p.protocol+" from "+p.sourceIpAddress.getString()+":"+p.sourceNetMask.getString()+" " ;
- 	 
- 	 if(p.sourcePort != 0){
- 	 arg = arg+p.sourcePort;
- 	 
- 	 }
- 	 arg = arg+  " to " + p.destIpAddress.getString()+":"+p.destNetMask.getString() +" ";
- 	 
- 	 if(p.destPort !=0){
- 	 arg = arg+p.destPort;
- 	 }
- 	  	  System.out.println(command+arg);
-	    
-	      
- 	  	 
-	}
- 	| 'undo' 'policy' var=object_name
- 	{
- 	  Policy p = (Policy) currentScope.lookup($var.text);
- 	 if(p!=null)
- 	 {
- 	  String command = "/sbin/iptables";
- 	 String verd = null;
- 	 if(p.verdict.equals("allow"))
- 	  {
- 	    verd = "ACCEPT";
- 	    }
- 	  if(p.verdict.equals("deny"))
- 	  {
- 	    verd = "DROP";
- 	    }  
- 	   if( verd == null)
- 	      { 
- 	      System.out.println("verdict is null");
- 	      }
-
-
-	String arg = "  -D FORWARD -p "+p.protocol+" -d "+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
- 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() ;
- 	 
- 	 if(p.destPort != 0){
- 	 arg = arg + " --destination-port "+p.destPort;
- 	 }
- 	 
- 	 if(p.sourcePort != 0){
- 	 arg = arg + " --source-port "+p.sourcePort;
- 	 }
- 	 arg = arg+" -j " +verd;
- 	 
-	  System.out.println(command+arg);
-  
-	 }
- 	 else  { System.out.println(" policy object is null");}
- 	 
- 	}
- 	| 'undo' 'policy' p3=policy
- 	{
- 	
-	Policy p=(Policy)p3.lookupValue();
-	//System.out.println(p.verdict);
-	 String command = "/sbin/iptables";
- 	 String verd = null;
- 	 if(p.verdict.equals("allow"))
- 	  {
- 	    verd = "ACCEPT";
- 	    }
- 	  if(p.verdict.equals("deny"))
- 	  {
- 	    verd = "DROP";
- 	    }  
- 	   if( verd == null)
- 	      { 
- 	      System.out.println("verdict is null");
- 	      }
- 	String arg = "  -D FORWARD -p "+p.protocol+" -d "+p.destIpAddress.getString()+"/"+p.destNetMask.getString()+
- 	 " -s " + p.sourceIpAddress.getString()+"/"+p.sourceNetMask.getString() ;
- 	 
- 	 if(p.destPort != 0){
- 	 arg = arg + " --destination-port "+p.destPort;
- 	 }
- 	 
- 	 if(p.sourcePort != 0){
- 	 arg = arg + " --source-port "+p.sourcePort;
- 	 }
- 	 arg = arg+" -j " +verd;
- 	 
- 	  System.out.println(command+arg);
- 	  
- 	}*/
  	| set_oper 'host_group' (object_name| host_group) (object_name|host) 
 // 	| set_oper 'serv_group' (object_name|serv_group) serv_descr 
 	|config_display 
@@ -476,10 +358,10 @@ set_oper
  	
  config_display 
  	:
- 	 'route' 'show' 'numeric'
- 	|'route' 'show' 
-	| 'fw' 'show' 'numeric'
-	|'fw' 'show'
+ 	 'route' 'show' 'numeric'  {Route.display("route.xml","DisplayRouteNumeric");}
+ 	|'route' 'show'  {Route.display("route.xml","DisplayRoute");}
+	| 'fw' 'show' 'numeric' {Policy.display("fw.xml","DisplayRulesNumeric");}
+	|'fw' 'show' {Policy.display("fw.xml","DisplayRules");}
 	;	
  	
  	
@@ -1010,7 +892,8 @@ topology  returns [Symbol sym]
 	
 	}	
 		
-	(('host_group' ((host_group_sym=host_group {hg = (Hostgroup)host_group_sym.lookupValue();}) 
+	(
+	('host_group' ((host_group_sym=host_group {hg = (Hostgroup)host_group_sym.lookupValue();}) 
 	|( host_group_obj=object_name  
 	{Symbol s  = currentScope.getSymbol ($host_group_obj.text); 
 	
