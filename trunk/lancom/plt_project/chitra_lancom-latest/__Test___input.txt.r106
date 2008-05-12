@@ -1,0 +1,5 @@
+prog
+policy_type_t r;
+r = inbound allow tcp dst 1.1.1.1 netmask 255.255.255.0 src 2.2.2.2 netmask 4.4.4.4 80 80;
+apply policy r;
+endprog

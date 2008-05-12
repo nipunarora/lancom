@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LANCOM>
+  <PolicyAdd>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>iptables</cmd>
+        <arg>-I FORWARD -p $PROTO -d $DST_IPADDR/$DNETMASK -s $SRC_IPADDR/$SNETMASK --destination-port $DPORTL:$DPORTH  --source-port $SPORTL:$SPORTH -j $VERDICT
+	</arg>
+   </PolicyAdd>
+   <VerdictAllow>ACCEPT</VerdictAllow> 
+   <VerdictDeny>DROP</VerdictDeny>  
+
+  <PolicyDelete>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>iptables</cmd>
+        <arg>-D FORWARD -p $PROTO -d $DST_IPADDR/$DNETMASK -s $SRC_IPADDR/$SNETMASK
+	  --destination-port $DPORTL:$DPORTH  --source-port $SPORTL:$SPORTH -j $VERDICT
+	</arg>
+	
+   </PolicyDelete>
+ 	<VerdictAllow>ACCEPT</VerdictAllow> 
+	<VerdictDeny>DROP</VerdictDeny>  
+  <DisplayRules>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>iptables</cmd>
+ 	<arg>-L -v </arg>
+  </DisplayRules>       
+  <DisplayRulesNumeric>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>iptables</cmd>
+ 	<arg>-L -n </arg>
+  </DisplayRulesNumeric>       
+
+
+
+</LANCOM>

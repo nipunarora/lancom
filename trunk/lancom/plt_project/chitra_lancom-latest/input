@@ -1,0 +1,14 @@
+prog
+serv_group_type_t sg;
+ipaddr_t ip1,ip2;
+ip1=1.1.1.1;
+ip2=2.2.2.2;
+sg = service_group{ ip1 netmask 255.255.255.255 80 , ip2 netmask 255.55.255.255 80};
+topology_type_t t;
+policy_type_t pol;
+pol = inbound allow tcp dst 0.0.0.0 netmask 0.0.0.0 80;
+context_type_t cxt;
+cxt = context{ pol };
+t = serv_group sg context cxt;
+undo topology t;
+endprog

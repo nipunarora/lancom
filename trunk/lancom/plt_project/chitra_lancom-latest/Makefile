@@ -1,0 +1,57 @@
+
+all: ExceedsLancomSizeException Ipaddress IntType  Policy Host   Route Interface Hostgroup Context Assignment Symbol Scope  Servicedescriptor Servicegroup Topology ParseXMLDoc CmdArg
+IntType:
+	javac -classpath . IntType.java
+Symbol:
+	javac -classpath . Symbol.java
+Scope:
+	javac -classpath . Scope.java
+Assignment:
+	javac -classpath . Assignment.java
+Expression:
+	javac -classpath . Expression.java
+IfElse:
+	javac -classpath . IfElse.java
+CharType:
+	javac -classpath . CharType.java
+Ipaddress:
+	javac -classpath . Ipaddress.java
+ExceedsLancomSizeException:
+	javac -classpath . ExceedsLancomSizeException.java
+Policy:
+	javac -classpath . Policy.java
+Host:
+	javac -classpath . Host.java
+Interface:
+	javac -classpath . Interface.java
+Hostgroup:
+	javac -classpath . Hostgroup.java
+Route:
+	javac -classpath . Route.java
+Context:
+	javac -classpath . Context.java
+
+Servicedescriptor:
+	javac -classpath . Servicedescriptor.java
+
+Servicegroup:
+	javac -classpath . Servicegroup.java
+
+Topology:
+	javac -classpath . Topology.java
+OStype:
+	javac -classpath . OStype.java
+
+ParseXMLDoc:
+	javac -classpath . ParseXMLDoc.java
+CmdArg:
+	javac -classpath . CmdArg.java
+
+
+
+
+
+
+clean:
+	rm -rf *.class *~
+ 

@@ -1,0 +1,17 @@
+prog
+int_type_t i;
+i = 1;
+if(i == 2)
+	i += 1;
+	echo "incrementing i";
+	if(i == 2)
+		i += 3;
+	endif
+else
+	echo "Condition not met";
+	i += 5;
+	if(i > 5 && i < 8)
+		echo "matched";
+	endif
+endif
+endprog

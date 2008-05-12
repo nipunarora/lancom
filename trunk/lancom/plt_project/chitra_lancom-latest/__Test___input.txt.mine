@@ -1,0 +1,5 @@
+prog
+interface_type_t ifc;
+ifc = ifname em1 1.1.1.1 netmask 255.255.255.0 dns { 1.1.1.2,1.1.1.3 } defgw 1.1.1.10;
+ifconfig ifc;
+endprog

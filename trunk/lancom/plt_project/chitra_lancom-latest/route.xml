@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LANCOM>
+  <RouteAdd>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>/sbin/route add</cmd>
+        <arg>-net $IPADDR/$NETMASK gw $GATEWAY</arg>
+   </RouteAdd>
+ <RouteDelete>
+	<interpreter>/bin/bash</interpreter>
+	<cmd>/sbin/route del</cmd>
+	 <arg>-net $IPADDR/$NETMASK gw $GATEWAY</arg>
+</RouteDelete>
+<DisplayRoute>
+	<interpreter>/bin/bash</interpreter>
+	<cmd>/sbin/route</cmd>
+	<arg>-v</arg>
+</DisplayRoute>
+<DisplayRouteNumeric>
+	<interpreter>/bin/bash</interpreter>
+	<cmd>/sbin/route route</cmd>
+	<arg>-n</arg>
+</DisplayRouteNumeric>
+</LANCOM>

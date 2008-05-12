@@ -1,0 +1,13 @@
+prog
+policy_type_t p;
+p=inbound allow tcp dst 0.0.0.0 netmask 0.0.0.0 80;
+host_type_t ht;
+ht=ip_addr 1.1.1.1 netmask 255.255.0.0;
+host_group_type_t hg;
+hg=host_group{ht};
+context_type_t cxt;
+cxt = context{p};
+topology_type_t t;
+t=host_group hg context cxt;
+apply topology t;
+endprog
