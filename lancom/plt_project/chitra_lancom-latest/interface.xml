@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LANCOM>
+  <InterfConfig >
+	<interpreter>/bin/bash</interpreter>
+        <cmd>/sbin/ifconfig</cmd>
+        <arg>$INTERFACE_NAME $IPADDR netmask $NETMASK up</arg>
+   </InterfConfig>     
+   <InterfDisplay >
+	<interpreter>/bin/bash</interpreter>
+        <cmd>/sbin/ifconfig</cmd>
+        <arg>$INTERFACE_NAME</arg>
+   </InterfDisplay>     
+   <DnsConf>
+	<interpreter>/bin/bash</interpreter>
+	<cmd>nameserver</cmd>
+        <arg>$IPADDR</arg>
+  </DnsConf>	
+</LANCOM>
+
+  
