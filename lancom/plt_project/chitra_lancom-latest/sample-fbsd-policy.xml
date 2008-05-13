@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LANCOM>
+
+  <RouteAdd>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>/sbin/route add</cmd>
+        <arg>-net $IPADDR/$NETMASK $GATEWAY</arg>
+   </RouteAdd>
+
+ <RouteDelete>
+	<interpreter>/bin/bash</interpreter>
+	<cmd>/sbin/route delete</cmd>
+	 <arg>-net $IPADDR/$NETMASK $GATEWAY</arg>
+</RouteDelete>
+
+<DisplayRoute>
+	<interpreter>/bin/bash</interpreter>
+	<cmd>/usr/bin/netstat</cmd>
+	<arg>-r</arg>
+</DisplayRoute>
+
+<DisplayRouteNumeric>
+	<interpreter>/bin/bash</interpreter>
+	<cmd>/usr/bin/netstat</cmd>
+	<arg>-rn</arg>
+</DisplayRouteNumeric>
+
+ <PolicyAdd>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>/sbin/ipfw</cmd>
+        <arg>add $VERDICT $PROTO from $SRC_IPADDR:$SNETMASK $SPORTL-$SPORTH to $DST_IPADDR:$DNETMASK $DPORTL-$DPORTH
+	</arg>
+   </PolicyAdd>
+
+   <VerdictAllow>allow</VerdictAllow> 
+   <VerdictDeny>deny</VerdictDeny>  
+
+  <PolicyDelete>
+<interpreter>/bin/bash</interpreter>
+     <cmd>/sbin/ipfw</cmd>
+    <arg>delete $VERDICT $PROTO from $SRC_IPADDR:$SNETMASK $SPORTL-$SPORTH to $DST_IPADDR:$DNETMASK $DPORTL-$DPORTH
+	</arg>
+	
+   </PolicyDelete>
+ 	 
+  <DisplayRules>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>iptables</cmd>
+ 	<arg>-L -v </arg>
+  </DisplayRules>       
+
+  <DisplayRulesNumeric>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>iptables</cmd>
+ 	<arg>-L -n </arg>
+  </DisplayRulesNumeric> 
+
+<InterfConfig>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>/sbin/ifconfig</cmd>
+        <arg>$INTERFACE_NAME $IPADDR netmask $NETMASK up</arg>
+   </InterfConfig>     
+  
+ <InterfDisplay>
+	<interpreter>/bin/bash</interpreter>
+        <cmd>/sbin/ifconfig</cmd>
+        <arg>$INTERFACE_NAME</arg>
+   </InterfDisplay>     
+
+   <DnsConf>
+	<interpreter>/bin/bash</interpreter>
+	<cmd>nameserver</cmd>
+        <arg>$IPADDR</arg>
+  </DnsConf>
+
+</LANCOM>
