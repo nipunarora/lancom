@@ -41,6 +41,7 @@ public class Route {
    {
    	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
 	CmdArg cmdarg = new CmdArg();
+	boolean append = false;
  	cmdarg = xmlDoc.getCmdArg(xmlTag);
 	cmdarg.arg = cmdarg.arg.replaceAll("\\$NETMASK",this.netMask.getString());
 	cmdarg.arg = cmdarg.arg.replaceAll("\\$IPADDR",this.ipAddress.getString());
@@ -50,11 +51,22 @@ public class Route {
 	
 	try
 	    {
-		FileWriter outFile = new FileWriter(OutputFileName);
-		PrintWriter out = new PrintWriter(outFile);
-		if(cmdarg.interpreterPath.equals("default") != true)
+
+		FileWriter outFile = null;
+                PrintWriter out= null;
+		if ((new File(OutputFileName)).exists() == true){
+		outFile = new FileWriter(OutputFileName,true);
+		append = true;
+                }
+		else {
+			outFile = new FileWriter(OutputFileName);
+		}
+	
+		out = new PrintWriter(outFile);
+		if((cmdarg.interpreterPath.equals("default") != true) && (append == false))
 		    {
 			out.println("#!"+cmdarg.interpreterPath);
+			append = false;
 		    }
 		out.println(cmdarg.cmd+" "+cmdarg.arg);
 		out.close();
@@ -68,6 +80,7 @@ public class Route {
    }
     public static void display(String xmlfile,String xmlTag,String OutputFileName)
     {
+	boolean append = false;
 	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
 	CmdArg cmdarg = new CmdArg();
  	cmdarg = xmlDoc.getCmdArg(xmlTag);
@@ -77,14 +90,26 @@ public class Route {
 
 	try
 	    {
-		FileWriter outFile = new FileWriter(OutputFileName);
-		PrintWriter out = new PrintWriter(outFile);
-		if(cmdarg.interpreterPath.equals("default") != true)
+		FileWriter outFile = null;
+                PrintWriter out= null;
+		if ((new File(OutputFileName)).exists() == true){
+		outFile = new FileWriter(OutputFileName,true);
+		append = true;
+                }
+		else {
+			outFile = new FileWriter(OutputFileName);
+		}
+	
+
+		out = new PrintWriter(outFile);
+		if((cmdarg.interpreterPath.equals("default") != true) && (append == false))
 		    {
 			out.println("#!"+cmdarg.interpreterPath);
+			append = false;	
 		    }
 		out.println(cmdarg.cmd+" "+cmdarg.arg);
 		out.close();
+
 	    }
 	catch(IOException ioe)
 	    {

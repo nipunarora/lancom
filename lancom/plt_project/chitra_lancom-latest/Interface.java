@@ -55,6 +55,7 @@ public class Interface
 	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
 	CmdArg cmdarg = new CmdArg();
  	cmdarg = xmlDoc.getCmdArg(xmlTag);
+	boolean append = false;
 	System.out.println("interpreter:"+cmdarg.interpreterPath);
         System.out.println("cmd:"+cmdarg.cmd);
 
@@ -68,17 +69,25 @@ public class Interface
 	
 	try
 	    {
-		FileWriter outFile = new FileWriter(OutputFileName);
-		PrintWriter out = new PrintWriter(outFile);
-
-	    if(cmdarg.interpreterPath.equals("default") != true)
+		FileWriter outFile = null;
+                PrintWriter out = null;
+		if((new File(OutputFileName)).exists() == true)
+		{
+		outFile = new FileWriter(OutputFileName,true);
+		out = new PrintWriter(outFile);
+		append = true;
+		}
+		else{
+		outFile = new FileWriter(OutputFileName);
+		}
+	    if((cmdarg.interpreterPath.equals("default") != true)&&(append== false))
 		{
 		    out.println("#!"+cmdarg.interpreterPath);
+		    append = false;	
 		}
 	    
 	      out.println(cmdarg.cmd+" "+cmdarg.arg);
 	      out.close();
-
 	    }
 	catch(IOException ioe)
 	    {
@@ -98,9 +107,17 @@ public class Interface
 	 System.out.println("arg:"+defgw.arg);
 	 
 	 try{
-	      
-		FileWriter outFile = new FileWriter(OutputFileName,true);
-		PrintWriter out = new PrintWriter(outFile);
+	        FileWriter outFile = null;
+ 		PrintWriter out = null ; 
+		if((new File(OutputFileName)).exists() == true){
+		outFile = new FileWriter(OutputFileName,true);
+		}
+		else{
+			outFile = new FileWriter(OutputFileName);
+			
+		}
+		
+		out = new PrintWriter(outFile);
 		 out.println(cmdarg.cmd+" "+cmdarg.arg);
 		 out.close();
 	 }catch(IOException ioe)
@@ -126,8 +143,16 @@ public class Interface
 	 	
 		    try{
 
-			FileWriter outFile = new FileWriter(OutputFileName,true);
-			PrintWriter out = new PrintWriter(outFile);
+			FileWriter outFile = null;
+			PrintWriter out = null; 
+			if((new File(OutputFileName)).exists() == true){
+			outFile = new FileWriter(OutputFileName,true);
+			}
+			else{
+			outFile = new FileWriter(OutputFileName);
+			}		
+
+			out = new PrintWriter(outFile);
 			if(cmdarg.interpreterPath.equals("default") != true)
 			    {
 				out.println("echo\' "+output+" \' >> /etc/rc.resolv.conf");	  
@@ -156,6 +181,7 @@ public class Interface
 	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
 	CmdArg cmdarg = new CmdArg();
  	cmdarg = xmlDoc.getCmdArg(xmlTag);
+	boolean append = false;	
 	System.out.println("interpreter:"+cmdarg.interpreterPath);
         System.out.println("cmd:"+cmdarg.cmd);
 
@@ -166,14 +192,26 @@ public class Interface
 	
 	try
 	    {
-		FileWriter outFile = new FileWriter(OutputFileName);
-		PrintWriter out = new PrintWriter(outFile);
-		if(cmdarg.interpreterPath.equals("default") != true)
+		FileWriter outFile = null;
+		PrintWriter out = null; 
+		if((new File(OutputFileName)).exists() == true){
+		outFile = new FileWriter(OutputFileName,true);
+		append = true;
+		}
+		else{
+			outFile = new FileWriter(OutputFileName);
+		
+		}
+
+		out = new PrintWriter(outFile);
+		if((cmdarg.interpreterPath.equals("default") != true) && (append == false)) 
 		    {
 			out.println("#!"+cmdarg.interpreterPath);
+			append = false;
 		    }
 		out.println(cmdarg.cmd+" "+cmdarg.arg);
 		out.close();
+		append = false;
 	    }
 	catch(IOException ioe)
 	    {
