@@ -36,7 +36,7 @@ public class Interface
         netMask = new Ipaddress(net);
 	if(def != null)
 	    {
-		defgw_used = true;	
+		defgw_used = true;
 		defaultGateway = new Ipaddress(def);
 	    }
 	else { defgw_used = false; }
@@ -80,6 +80,9 @@ public class Interface
 		else{
 		outFile = new FileWriter(OutputFileName);
 		}
+
+	    out = new PrintWriter(outFile);
+
 	    if((cmdarg.interpreterPath.equals("default") != true)&&(append== false))
 		{
 		    out.println("#!"+cmdarg.interpreterPath);
@@ -101,7 +104,7 @@ public class Interface
 	{
 	 Route route = new Route("0.0.0.0","0.0.0.0",
 		                 this.defaultGateway.getString());
-	 defgw = route.addRoute("route.xml","RouteAdd");
+	 defgw = route.addRoute(xmlfile,"RouteAdd");
  	 System.out.println(" default gateway ");
 	 System.out.println("cmd:"+defgw.cmd);
 	 System.out.println("arg:"+defgw.arg);
@@ -118,7 +121,7 @@ public class Interface
 		}
 		
 		out = new PrintWriter(outFile);
-		 out.println(cmdarg.cmd+" "+cmdarg.arg);
+		 out.println(defgw.cmd+" "+defgw.arg);
 		 out.close();
 	 }catch(IOException ioe)
 	     {
@@ -155,7 +158,7 @@ public class Interface
 			out = new PrintWriter(outFile);
 			if(cmdarg.interpreterPath.equals("default") != true)
 			    {
-				out.println("echo\' "+output+" \' >> /etc/rc.resolv.conf");	  
+				out.println("echo \'"+output+"\' >> /etc/rc.resolv.conf");	  
 				out.close();
 			    }
 			else{

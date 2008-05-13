@@ -118,7 +118,7 @@ if_statement_list
 ** Sambuddho
 */ 	
  config_statement 
- 	: route_cmd=ROUTE_OPER robj=object_name
+ 	: route_cmd=route_oper robj=object_name
 	{
 		Symbol s = currentScope.getSymbol($robj.text);
 		if ( s == null)
@@ -144,15 +144,15 @@ if_statement_list
 		Route route = (Route) currentScope.lookup($robj.text);
 		if (route != null)
 		{
-			route.configure(XMLFile,$route_cmd.text,outputFile+".route");
+			route.configure(XMLFile,route_cmd,outputFile+".route");
 		} 
 	}
-	|route_cmd2=ROUTE_OPER robj2=route
+	|route_cmd2=route_oper  robj2=route
   	{
 		Route r=(Route)robj2.lookupValue();
 		if(r!=null)
 		{
-			r.configure(XMLFile,$route_cmd2.text,outputFile+".route");
+			r.configure(XMLFile,route_cmd,outputFile+".route");
 		}
  	}
  	|
@@ -531,7 +531,7 @@ ROUTE_OPER returns [String rcmd]
  	;
  	*/	
 
-ROUTE_OPER returns [String rcmd]
+route_oper returns [String rcmd]
  	:'route' 'add' 		{ $rcmd = new String("RouteAdd"); }
  	|'route' 'delete' 	{ $rcmd = new String("RouteDelete"); }
  	;	
@@ -628,7 +628,7 @@ set_oper
 		}
 		if(input.LA(1) == ELSE)
 		{
-			match(input,ELSE,FOLLOW_ELSE_in_condition_statement791);  
+			match(input,ELSE,FOLLOW_ELSE_in_condition_statement792);  
 			//Check the value of TOS to see if expression was true
 			boolean ignoreFlag = ((IfElse)g_ifStack.peek()).getIgnore();
 			g_ifStack.pop();
@@ -719,14 +719,14 @@ set_oper
  			while(((IntType)val.sym.lookupValue()).getValue() == 1)
  			{
  			input.rewind(start_index);
- 			match(input,OPAREN,FOLLOW_OPAREN_in_iteration_statement852);  
+ 			match(input,OPAREN,FOLLOW_OPAREN_in_iteration_statement853);  
  			val = equality_expr();
  			if (((IntType)val.sym.lookupValue()).getValue() == 1)
    			{
    				input.rewind(stmt_index);
    				if(input.LA(1) == CPAREN)
    				{
-   					match(input,CPAREN,FOLLOW_CPAREN_in_iteration_statement866);  
+   					match(input,CPAREN,FOLLOW_CPAREN_in_iteration_statement867);  
    					if_statement_list();
    				}
    			}
@@ -735,7 +735,7 @@ set_oper
    				input.rewind(stmt_index);
    				if(input.LA(1) == CPAREN)
    				{
-   					match(input,CPAREN,FOLLOW_CPAREN_in_iteration_statement866);  
+   					match(input,CPAREN,FOLLOW_CPAREN_in_iteration_statement867);  
    				}
    				break;
    			}
@@ -743,7 +743,7 @@ set_oper
    			input.rewind(end_index);
    			if(input.LA(1) == ENDWHILE)
    			{
-   				match(input,ENDWHILE,FOLLOW_ENDWHILE_in_iteration_statement886);  
+   				match(input,ENDWHILE,FOLLOW_ENDWHILE_in_iteration_statement887);  
    			}
  		}
   		g_ifStack.pop();
@@ -2307,7 +2307,7 @@ route returns [Symbol sym]
 		   		}	  
 				Ipaddress gwip = (Ipaddress) dst_gw.lookupValue();	 
 		 		Route rh = new Route (ip.getString(),gwip.getString());
-		 		Symbol s_ret = new Symbol("route_host_string", "host_type_t", rh);
+		 		Symbol s_ret = new Symbol("route_host_string", "route_type_t", rh);
 		 		$sym = s_ret;
 		
 			}
