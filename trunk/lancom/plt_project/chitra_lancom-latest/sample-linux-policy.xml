@@ -1,67 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LANCOM>
+
   <RouteAdd>
 	<interpreter>/bin/bash</interpreter>
         <cmd>/sbin/route add</cmd>
         <arg>-net $IPADDR/$NETMASK gw $GATEWAY</arg>
    </RouteAdd>
+
  <RouteDelete>
 	<interpreter>/bin/bash</interpreter>
 	<cmd>/sbin/route del</cmd>
 	 <arg>-net $IPADDR/$NETMASK gw $GATEWAY</arg>
 </RouteDelete>
+
 <DisplayRoute>
 	<interpreter>/bin/bash</interpreter>
 	<cmd>/sbin/route</cmd>
 	<arg>-v</arg>
 </DisplayRoute>
+
 <DisplayRouteNumeric>
 	<interpreter>/bin/bash</interpreter>
 	<cmd>/sbin/route route</cmd>
 	<arg>-n</arg>
 </DisplayRouteNumeric>
+
  <PolicyAdd>
 	<interpreter>/bin/bash</interpreter>
         <cmd>iptables</cmd>
         <arg>-I FORWARD -p $PROTO -d $DST_IPADDR/$DNETMASK -s $SRC_IPADDR/$SNETMASK --destination-port $DPORTL:$DPORTH  --source-port $SPORTL:$SPORTH -j $VERDICT
 	</arg>
    </PolicyAdd>
+
    <VerdictAllow>ACCEPT</VerdictAllow> 
    <VerdictDeny>DROP</VerdictDeny>  
 
   <PolicyDelete>
 <interpreter>/bin/bash</interpreter>
      <cmd>iptables</cmd>
-    <arg>-D FORWARD -p $PROTO -d $DST_IPADDR/$DNETMASK -s $SRC_IPADDR/$SNETMASK
-	  --destination-port $DPORTL:$DPORTH  --source-port $SPORTL:$SPORTH -j $VERDICT
+    <arg>-D FORWARD -p $PROTO -d $DST_IPADDR/$DNETMASK -s $SRC_IPADDR/$SNETMASK --destination-port $DPORTL:$DPORTH  --source-port $SPORTL:$SPORTH -j $VERDICT
 	</arg>
 	
-   </PolicyDelete>
- 	<VerdictAllow>ACCEPT</VerdictAllow> 
-	<VerdictDeny>DROP</VerdictDeny>  
+   </PolicyDelete> 
+
   <DisplayRules>
 	<interpreter>/bin/bash</interpreter>
         <cmd>iptables</cmd>
  	<arg>-L -v </arg>
   </DisplayRules>       
+
   <DisplayRulesNumeric>
 	<interpreter>/bin/bash</interpreter>
         <cmd>iptables</cmd>
  	<arg>-L -n </arg>
   </DisplayRulesNumeric> 
-<InterfConfig >
+
+<InterfConfig>
 	<interpreter>/bin/bash</interpreter>
         <cmd>/sbin/ifconfig</cmd>
         <arg>$INTERFACE_NAME $IPADDR netmask $NETMASK up</arg>
    </InterfConfig>     
-   <InterfDisplay >
+
+   <InterfDisplay>
 	<interpreter>/bin/bash</interpreter>
         <cmd>/sbin/ifconfig</cmd>
         <arg>$INTERFACE_NAME</arg>
    </InterfDisplay>     
+
    <DnsConf>
 	<interpreter>/bin/bash</interpreter>
 	<cmd>nameserver</cmd>
         <arg>$IPADDR</arg>
   </DnsConf>
+
 </LANCOM>
