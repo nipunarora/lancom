@@ -53,7 +53,7 @@ public class Policy
 		    destIpAddress = new Ipaddress(dip);
                     destNetMask = new Ipaddress(dnet);
                     destPort = Integer.parseInt(dest);
-		 
+		    icmpMessage = null; 
                     if(destPort> 65536)
                     {
                         throw new ExceedsLancomSizeException("Destination port > 65535");
@@ -73,7 +73,9 @@ public class Policy
 
 		    direction = new String (dir);
                     verdict = new String(verd);
-
+		    protocol = null;
+		    sourcePort = 0;
+		    destPort = 0;
                     sourceIpAddress = new Ipaddress(sip);
                     sourceNetMask = new Ipaddress(snet);
 		    
@@ -90,6 +92,7 @@ public class Policy
     {
 	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
 	CmdArg cmdarg = new CmdArg();
+	boolean append = false;
  	cmdarg = xmlDoc.getCmdArg(xmlTag);
 	cmdarg.arg = cmdarg.arg.replaceAll("\\$DNETMASK",this.destNetMask.getString());
 	cmdarg.arg = cmdarg.arg.replaceAll("\\$SNETMASK",this.sourceNetMask.getString());
@@ -142,9 +145,17 @@ public class Policy
 	
 	try
 	    {
-		FileWriter outFile = new FileWriter(OutputFileName);
-		PrintWriter out = new PrintWriter(outFile);
-		if(cmdarg.interpreterPath.equals("default") != true)
+ 		FileWriter outFile = null;
+		PrintWriter out = null;
+		if((new File(OutputFileName)).exists() == true){
+		outFile = new FileWriter(OutputFileName,true);
+                append = true;
+		}
+		else{
+			outFile = new FileWriter(OutputFileName);
+		}
+		out = new PrintWriter(outFile);
+		if((cmdarg.interpreterPath.equals("default") != true) && (append == false))
 		    {
 			out.println("#!"+cmdarg.interpreterPath);
 		    }
@@ -166,6 +177,7 @@ public class Policy
     {
 	ParseXMLDoc xmlDoc = new ParseXMLDoc(xmlfile);
 	CmdArg cmdarg = new CmdArg();
+	boolean append = false;
  	cmdarg = xmlDoc.getCmdArg(xmlTag);
 	System.out.println("interpreter:"+cmdarg.interpreterPath);
 	System.out.println("cmd:"+cmdarg.cmd);
@@ -174,12 +186,21 @@ public class Policy
 
 	try
 	    {
-		FileWriter outFile = new FileWriter(OutputFileName);
-		PrintWriter out = new PrintWriter(outFile);
-		if(cmdarg.interpreterPath.equals("default") != true)
+		FileWriter outFile = null;
+                PrintWriter out= null;
+		if ((new File(OutputFileName)).exists() == true){
+		outFile = new FileWriter(OutputFileName,true);
+ 		append = true;
+                }
+		else {
+			outFile = new FileWriter(OutputFileName);
+		}
+		out = new PrintWriter(outFile);
+		if((cmdarg.interpreterPath.equals("default") != true) && (append == false))
 		    {
 			out.println("#!"+cmdarg.interpreterPath);
 		    }
+		
 		out.println(cmdarg.cmd+" "+cmdarg.arg);
 		out.close();
 	    }
